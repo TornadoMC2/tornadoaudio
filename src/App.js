@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Header from './components/Header';
+import HeroSection from './components/HeroSection';
+import ServicesSection from './components/ServicesSection';
+import Portfolio from './components/Portfolio';
+import AudioComparison from './components/AudioComparison';
+import PricingSection from './components/PricingSection';
+import ContactSection from './components/ContactSection';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <main>
+        <HeroSection />
+        <ServicesSection />
+        <Portfolio />
+        <PricingSection />
+        <ContactSection />
+      </main>
+      <footer className="footer">
+        <div className="container">
+          <p>&copy; 2025 Tornado Audio - Hunter Johanson. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }

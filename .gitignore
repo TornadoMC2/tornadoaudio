@@ -23,3 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 /server/node_modules
+
+# Large audio files
+public/audio/*.wav
+public/audio/*.mp3

@@ -1,38 +1,269 @@
-.App {
-  text-align: center;
+:root {
+  /* Light theme colors - Blue/Purple palette */
+  --primary-color: #4f46e5; /* Indigo */
+  --primary-gradient: linear-gradient(135deg, #4f46e5, #7c3aed); /* Indigo to Purple */
+  --primary-light: rgba(79, 70, 229, 0.1);
+  --primary-medium: rgba(79, 70, 229, 0.3);
+  --primary-dark: #3730a3;
+
+  --secondary-color: #7c3aed; /* Purple */
+  --secondary-light: rgba(124, 58, 237, 0.1);
+  --secondary-medium: rgba(124, 58, 237, 0.3);
+
+  --accent-color: #06b6d4; /* Cyan */
+  --accent-light: rgba(6, 182, 212, 0.1);
+
+  /* Light theme backgrounds and text */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-inverse: #ffffff;
+
+  /* Border and shadow colors */
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+  --shadow-light: rgba(15, 23, 42, 0.1);
+  --shadow-medium: rgba(15, 23, 42, 0.15);
+  --shadow-heavy: rgba(15, 23, 42, 0.25);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+/* Dark theme colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark theme colors - Maintain blue/purple but darker */
+    --primary-color: #6366f1; /* Lighter indigo for dark mode */
+    --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+    --primary-light: rgba(99, 102, 241, 0.15);
+    --primary-medium: rgba(99, 102, 241, 0.35);
+    --primary-dark: #4338ca;
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    --secondary-color: #8b5cf6; /* Lighter purple */
+    --secondary-light: rgba(139, 92, 246, 0.15);
+    --secondary-medium: rgba(139, 92, 246, 0.35);
+
+    --accent-color: #22d3ee; /* Lighter cyan */
+    --accent-light: rgba(34, 211, 238, 0.15);
+
+    /* Dark theme backgrounds and text */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-card: #1e293b;
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-inverse: #0f172a;
+
+    /* Border and shadow colors for dark mode */
+    --border-color: #334155;
+    --border-light: #475569;
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --shadow-heavy: rgba(0, 0, 0, 0.6);
   }
 }
 
-.App-header {
-  background-color: #282c34;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.App {
+  text-align: left;
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: var(--bg-primary);
 }
 
-.App-link {
-  color: #61dafb;
+main {
+  flex: 1;
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  margin-bottom: 4rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.3s forwards;
+}
+
+/* Global Animations */
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
   }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Ensure sections don't overlap */
+section {
+  width: 100%;
+  position: relative;
+  padding: 4rem 0;
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Prevent overlap between sections */
+section:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, select, textarea {
+  transition: all 0.3s ease;
+}
+
+/* Global button styles */
+.btn-primary, .cta-button {
+  background: var(--primary-gradient);
+  color: var(--text-inverse);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 15px var(--shadow-medium);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px var(--shadow-heavy);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--primary-color);
+  color: var(--text-inverse);
+  transform: translateY(-2px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  section {
+    padding: 2rem 0;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.footer {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  margin-top: 4rem;
 }
