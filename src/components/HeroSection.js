@@ -6,6 +6,9 @@ const HeroSection = () => {
     <section className="hero-section">
       <div className="hero-content">
         <div className="hero-text">
+          <div className="hero-logo">
+            <img src="/logo192.png" alt="Tornado Audio Logo" className="hero-logo-image" />
+          </div>
           <h1>Professional Audio Mixing</h1>
           <h2>by Hunter Johanson</h2>
           <p>Transform your recordings into professional, radio-ready tracks. Specializing in all genres with over 3 years of mixing experience by Hunter Johanson.</p>

@@ -27,8 +27,11 @@ const Header = () => {
       <div className="container">
         <div className="header-content">
           <div className="logo">
-            <h1>Tornado Audio</h1>
-            <span>Audio mixing by Hunter Johanson</span>
+            <img src="/logo192.png" alt="Tornado Audio Logo" className="logo-image" />
+            <div className="logo-text">
+              <h1>Tornado Audio</h1>
+              <span>Audio mixing by Hunter Johanson</span>
+            </div>
           </div>
           <nav className={`nav ${mobileMenuOpen ? 'mobile-open' : ''}`}>
             <a href="#home" onClick={handleNavClick}>Home</a>

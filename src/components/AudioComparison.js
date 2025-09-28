@@ -10,6 +10,13 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
   const [isLoaded, setIsLoaded] = useState(false);
   const [showVolumeDropdown, setShowVolumeDropdown] = useState(false); // Volume dropdown state
   const [isDraggingVolume, setIsDraggingVolume] = useState(false); // Track if user is dragging volume slider
+
+  // New lazy loading states
+  const [audioLoadingState, setAudioLoadingState] = useState('unloaded'); // 'unloaded', 'loading', 'loaded', 'error'
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [audioError, setAudioError] = useState(null);
+
   const beforeRef = useRef(null);
   const afterRef = useRef(null);
   const volumeDropdownRef = useRef(null);
@@ -44,7 +51,10 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     };
   }, [showVolumeDropdown, isDraggingVolume]);
 
+  // Lazy loading effect - only set up audio when loaded
   useEffect(() => {
+    if (audioLoadingState !== 'loaded') return;
+
     const beforeAudioEl = beforeRef.current;
     const afterAudioEl = afterRef.current;
 
@@ -80,6 +90,25 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         }
       };
 
+      // Handle loading progress
+      const handleProgress = (audio, type) => {
+        if (audio.buffered.length > 0) {
+          const bufferedEnd = audio.buffered.end(audio.buffered.length - 1);
+          const duration = audio.duration;
+          if (duration > 0) {
+            const progress = (bufferedEnd / duration) * 100;
+            setLoadingProgress(Math.min(progress, 100));
+          }
+        }
+      };
+
+      // Handle loading errors
+      const handleError = (e) => {
+        console.error('Audio loading error:', e);
+        setAudioError('Failed to load audio. Please try again.');
+        setAudioLoadingState('error');
+      };
+
       const activeAudio = currentTrack === 'before' ? beforeAudioEl : afterAudioEl;
 
       activeAudio.addEventListener('timeupdate', syncAudio);
@@ -87,6 +116,10 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       activeAudio.addEventListener('ended', handleEnded);
       beforeAudioEl.addEventListener('loadedmetadata', handleLoadedMetadata);
       afterAudioEl.addEventListener('loadedmetadata', handleLoadedMetadata);
+      beforeAudioEl.addEventListener('progress', () => handleProgress(beforeAudioEl, 'before'));
+      afterAudioEl.addEventListener('progress', () => handleProgress(afterAudioEl, 'after'));
+      beforeAudioEl.addEventListener('error', handleError);
+      afterAudioEl.addEventListener('error', handleError);
 
       return () => {
         activeAudio.removeEventListener('timeupdate', syncAudio);
@@ -94,11 +127,93 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         activeAudio.removeEventListener('ended', handleEnded);
         beforeAudioEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
         afterAudioEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        beforeAudioEl.removeEventListener('progress', () => handleProgress(beforeAudioEl, 'before'));
+        afterAudioEl.removeEventListener('progress', () => handleProgress(afterAudioEl, 'after'));
+        beforeAudioEl.removeEventListener('error', handleError);
+        afterAudioEl.removeEventListener('error', handleError);
       };
     }
-  }, [currentTrack, volume]);
+  }, [currentTrack, volume, audioLoadingState]);
 
-  const togglePlayback = () => {
+  // Function to load audio files lazily
+  const loadAudioFiles = async () => {
+    if (audioLoadingState === 'loading' || audioLoadingState === 'loaded') return;
+
+    setAudioLoadingState('loading');
+    setLoadingProgress(0);
+    setAudioError(null);
+
+    try {
+      const beforeAudioEl = beforeRef.current;
+      const afterAudioEl = afterRef.current;
+
+      if (beforeAudioEl && afterAudioEl) {
+        // Set preload to metadata to start loading
+        beforeAudioEl.preload = 'metadata';
+        afterAudioEl.preload = 'metadata';
+
+        // Force load by setting src again
+        beforeAudioEl.load();
+        afterAudioEl.load();
+
+        // Wait for both to be ready
+        await Promise.all([
+          new Promise((resolve, reject) => {
+            const handleCanPlay = () => {
+              beforeAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              beforeAudioEl.removeEventListener('error', handleError);
+              resolve();
+            };
+            const handleError = (e) => {
+              beforeAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              beforeAudioEl.removeEventListener('error', handleError);
+              reject(e);
+            };
+            beforeAudioEl.addEventListener('canplaythrough', handleCanPlay);
+            beforeAudioEl.addEventListener('error', handleError);
+          }),
+          new Promise((resolve, reject) => {
+            const handleCanPlay = () => {
+              afterAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              afterAudioEl.removeEventListener('error', handleError);
+              resolve();
+            };
+            const handleError = (e) => {
+              afterAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              afterAudioEl.removeEventListener('error', handleError);
+              reject(e);
+            };
+            afterAudioEl.addEventListener('canplaythrough', handleCanPlay);
+            afterAudioEl.addEventListener('error', handleError);
+          })
+        ]);
+
+        setAudioLoadingState('loaded');
+        setLoadingProgress(100);
+      }
+    } catch (error) {
+      console.error('Error loading audio files:', error);
+      setAudioError('Failed to load audio files. Please check your internet connection and try again.');
+      setAudioLoadingState('error');
+    }
+  };
+
+  const handleFirstInteraction = async () => {
+    if (!hasUserInteracted) {
+      setHasUserInteracted(true);
+      if (audioLoadingState === 'unloaded') {
+        await loadAudioFiles();
+      }
+    }
+  };
+
+  const togglePlayback = async () => {
+    await handleFirstInteraction();
+
+    if (audioLoadingState !== 'loaded') {
+      return; // Don't play if audio isn't loaded yet
+    }
+
     const activeAudio = currentTrack === 'before' ? beforeRef.current : afterRef.current;
     const inactiveAudio = currentTrack === 'before' ? afterRef.current : beforeRef.current;
 
@@ -106,12 +221,24 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       activeAudio.pause();
       inactiveAudio.pause();
     } else {
-      activeAudio.play();
+      try {
+        await activeAudio.play();
+      } catch (error) {
+        console.error('Error playing audio:', error);
+        setAudioError('Unable to play audio. Please try again.');
+        return;
+      }
     }
     setIsPlaying(!isPlaying);
   };
 
-  const switchTrack = (track) => {
+  const switchTrack = async (track) => {
+    await handleFirstInteraction();
+
+    if (audioLoadingState !== 'loaded') {
+      return; // Don't switch if audio isn't loaded yet
+    }
+
     const currentTime = (currentTrack === 'before' ? beforeRef.current : afterRef.current).currentTime;
     const wasPlaying = isPlaying;
 
@@ -127,7 +254,10 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       newActiveAudio.currentTime = currentTime;
 
       if (wasPlaying) {
-        newActiveAudio.play();
+        newActiveAudio.play().catch(error => {
+          console.error('Error playing audio after track switch:', error);
+          setAudioError('Unable to play audio. Please try again.');
+        });
       }
     }, 50);
   };
@@ -148,23 +278,21 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
   const handleVolumeTouchStart = (e) => {
     e.stopPropagation();
     setIsDraggingVolume(true);
+    // Don't prevent default - let browser handle the touch
   };
 
   const handleVolumeTouchEnd = (e) => {
     e.stopPropagation();
-    setIsDraggingVolume(false);
+    // Delay clearing drag state to prevent dropdown from closing
+    setTimeout(() => {
+      setIsDraggingVolume(false);
+    }, 100);
   };
 
-  const handleVolumeTouchMove = (e) => {
+  // Remove the problematic handleVolumeTouchMove - let browser handle it natively
+  const handleVolumeSliderInteraction = (e) => {
     e.stopPropagation();
-    if (isDraggingVolume && volumeSliderRef.current) {
-      const slider = volumeSliderRef.current;
-      const rect = slider.getBoundingClientRect();
-      const touch = e.touches[0];
-      const x = touch.clientX - rect.left;
-      const percentage = Math.max(0, Math.min(1, x / rect.width));
-      setVolume(percentage);
-    }
+    // Prevent any parent events during slider interaction
   };
 
   const toggleVolumeDropdown = (e) => {
@@ -177,6 +305,8 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
   };
 
   const handleProgressChange = (e) => {
+    if (audioLoadingState !== 'loaded') return;
+
     const newTime = parseFloat(e.target.value);
     const activeAudio = currentTrack === 'before' ? beforeRef.current : afterRef.current;
     const inactiveAudio = currentTrack === 'before' ? afterRef.current : beforeRef.current;
@@ -193,6 +323,13 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const retryLoading = () => {
+    setAudioLoadingState('unloaded');
+    setAudioError(null);
+    setLoadingProgress(0);
+    loadAudioFiles();
   };
 
   // If this is a placeholder, render a different layout
@@ -252,6 +389,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
               className="volume-toggle-btn"
               onClick={toggleVolumeDropdown}
               aria-label="Volume control"
+              disabled={audioLoadingState !== 'loaded'}
           >
             🔊
           </button>
@@ -271,9 +409,11 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
                       onMouseUp={handleVolumeMouseUp}
                       onTouchStart={handleVolumeTouchStart}
                       onTouchEnd={handleVolumeTouchEnd}
-                      onTouchMove={handleVolumeTouchMove}
+                      onPointerDown={handleVolumeSliderInteraction}
+                      onPointerMove={handleVolumeSliderInteraction}
                       className="volume-slider-dropdown"
                       aria-label="Volume control"
+                      disabled={audioLoadingState !== 'loaded'}
                   />
                   <span className="volume-percentage-dropdown">{Math.round(volume * 100)}%</span>
                 </div>
@@ -281,26 +421,69 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
           )}
         </div>
 
+        {/* Loading State Display */}
+        {audioLoadingState === 'loading' && (
+          <div className="audio-loading-overlay">
+            <div className="loading-content">
+              <div className="loading-spinner"></div>
+              <p>Loading audio files...</p>
+              <div className="loading-progress-bar">
+                <div
+                  className="loading-progress-fill"
+                  style={{ width: `${loadingProgress}%` }}
+                ></div>
+              </div>
+              <span className="loading-percentage">{Math.round(loadingProgress)}%</span>
+            </div>
+          </div>
+        )}
+
+        {/* Error State Display */}
+        {audioLoadingState === 'error' && (
+          <div className="audio-error-overlay">
+            <div className="error-content">
+              <div className="error-icon">⚠️</div>
+              <p>{audioError}</p>
+              <button className="retry-btn" onClick={retryLoading}>
+                Try Again
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="audio-controls">
           <div className="track-selector">
             <button
                 className={`track-btn ${currentTrack === 'before' ? 'active' : ''}`}
                 onClick={() => switchTrack('before')}
+                disabled={audioLoadingState === 'loading'}
             >
               Before Mix
+              {audioLoadingState === 'unloaded' && <span className="load-indicator">Click to load</span>}
             </button>
             <button
                 className={`track-btn ${currentTrack === 'after' ? 'active' : ''}`}
                 onClick={() => switchTrack('after')}
+                disabled={audioLoadingState === 'loading'}
             >
               After Mix
+              {audioLoadingState === 'unloaded' && <span className="load-indicator">Click to load</span>}
             </button>
           </div>
 
           <div className="playback-controls">
-            <button className="play-btn" onClick={togglePlayback} disabled={!isLoaded}>
-              {isPlaying ? '⏸️' : '▶️'}
+            <button
+              className="play-btn"
+              onClick={togglePlayback}
+              disabled={audioLoadingState === 'loading' || audioLoadingState === 'error'}
+            >
+              {audioLoadingState === 'loading' ? '⏳' :
+               audioLoadingState === 'error' ? '❌' :
+               isPlaying ? '⏸️' : '▶️'}
             </button>
+            {audioLoadingState === 'unloaded' && (
+              <span className="play-hint">Click to load and play</span>
+            )}
           </div>
         </div>
 
@@ -314,7 +497,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
               value={currentTime}
               onChange={handleProgressChange}
               className="progress-slider"
-              disabled={!isLoaded}
+              disabled={!isLoaded || audioLoadingState !== 'loaded'}
               aria-label="Audio progress"
           />
           <span className="time-display">{formatTime(duration)}</span>
@@ -322,18 +505,23 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
 
         <div className="current-track-info">
           <span>Now playing: {currentTrack === 'before' ? 'Original Track' : 'Mixed Track'}</span>
-          {!isLoaded && <span className="loading-indicator"> • Loading audio...</span>}
+          {audioLoadingState === 'loading' && <span className="loading-indicator"> • Loading audio...</span>}
+          {audioLoadingState === 'unloaded' && <span className="unloaded-indicator"> • Click play to load audio</span>}
+          {!isLoaded && audioLoadingState === 'loaded' && <span className="loading-indicator"> • Preparing audio...</span>}
         </div>
 
-        {/* Hidden audio elements */}
-        <audio ref={beforeRef} preload="metadata">
+        {/* Hidden audio elements - now with preload="none" for lazy loading */}
+        <audio ref={beforeRef} preload="none">
           <source src={beforeAudio} type="audio/mpeg" />
+          <source src={beforeAudio} type="audio/wav" />
         </audio>
-        <audio ref={afterRef} preload="metadata">
+        <audio ref={afterRef} preload="none">
           <source src={afterAudio} type="audio/mpeg" />
+          <source src={afterAudio} type="audio/wav" />
         </audio>
       </div>
   );
 };
 
 export default AudioComparison;
+

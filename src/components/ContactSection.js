@@ -85,7 +85,7 @@ const ContactSection = () => {
             <h3>Contact Information</h3>
             <div className="contact-item">
               <h4>📧 Email</h4>
-              <p>hunterjohanson04@gmail.com</p>
+              <p>contact@tornadoaudio.net</p>
             </div>
             <div className="contact-item">
               <h4>⏱️ Response Time</h4>

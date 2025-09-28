@@ -88,6 +88,17 @@ const PricingSection = () => {
     }
   };
 
+  const handleContactUs = () => {
+    // Scroll to contact section
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <section id="pricing" className="pricing-section">
       <div className="container">
@@ -156,7 +167,7 @@ const PricingSection = () => {
             * All services include professional communication throughout the process and satisfaction guarantee
           </p>
           <p className="custom-pricing">
-            Need something custom? <strong>Contact us</strong> for personalized pricing and services.
+            Need something custom? <span className="contact-link" onClick={handleContactUs}>Contact us</span> for personalized pricing and services.
           </p>
         </div>
       </div>
