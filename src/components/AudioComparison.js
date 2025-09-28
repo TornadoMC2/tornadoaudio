@@ -91,7 +91,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       };
 
       // Handle loading progress
-      const handleProgress = (audio, type) => {
+      const handleProgress = (audio) => {
         if (audio.buffered.length > 0) {
           const bufferedEnd = audio.buffered.end(audio.buffered.length - 1);
           const duration = audio.duration;
@@ -116,8 +116,8 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       activeAudio.addEventListener('ended', handleEnded);
       beforeAudioEl.addEventListener('loadedmetadata', handleLoadedMetadata);
       afterAudioEl.addEventListener('loadedmetadata', handleLoadedMetadata);
-      beforeAudioEl.addEventListener('progress', () => handleProgress(beforeAudioEl, 'before'));
-      afterAudioEl.addEventListener('progress', () => handleProgress(afterAudioEl, 'after'));
+      beforeAudioEl.addEventListener('progress', () => handleProgress(beforeAudioEl));
+      afterAudioEl.addEventListener('progress', () => handleProgress(afterAudioEl));
       beforeAudioEl.addEventListener('error', handleError);
       afterAudioEl.addEventListener('error', handleError);
 
@@ -127,8 +127,8 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         activeAudio.removeEventListener('ended', handleEnded);
         beforeAudioEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
         afterAudioEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
-        beforeAudioEl.removeEventListener('progress', () => handleProgress(beforeAudioEl, 'before'));
-        afterAudioEl.removeEventListener('progress', () => handleProgress(afterAudioEl, 'after'));
+        beforeAudioEl.removeEventListener('progress', () => handleProgress(beforeAudioEl));
+        afterAudioEl.removeEventListener('progress', () => handleProgress(afterAudioEl));
         beforeAudioEl.removeEventListener('error', handleError);
         afterAudioEl.removeEventListener('error', handleError);
       };
@@ -527,6 +527,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
           </div>
         </div>
 
+              <small>Please wait while both before and after tracks load completely</small>
         <div className="progress-control">
           <span className="time-display">{formatTime(currentTime)}</span>
           <input
