@@ -9,24 +9,24 @@ const Portfolio = () => {
       id: 1,
       title: "Take32 - 'Rotten Eyes'",
       description: "Full band mix with emphasis on punch and clarity. Enhanced drum presence and guitar separation.",
-      beforeAudio: "/audio/rock-before.wav",
-      afterAudio: "/audio/rock-after.wav",
+      beforeAudio: "/audio/mp3/rock-before.mp3",
+      afterAudio: "/audio/mp3/rock-after.mp3",
       genre: "Rock"
     },
     {
       id: 2,
       title: "Bryce Allin - 'Shark Infested Waters'",
       description: "Modern rock mix focused on bringing out vocal detail and dynamic range. Bringing out clarity in the Drums. Tight low end and wide stereo image.",
-      beforeAudio: "/audio/rock2-before.mp3",
-      afterAudio: "/audio/rock2-after.wav",
+      beforeAudio: "/audio/mp3/rock2-before.mp3",
+      afterAudio: "/audio/mp3/rock2-after.mp3",
       genre: "Rock"
     },
     {
       id: 3,
       title: "Chad Hollister Band - 'Eyes'",
       description: "Energy filled mix with non-conventional instrumentation. Emphasizing warmth and presence for an intimate yet powerful sound. Drums are punchy and upfront, vocals are clear and present, and the acoustic instruments have a natural warmth.",
-      beforeAudio: "/audio/eyes-before.wav",
-      afterAudio: "/audio/eyes-after.wav",
+      beforeAudio: "/audio/mp3/eyes-before.mp3",
+      afterAudio: "/audio/mp3/eyes-after.mp3",
       genre: "Country Rock"
     },
     {
