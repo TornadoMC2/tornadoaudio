@@ -67,6 +67,7 @@ const sendConfirmationEmail = async (name, email) => {
   try {
     const { data, error } = await resend.emails.send({
       from: `Hunter Johanson <contact@tornadoaudio.net>`,
+      to: [email],
       bcc: [process.env.RECIPIENT_EMAIL, email], // BCC to both owner and client
       replyTo: [email], // Client's email - when you reply, it goes to them
       subject: `Thank you for your inquiry, ${name}!`,
