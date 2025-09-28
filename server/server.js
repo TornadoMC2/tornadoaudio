@@ -68,6 +68,7 @@ const sendConfirmationEmail = async (name, email) => {
     const { data, error } = await resend.emails.send({
       from: `Hunter Johanson <contact@tornadoaudio.net>`,
       to: [email],
+      cc: [process.env.RECIPIENT_EMAIL], // Optional: keep a copy for yourself
       subject: `Thank you for your inquiry, ${name}!`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -83,7 +84,7 @@ const sendConfirmationEmail = async (name, email) => {
           </p>
           <p style="color: #555;">
             Best regards,<br>
-            The Tornado Audio Team
+            Hunter Johanson at The Tornado Audio Team
           </p>
         </div>
       `
@@ -205,7 +206,7 @@ app.post('/api/contact', async (req, res) => {
         console.log('Confirmation email sent successfully');
 
         // Send copy to owner for easy replying
-        await sendConfirmationCopyToOwner(name, email);
+        // await sendConfirmationCopyToOwner(name, email);
         console.log('Confirmation copy sent to owner successfully');
       } catch (confirmationEmailError) {
         console.error('Confirmation email error:', confirmationEmailError);
