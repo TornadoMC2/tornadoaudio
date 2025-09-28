@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Resend } = require('resend');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +13,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Professional email function using Resend
 const sendEmailWithResend = async (name, email, project, message) => {
@@ -226,6 +230,11 @@ app.post('/api/contact', async (req, res) => {
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Tornado Audio API is running' });
+});
+
+// Catch-all route for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 app.listen(PORT, () => {
