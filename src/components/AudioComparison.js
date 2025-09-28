@@ -63,24 +63,9 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       beforeAudioEl.volume = volume;
       afterAudioEl.volume = volume;
 
-      // Improved sync function with less aggressive synchronization
-      const maintainSync = () => {
+      // Simple time update - no sync, just track current time
+      const handleTimeUpdate = () => {
         const activeAudio = currentTrack === 'before' ? beforeAudioEl : afterAudioEl;
-        const inactiveAudio = currentTrack === 'before' ? afterAudioEl : beforeAudioEl;
-        
-        // Only sync if there's a significant difference (>500ms) and not too frequently
-        const timeDiff = Math.abs(inactiveAudio.currentTime - activeAudio.currentTime);
-
-        // Use a more lenient threshold and only sync occasionally to prevent choppiness
-        if (timeDiff > 0.5 && !activeAudio.seeking) {
-          // Use requestAnimationFrame for smoother sync timing
-          requestAnimationFrame(() => {
-            if (inactiveAudio && !inactiveAudio.seeking) {
-              inactiveAudio.currentTime = activeAudio.currentTime;
-            }
-          });
-        }
-        
         setCurrentTime(activeAudio.currentTime);
       };
 
@@ -137,38 +122,10 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         setAudioLoadingState('error');
       };
 
-      // Enhanced seeking handler - only sync when user explicitly seeks
-      const handleSeeked = (e) => {
-        const seekedAudio = e.target;
-        const otherAudio = seekedAudio === beforeAudioEl ? afterAudioEl : beforeAudioEl;
-        
-        // Only sync when user actively seeks, not during automatic playback adjustments
-        if (seekedAudio.seeking === false) {
-          // Use a small delay to ensure seeking is complete
-          setTimeout(() => {
-            if (otherAudio && !otherAudio.seeking) {
-              otherAudio.currentTime = seekedAudio.currentTime;
-            }
-            setCurrentTime(seekedAudio.currentTime);
-          }, 50);
-        }
-      };
-
       const activeAudio = currentTrack === 'before' ? beforeAudioEl : afterAudioEl;
 
-      // Throttle the sync function to run less frequently (every 250ms instead of every frame)
-      let lastSyncTime = 0;
-      const throttledMaintainSync = () => {
-        const now = Date.now();
-        if (now - lastSyncTime > 250) { // Only sync every 250ms
-          maintainSync();
-          lastSyncTime = now;
-        }
-        setCurrentTime(activeAudio.currentTime);
-      };
-
-      // Enhanced event listeners with throttled sync
-      activeAudio.addEventListener('timeupdate', throttledMaintainSync);
+      // Simple event listeners - no complex sync
+      activeAudio.addEventListener('timeupdate', handleTimeUpdate);
       activeAudio.addEventListener('timeupdate', checkDurationLimit);
       activeAudio.addEventListener('ended', handleEnded);
       beforeAudioEl.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -178,12 +135,8 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       beforeAudioEl.addEventListener('error', handleError);
       afterAudioEl.addEventListener('error', handleError);
 
-      // Only add seeked listeners to detect user-initiated seeking
-      beforeAudioEl.addEventListener('seeked', handleSeeked);
-      afterAudioEl.addEventListener('seeked', handleSeeked);
-
       return () => {
-        activeAudio.removeEventListener('timeupdate', throttledMaintainSync);
+        activeAudio.removeEventListener('timeupdate', handleTimeUpdate);
         activeAudio.removeEventListener('timeupdate', checkDurationLimit);
         activeAudio.removeEventListener('ended', handleEnded);
         beforeAudioEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
@@ -192,8 +145,6 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         afterAudioEl.removeEventListener('progress', () => handleProgress(afterAudioEl));
         beforeAudioEl.removeEventListener('error', handleError);
         afterAudioEl.removeEventListener('error', handleError);
-        beforeAudioEl.removeEventListener('seeked', handleSeeked);
-        afterAudioEl.removeEventListener('seeked', handleSeeked);
       };
     }
   }, [currentTrack, volume, audioLoadingState, duration]);
