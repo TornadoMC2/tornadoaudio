@@ -151,125 +151,125 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     };
 
     return (
-      <div className="audio-comparison placeholder-comparison">
-        <h3>{title}</h3>
-        <p>{description}</p>
+        <div className="audio-comparison placeholder-comparison">
+          <h3>{title}</h3>
+          <p>{description}</p>
 
-        <div className="placeholder-content">
-          <div className="placeholder-visual">
-            <div className="waveform-placeholder">
-              <div className="wave-bar"></div>
-              <div className="wave-bar"></div>
-              <div className="wave-bar"></div>
-              <div className="wave-bar"></div>
-              <div className="wave-bar"></div>
-              <div className="wave-bar"></div>
-              <div className="wave-bar"></div>
-              <div className="wave-bar"></div>
+          <div className="placeholder-content">
+            <div className="placeholder-visual">
+              <div className="waveform-placeholder">
+                <div className="wave-bar"></div>
+                <div className="wave-bar"></div>
+                <div className="wave-bar"></div>
+                <div className="wave-bar"></div>
+                <div className="wave-bar"></div>
+                <div className="wave-bar"></div>
+                <div className="wave-bar"></div>
+                <div className="wave-bar"></div>
+              </div>
+              <div className="placeholder-text">Your Music Here</div>
             </div>
-            <div className="placeholder-text">Your Music Here</div>
-          </div>
 
-          <button className="get-started-btn" onClick={scrollToContact}>
-            Get Started Today
-          </button>
+            <button className="get-started-btn" onClick={scrollToContact}>
+              Get Started Today
+            </button>
 
-          <div className="placeholder-features">
-            <div className="feature-item">✓ Professional Quality</div>
-            <div className="feature-item">✓ Fast Turnaround</div>
-            <div className="feature-item">✓ Unlimited Revisions*</div>
+            <div className="placeholder-features">
+              <div className="feature-item">✓ Professional Quality</div>
+              <div className="feature-item">✓ Fast Turnaround</div>
+              <div className="feature-item">✓ Unlimited Revisions*</div>
+            </div>
           </div>
         </div>
-      </div>
     );
   }
 
   return (
-    <div className="audio-comparison">
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <div className="audio-comparison">
+        <h3>{title}</h3>
+        <p>{description}</p>
 
-      {/* Volume Dropdown - positioned in top right corner */}
-      <div className="volume-dropdown-container">
-        <button
-          className="volume-toggle-btn"
-          onClick={toggleVolumeDropdown}
-          aria-label="Volume control"
-        >
-          🔊
-        </button>
-        {showVolumeDropdown && (
-          <div className="volume-dropdown">
-            <div className="volume-control-dropdown">
-              <span>Volume</span>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="volume-slider-dropdown"
-                aria-label="Volume control"
-              />
-              <span className="volume-percentage-dropdown">{Math.round(volume * 100)}%</span>
-            </div>
+        {/* Volume Dropdown - positioned in top right corner */}
+        <div className="volume-dropdown-container">
+          <button
+              className="volume-toggle-btn"
+              onClick={toggleVolumeDropdown}
+              aria-label="Volume control"
+          >
+            🔊
+          </button>
+          {showVolumeDropdown && (
+              <div className="volume-dropdown">
+                <div className="volume-control-dropdown">
+                  <span>Volume</span>
+                  <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value={volume}
+                      onChange={handleVolumeChange}
+                      className="volume-slider-dropdown"
+                      aria-label="Volume control"
+                  />
+                  <span className="volume-percentage-dropdown">{Math.round(volume * 100)}%</span>
+                </div>
+              </div>
+          )}
+        </div>
+
+        <div className="audio-controls">
+          <div className="track-selector">
+            <button
+                className={`track-btn ${currentTrack === 'before' ? 'active' : ''}`}
+                onClick={() => switchTrack('before')}
+            >
+              Before Mix
+            </button>
+            <button
+                className={`track-btn ${currentTrack === 'after' ? 'active' : ''}`}
+                onClick={() => switchTrack('after')}
+            >
+              After Mix
+            </button>
           </div>
-        )}
-      </div>
 
-      <div className="audio-controls">
-        <div className="track-selector">
-          <button
-            className={`track-btn ${currentTrack === 'before' ? 'active' : ''}`}
-            onClick={() => switchTrack('before')}
-          >
-            Before Mix
-          </button>
-          <button
-            className={`track-btn ${currentTrack === 'after' ? 'active' : ''}`}
-            onClick={() => switchTrack('after')}
-          >
-            After Mix
-          </button>
+          <div className="playback-controls">
+            <button className="play-btn" onClick={togglePlayback} disabled={!isLoaded}>
+              {isPlaying ? '⏸️' : '▶️'}
+            </button>
+          </div>
         </div>
 
-        <div className="playback-controls">
-          <button className="play-btn" onClick={togglePlayback} disabled={!isLoaded}>
-            {isPlaying ? '⏸️' : '▶️'}
-          </button>
+        <div className="progress-control">
+          <span className="time-display">{formatTime(currentTime)}</span>
+          <input
+              type="range"
+              min="0"
+              max={duration || 0}
+              step="0.1"
+              value={currentTime}
+              onChange={handleProgressChange}
+              className="progress-slider"
+              disabled={!isLoaded}
+              aria-label="Audio progress"
+          />
+          <span className="time-display">{formatTime(duration)}</span>
         </div>
-      </div>
 
-      <div className="progress-control">
-        <span className="time-display">{formatTime(currentTime)}</span>
-        <input
-          type="range"
-          min="0"
-          max={duration || 0}
-          step="0.1"
-          value={currentTime}
-          onChange={handleProgressChange}
-          className="progress-slider"
-          disabled={!isLoaded}
-          aria-label="Audio progress"
-        />
-        <span className="time-display">{formatTime(duration)}</span>
-      </div>
+        <div className="current-track-info">
+          <span>Now playing: {currentTrack === 'before' ? 'Original Track' : 'Mixed Track'}</span>
+          {!isLoaded && <span className="loading-indicator"> • Loading audio...</span>}
+        </div>
 
-      <div className="current-track-info">
-        <span>Now playing: {currentTrack === 'before' ? 'Original Track' : 'Mixed Track'}</span>
-        {!isLoaded && <span className="loading-indicator"> • Loading audio...</span>}
+        {/* Hidden audio elements */}
+        <audio ref={beforeRef} preload="metadata">
+          <source src={beforeAudio} type="audio/mpeg" />
+        </audio>
+        <audio ref={afterRef} preload="metadata">
+          <source src={afterAudio} type="audio/mpeg" />
+        </audio>
       </div>
-
-      {/* Hidden audio elements */}
-      <audio ref={beforeRef} preload="metadata">
-        <source src={beforeAudio} type="audio/mpeg" />
-      </audio>
-      <audio ref={afterRef} preload="metadata">
-        <source src={afterAudio} type="audio/mpeg" />
-      </audio>
-    </div>
   );
 };
 

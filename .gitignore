@@ -27,3 +27,4 @@ yarn-error.log*
 # Large audio files
 public/audio/*.wav
 public/audio/*.mp3
+/server/.env
