@@ -63,30 +63,58 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       beforeAudioEl.volume = volume;
       afterAudioEl.volume = volume;
 
-      // Handle metadata loaded
-      const handleLoadedMetadata = () => {
-        setDuration(beforeAudioEl.duration || afterAudioEl.duration);
-        setIsLoaded(true);
-      };
-
-      // Handle time update
-      const handleTimeUpdate = () => {
+      // Improved sync function with less aggressive synchronization
+      const maintainSync = () => {
         const activeAudio = currentTrack === 'before' ? beforeAudioEl : afterAudioEl;
+        const inactiveAudio = currentTrack === 'before' ? afterAudioEl : beforeAudioEl;
+        
+        // Only sync if there's a significant difference (>500ms) and not too frequently
+        const timeDiff = Math.abs(inactiveAudio.currentTime - activeAudio.currentTime);
+
+        // Use a more lenient threshold and only sync occasionally to prevent choppiness
+        if (timeDiff > 0.5 && !activeAudio.seeking) {
+          // Use requestAnimationFrame for smoother sync timing
+          requestAnimationFrame(() => {
+            if (inactiveAudio && !inactiveAudio.seeking) {
+              inactiveAudio.currentTime = activeAudio.currentTime;
+            }
+          });
+        }
+        
         setCurrentTime(activeAudio.currentTime);
       };
 
-      // Handle audio ended
+      // Handle metadata loaded - use shorter duration to trim longer audio
+      const handleLoadedMetadata = () => {
+        const beforeDuration = beforeAudioEl.duration || 0;
+        const afterDuration = afterAudioEl.duration || 0;
+
+        // Use the shorter duration to ensure sync throughout and effectively "trim" longer audio
+        const shortestDuration = Math.min(beforeDuration, afterDuration);
+        setDuration(shortestDuration);
+        setIsLoaded(true);
+        
+        // Ensure both tracks start at the same position
+        beforeAudioEl.currentTime = 0;
+        afterAudioEl.currentTime = 0;
+      };
+
+      // Handle audio ended or reaching the trimmed duration
       const handleEnded = () => {
         setIsPlaying(false);
+        // Reset both tracks to beginning for consistency
+        beforeAudioEl.currentTime = 0;
+        afterAudioEl.currentTime = 0;
         setCurrentTime(0);
       };
 
-      // Sync the audio elements
-      const syncAudio = () => {
-        if (currentTrack === 'before') {
-          afterAudioEl.currentTime = beforeAudioEl.currentTime;
-        } else {
-          beforeAudioEl.currentTime = afterAudioEl.currentTime;
+      // Check if we've reached the end of the shorter track during playback
+      const checkDurationLimit = () => {
+        const activeAudio = currentTrack === 'before' ? beforeAudioEl : afterAudioEl;
+
+        // Stop playback if we've reached the duration limit (shortest track length)
+        if (activeAudio.currentTime >= duration && duration > 0) {
+          handleEnded();
         }
       };
 
@@ -109,10 +137,39 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         setAudioLoadingState('error');
       };
 
+      // Enhanced seeking handler - only sync when user explicitly seeks
+      const handleSeeked = (e) => {
+        const seekedAudio = e.target;
+        const otherAudio = seekedAudio === beforeAudioEl ? afterAudioEl : beforeAudioEl;
+        
+        // Only sync when user actively seeks, not during automatic playback adjustments
+        if (seekedAudio.seeking === false) {
+          // Use a small delay to ensure seeking is complete
+          setTimeout(() => {
+            if (otherAudio && !otherAudio.seeking) {
+              otherAudio.currentTime = seekedAudio.currentTime;
+            }
+            setCurrentTime(seekedAudio.currentTime);
+          }, 50);
+        }
+      };
+
       const activeAudio = currentTrack === 'before' ? beforeAudioEl : afterAudioEl;
 
-      activeAudio.addEventListener('timeupdate', syncAudio);
-      activeAudio.addEventListener('timeupdate', handleTimeUpdate);
+      // Throttle the sync function to run less frequently (every 250ms instead of every frame)
+      let lastSyncTime = 0;
+      const throttledMaintainSync = () => {
+        const now = Date.now();
+        if (now - lastSyncTime > 250) { // Only sync every 250ms
+          maintainSync();
+          lastSyncTime = now;
+        }
+        setCurrentTime(activeAudio.currentTime);
+      };
+
+      // Enhanced event listeners with throttled sync
+      activeAudio.addEventListener('timeupdate', throttledMaintainSync);
+      activeAudio.addEventListener('timeupdate', checkDurationLimit);
       activeAudio.addEventListener('ended', handleEnded);
       beforeAudioEl.addEventListener('loadedmetadata', handleLoadedMetadata);
       afterAudioEl.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -121,9 +178,13 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       beforeAudioEl.addEventListener('error', handleError);
       afterAudioEl.addEventListener('error', handleError);
 
+      // Only add seeked listeners to detect user-initiated seeking
+      beforeAudioEl.addEventListener('seeked', handleSeeked);
+      afterAudioEl.addEventListener('seeked', handleSeeked);
+
       return () => {
-        activeAudio.removeEventListener('timeupdate', syncAudio);
-        activeAudio.removeEventListener('timeupdate', handleTimeUpdate);
+        activeAudio.removeEventListener('timeupdate', throttledMaintainSync);
+        activeAudio.removeEventListener('timeupdate', checkDurationLimit);
         activeAudio.removeEventListener('ended', handleEnded);
         beforeAudioEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
         afterAudioEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
@@ -131,9 +192,11 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         afterAudioEl.removeEventListener('progress', () => handleProgress(afterAudioEl));
         beforeAudioEl.removeEventListener('error', handleError);
         afterAudioEl.removeEventListener('error', handleError);
+        beforeAudioEl.removeEventListener('seeked', handleSeeked);
+        afterAudioEl.removeEventListener('seeked', handleSeeked);
       };
     }
-  }, [currentTrack, volume, audioLoadingState]);
+  }, [currentTrack, volume, audioLoadingState, duration]);
 
   // Function to load audio files lazily
   const loadAudioFiles = async () => {
@@ -149,63 +212,71 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       const afterAudioEl = afterRef.current;
 
       if (beforeAudioEl && afterAudioEl) {
-        // Set preload to metadata to start loading
-        beforeAudioEl.preload = 'metadata';
-        afterAudioEl.preload = 'metadata';
+        // Set preload to auto to ensure both tracks have enough buffered data for seamless switching
+        beforeAudioEl.preload = 'auto';
+        afterAudioEl.preload = 'auto';
 
         // Force load by setting src again
         beforeAudioEl.load();
         afterAudioEl.load();
 
-        // Wait for both to be ready with metadata loaded
+        // Wait for both to be ready with enough data for smooth playback
         await Promise.all([
           new Promise((resolve, reject) => {
             const handleCanPlay = () => {
-              beforeAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
+              beforeAudioEl.removeEventListener('canplaythrough', handleCanPlay);
               beforeAudioEl.removeEventListener('error', handleError);
               resolve();
             };
             const handleError = (e) => {
-              beforeAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
+              beforeAudioEl.removeEventListener('canplaythrough', handleCanPlay);
               beforeAudioEl.removeEventListener('error', handleError);
               reject(e);
             };
 
-            // Use loadedmetadata instead of canplaythrough for faster response
-            if (beforeAudioEl.readyState >= 1) {
-              resolve(); // Already has metadata
+            // Use canplaythrough to ensure enough data is buffered for seamless switching
+            if (beforeAudioEl.readyState >= 4) {
+              resolve(); // Already can play through
             } else {
-              beforeAudioEl.addEventListener('loadedmetadata', handleCanPlay);
+              beforeAudioEl.addEventListener('canplaythrough', handleCanPlay);
               beforeAudioEl.addEventListener('error', handleError);
             }
           }),
           new Promise((resolve, reject) => {
             const handleCanPlay = () => {
-              afterAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
+              afterAudioEl.removeEventListener('canplaythrough', handleCanPlay);
               afterAudioEl.removeEventListener('error', handleError);
               resolve();
             };
             const handleError = (e) => {
-              afterAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
+              afterAudioEl.removeEventListener('canplaythrough', handleCanPlay);
               afterAudioEl.removeEventListener('error', handleError);
               reject(e);
             };
 
-            // Use loadedmetadata instead of canplaythrough for faster response
-            if (afterAudioEl.readyState >= 1) {
-              resolve(); // Already has metadata
+            // Use canplaythrough to ensure enough data is buffered for seamless switching
+            if (afterAudioEl.readyState >= 4) {
+              resolve(); // Already can play through
             } else {
-              afterAudioEl.addEventListener('loadedmetadata', handleCanPlay);
+              afterAudioEl.addEventListener('canplaythrough', handleCanPlay);
               afterAudioEl.addEventListener('error', handleError);
             }
           })
         ]);
 
-        // Set both states when audio is ready
-        setDuration(beforeAudioEl.duration || afterAudioEl.duration);
+        // Set both states when audio is ready - use the shorter duration to trim longer audio
+        const beforeDuration = beforeAudioEl.duration || 0;
+        const afterDuration = afterAudioEl.duration || 0;
+        const shortestDuration = Math.min(beforeDuration, afterDuration);
+
+        setDuration(shortestDuration);
         setIsLoaded(true);
         setAudioLoadingState('loaded');
         setLoadingProgress(100);
+        
+        // Pre-sync both tracks to starting position for consistency
+        beforeAudioEl.currentTime = 0;
+        afterAudioEl.currentTime = 0;
       }
     } catch (error) {
       console.error('Error loading audio files:', error);
@@ -272,6 +343,17 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     setIsPlaying(!isPlaying);
   };
 
+  // Enhanced sync function to keep both tracks in perfect sync
+  const syncBothTracks = (sourceAudio, targetAudio) => {
+    if (sourceAudio && targetAudio && sourceAudio.readyState >= 1 && targetAudio.readyState >= 1) {
+      const timeDiff = Math.abs(targetAudio.currentTime - sourceAudio.currentTime);
+      // Only sync if there's a significant difference (more than 50ms)
+      if (timeDiff > 0.05) {
+        targetAudio.currentTime = sourceAudio.currentTime;
+      }
+    }
+  };
+
   const switchTrack = async (track) => {
     await handleFirstInteraction();
 
@@ -279,27 +361,60 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       return; // Don't switch if audio isn't loaded yet
     }
 
-    const currentTime = (currentTrack === 'before' ? beforeRef.current : afterRef.current).currentTime;
-    const wasPlaying = isPlaying;
+    // Get references to both audio elements
+    const beforeAudio = beforeRef.current;
+    const afterAudio = afterRef.current;
+    const currentAudio = currentTrack === 'before' ? beforeAudio : afterAudio;
+    const newActiveAudio = track === 'before' ? beforeAudio : afterAudio;
 
-    if (isPlaying) {
-      beforeRef.current.pause();
-      afterRef.current.pause();
+    // If switching to the same track, do nothing
+    if (currentTrack === track) {
+      return;
     }
 
-    setCurrentTrack(track);
+    const wasPlaying = isPlaying;
+    const currentTime = currentAudio.currentTime;
 
-    setTimeout(() => {
-      const newActiveAudio = track === 'before' ? beforeRef.current : afterRef.current;
-      newActiveAudio.currentTime = currentTime;
+    // Pre-sync the new track to the exact current time
+    syncBothTracks(currentAudio, newActiveAudio);
 
-      if (wasPlaying) {
-        newActiveAudio.play().catch(error => {
-          console.error('Error playing audio after track switch:', error);
-          setAudioError('Unable to play audio. Please try again.');
-        });
+    // For seamless switching during playback
+    if (wasPlaying) {
+      try {
+        // Start the new track playing at the exact same time
+        newActiveAudio.currentTime = currentTime;
+        await newActiveAudio.play();
+
+        // Immediately pause the old track to avoid overlap
+        currentAudio.pause();
+
+        // Update state
+        setCurrentTrack(track);
+
+        // Fine-tune synchronization after the switch
+        setTimeout(() => {
+          syncBothTracks(newActiveAudio, currentAudio);
+        }, 10);
+
+      } catch (error) {
+        console.error('Error playing audio after track switch:', error);
+        setAudioError('Unable to play audio. Please try again.');
+        // Fallback: pause everything if there's an error
+        beforeAudio.pause();
+        afterAudio.pause();
+        setIsPlaying(false);
       }
-    }, 50);
+    } else {
+      // When not playing, just sync and switch
+      newActiveAudio.currentTime = currentTime;
+      currentAudio.pause();
+      setCurrentTrack(track);
+
+      // Ensure both tracks stay synced
+      setTimeout(() => {
+        syncBothTracks(newActiveAudio, currentAudio);
+      }, 10);
+    }
   };
 
   const handleVolumeChange = (e) => {
@@ -527,7 +642,6 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
           </div>
         </div>
 
-              <small>Please wait while both before and after tracks load completely</small>
         <div className="progress-control">
           <span className="time-display">{formatTime(currentTime)}</span>
           <input
