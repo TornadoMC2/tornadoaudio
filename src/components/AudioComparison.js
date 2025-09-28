@@ -142,6 +142,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     setAudioLoadingState('loading');
     setLoadingProgress(0);
     setAudioError(null);
+    setIsLoaded(false); // Reset isLoaded when starting to load
 
     try {
       const beforeAudioEl = beforeRef.current;
@@ -156,38 +157,53 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         beforeAudioEl.load();
         afterAudioEl.load();
 
-        // Wait for both to be ready
+        // Wait for both to be ready with metadata loaded
         await Promise.all([
           new Promise((resolve, reject) => {
             const handleCanPlay = () => {
-              beforeAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              beforeAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
               beforeAudioEl.removeEventListener('error', handleError);
               resolve();
             };
             const handleError = (e) => {
-              beforeAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              beforeAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
               beforeAudioEl.removeEventListener('error', handleError);
               reject(e);
             };
-            beforeAudioEl.addEventListener('canplaythrough', handleCanPlay);
-            beforeAudioEl.addEventListener('error', handleError);
+
+            // Use loadedmetadata instead of canplaythrough for faster response
+            if (beforeAudioEl.readyState >= 1) {
+              resolve(); // Already has metadata
+            } else {
+              beforeAudioEl.addEventListener('loadedmetadata', handleCanPlay);
+              beforeAudioEl.addEventListener('error', handleError);
+            }
           }),
           new Promise((resolve, reject) => {
             const handleCanPlay = () => {
-              afterAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              afterAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
               afterAudioEl.removeEventListener('error', handleError);
               resolve();
             };
             const handleError = (e) => {
-              afterAudioEl.removeEventListener('canplaythrough', handleCanPlay);
+              afterAudioEl.removeEventListener('loadedmetadata', handleCanPlay);
               afterAudioEl.removeEventListener('error', handleError);
               reject(e);
             };
-            afterAudioEl.addEventListener('canplaythrough', handleCanPlay);
-            afterAudioEl.addEventListener('error', handleError);
+
+            // Use loadedmetadata instead of canplaythrough for faster response
+            if (afterAudioEl.readyState >= 1) {
+              resolve(); // Already has metadata
+            } else {
+              afterAudioEl.addEventListener('loadedmetadata', handleCanPlay);
+              afterAudioEl.addEventListener('error', handleError);
+            }
           })
         ]);
 
+        // Set both states when audio is ready
+        setDuration(beforeAudioEl.duration || afterAudioEl.duration);
+        setIsLoaded(true);
         setAudioLoadingState('loaded');
         setLoadingProgress(100);
       }
@@ -195,6 +211,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       console.error('Error loading audio files:', error);
       setAudioError('Failed to load audio files. Please check your internet connection and try again.');
       setAudioLoadingState('error');
+      setIsLoaded(false);
     }
   };
 
@@ -208,9 +225,32 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
   };
 
   const togglePlayback = async () => {
+    const shouldPlayAfterLoad = !isPlaying && audioLoadingState === 'unloaded';
+
     await handleFirstInteraction();
 
     if (audioLoadingState !== 'loaded') {
+      // If we're still loading and user wanted to play, set a flag to play after loading
+      if (shouldPlayAfterLoad) {
+        // Wait for loading to complete, then play
+        const waitForLoad = setInterval(() => {
+          if (audioLoadingState === 'loaded') {
+            clearInterval(waitForLoad);
+            // Auto-play after loading is complete
+            const activeAudio = currentTrack === 'before' ? beforeRef.current : afterRef.current;
+            if (activeAudio) {
+              activeAudio.play().then(() => {
+                setIsPlaying(true);
+              }).catch(error => {
+                console.error('Error auto-playing audio after load:', error);
+                setAudioError('Unable to play audio. Please try again.');
+              });
+            }
+          } else if (audioLoadingState === 'error') {
+            clearInterval(waitForLoad);
+          }
+        }, 100);
+      }
       return; // Don't play if audio isn't loaded yet
     }
 
@@ -472,6 +512,9 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
           </div>
 
           <div className="playback-controls">
+            {audioLoadingState === 'unloaded' && (
+              <span className="play-hint">Click to load and play</span>
+            )}
             <button
               className="play-btn"
               onClick={togglePlayback}
@@ -481,9 +524,6 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
                audioLoadingState === 'error' ? '❌' :
                isPlaying ? '⏸️' : '▶️'}
             </button>
-            {audioLoadingState === 'unloaded' && (
-              <span className="play-hint">Click to load and play</span>
-            )}
           </div>
         </div>
 
@@ -507,7 +547,6 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
           <span>Now playing: {currentTrack === 'before' ? 'Original Track' : 'Mixed Track'}</span>
           {audioLoadingState === 'loading' && <span className="loading-indicator"> • Loading audio...</span>}
           {audioLoadingState === 'unloaded' && <span className="unloaded-indicator"> • Click play to load audio</span>}
-          {!isLoaded && audioLoadingState === 'loaded' && <span className="loading-indicator"> • Preparing audio...</span>}
         </div>
 
         {/* Hidden audio elements - now with preload="none" for lazy loading */}
