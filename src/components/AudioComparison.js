@@ -9,8 +9,11 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
   const [duration, setDuration] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showVolumeDropdown, setShowVolumeDropdown] = useState(false); // Volume dropdown state
+  const [isDraggingVolume, setIsDraggingVolume] = useState(false); // Track if user is dragging volume slider
   const beforeRef = useRef(null);
   const afterRef = useRef(null);
+  const volumeDropdownRef = useRef(null);
+  const volumeSliderRef = useRef(null);
 
   // Update audio volumes when volume state changes
   useEffect(() => {
@@ -21,6 +24,25 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
       afterRef.current.volume = volume;
     }
   }, [volume]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (volumeDropdownRef.current && !volumeDropdownRef.current.contains(event.target) && !isDraggingVolume) {
+        setShowVolumeDropdown(false);
+      }
+    };
+
+    if (showVolumeDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showVolumeDropdown, isDraggingVolume]);
 
   useEffect(() => {
     const beforeAudioEl = beforeRef.current;
@@ -115,8 +137,43 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     setVolume(newVolume);
   };
 
-  const toggleVolumeDropdown = () => {
+  const handleVolumeMouseDown = () => {
+    setIsDraggingVolume(true);
+  };
+
+  const handleVolumeMouseUp = () => {
+    setIsDraggingVolume(false);
+  };
+
+  const handleVolumeTouchStart = (e) => {
+    e.stopPropagation();
+    setIsDraggingVolume(true);
+  };
+
+  const handleVolumeTouchEnd = (e) => {
+    e.stopPropagation();
+    setIsDraggingVolume(false);
+  };
+
+  const handleVolumeTouchMove = (e) => {
+    e.stopPropagation();
+    if (isDraggingVolume && volumeSliderRef.current) {
+      const slider = volumeSliderRef.current;
+      const rect = slider.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const percentage = Math.max(0, Math.min(1, x / rect.width));
+      setVolume(percentage);
+    }
+  };
+
+  const toggleVolumeDropdown = (e) => {
+    e.stopPropagation();
     setShowVolumeDropdown(!showVolumeDropdown);
+  };
+
+  const handleVolumeDropdownClick = (e) => {
+    e.stopPropagation();
   };
 
   const handleProgressChange = (e) => {
@@ -190,7 +247,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         <p>{description}</p>
 
         {/* Volume Dropdown - positioned in top right corner */}
-        <div className="volume-dropdown-container">
+        <div className="volume-dropdown-container" ref={volumeDropdownRef}>
           <button
               className="volume-toggle-btn"
               onClick={toggleVolumeDropdown}
@@ -199,16 +256,22 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
             🔊
           </button>
           {showVolumeDropdown && (
-              <div className="volume-dropdown">
+              <div className="volume-dropdown" onClick={handleVolumeDropdownClick}>
                 <div className="volume-control-dropdown">
                   <span>Volume</span>
                   <input
+                      ref={volumeSliderRef}
                       type="range"
                       min="0"
                       max="1"
                       step="0.05"
                       value={volume}
                       onChange={handleVolumeChange}
+                      onMouseDown={handleVolumeMouseDown}
+                      onMouseUp={handleVolumeMouseUp}
+                      onTouchStart={handleVolumeTouchStart}
+                      onTouchEnd={handleVolumeTouchEnd}
+                      onTouchMove={handleVolumeTouchMove}
                       className="volume-slider-dropdown"
                       aria-label="Volume control"
                   />
