@@ -75,21 +75,23 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="contact-section">
+    <section id="contact" className="contact-section" itemScope itemType="https://schema.org/ContactPage">
       <div className="container">
-        <h2>Get Your Project Started</h2>
-        <p className="section-subtitle">Ready to take your music to the next level? Let's discuss your project.</p>
+        <header>
+          <h2 itemProp="name">Get Your Project Started</h2>
+          <p className="section-subtitle" itemProp="description">Ready to take your music to the next level? Let's discuss your project.</p>
+        </header>
 
         <div className="contact-content">
-          <div className="contact-info">
+          <div className="contact-info" itemScope itemType="https://schema.org/ContactPoint">
             <h3>Contact Information</h3>
             <div className="contact-item">
               <h4>📧 Email</h4>
-              <p>contact@tornadoaudio.net</p>
+              <p itemProp="email">contact@tornadoaudio.net</p>
             </div>
             <div className="contact-item">
-              <h4>⏱️ Response Time</h4>
-              <p>Within 24 hours</p>
+              <h4>⏱ Response Time</h4>
+              <p itemProp="hoursAvailable">Within 24 hours</p>
             </div>
             <div className="contact-item">
               <h4>🎵 File Delivery</h4>
@@ -99,11 +101,14 @@ const ContactSection = () => {
               <h4>💳 Payment</h4>
               <p>Zelle, Venmo, or Bank Transfer</p>
             </div>
+            <meta itemProp="contactType" content="Customer Service" />
+            <meta itemProp="areaServed" content="Worldwide" />
+            <meta itemProp="availableLanguage" content="English" />
           </div>
 
-          <form className="contact-form" onSubmit={handleSubmit}>
+          <form className="contact-form" onSubmit={handleSubmit} itemScope itemType="https://schema.org/ContactForm">
             {submitMessage && (
-              <div className={`submit-message ${submitMessage.includes('Thank you') ? 'success' : 'error'}`}>
+              <div className={`submit-message ${submitMessage.includes('Thank you') ? 'success' : 'error'}`} role="alert">
                 {submitMessage}
               </div>
             )}
@@ -118,6 +123,8 @@ const ContactSection = () => {
                 onChange={handleChange}
                 required
                 disabled={isSubmitting}
+                aria-describedby="name-help"
+                itemProp="name"
               />
             </div>
 
@@ -131,6 +138,8 @@ const ContactSection = () => {
                 onChange={handleChange}
                 required
                 disabled={isSubmitting}
+                aria-describedby="email-help"
+                itemProp="email"
               />
             </div>
 
@@ -143,6 +152,8 @@ const ContactSection = () => {
                 onChange={handleChange}
                 required
                 disabled={isSubmitting}
+                aria-describedby="project-help"
+                itemProp="serviceType"
               >
                 <option value="">Select a service</option>
                 <option value="basic">Basic Mix ($40 / song)</option>
@@ -163,10 +174,17 @@ const ContactSection = () => {
                 placeholder="Tell me about your project - genre, number of tracks, timeline, and any specific requirements..."
                 required
                 disabled={isSubmitting}
+                aria-describedby="message-help"
+                itemProp="text"
               ></textarea>
             </div>
 
-            <button type="submit" className="submit-btn" disabled={isSubmitting}>
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={isSubmitting}
+              aria-describedby="submit-help"
+            >
               {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
           </form>

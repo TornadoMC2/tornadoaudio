@@ -43,27 +43,48 @@ const Header = () => {
   };
 
   return (
-    <header className={`header ${isScrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : 'hidden'}`}>
+    <header className={`header ${isScrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : 'hidden'}`} role="banner" itemScope itemType="https://schema.org/WPHeader">
       <div className="container">
         <div className="header-content">
-          <div className="logo">
-            <img src="/logo192.png" alt="Tornado Audio Logo" className="logo-image" />
+          <div className="logo" itemScope itemType="https://schema.org/Organization">
+            <img
+              src="/logo192.png"
+              alt="Tornado Audio Logo - Professional Audio Mixing Services"
+              className="logo-image"
+              itemProp="logo"
+              width="192"
+              height="192"
+            />
             <div className="logo-text">
-              <h1>Tornado Audio</h1>
-              <span>Audio mixing by Hunter Johanson</span>
+              <h1 itemProp="name">Tornado Audio</h1>
+              <span itemProp="description">Audio mixing by Hunter Johanson</span>
+              <meta itemProp="url" content="https://tornadoaudio.net" />
+              <meta itemProp="founder" content="Hunter Johanson" />
             </div>
           </div>
-          <nav className={`nav ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-            <a href="#home" onClick={handleNavClick}>Home</a>
-            <a href="#services" onClick={handleNavClick}>Services</a>
-            <a href="#portfolio" onClick={handleNavClick}>Portfolio</a>
-            <a href="#pricing" onClick={handleNavClick}>Pricing</a>
-            <a href="#contact" onClick={handleNavClick}>Contact</a>
+          <nav className={`nav ${mobileMenuOpen ? 'mobile-open' : ''}`} role="navigation" aria-label="Main navigation" itemScope itemType="https://schema.org/SiteNavigationElement">
+            <a href="#home" onClick={handleNavClick} itemProp="url" aria-label="Navigate to home section">
+              <span itemProp="name">Home</span>
+            </a>
+            <a href="#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
+              <span itemProp="name">Services</span>
+            </a>
+            <a href="#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
+              <span itemProp="name">Portfolio</span>
+            </a>
+            <a href="#pricing" onClick={handleNavClick} itemProp="url" aria-label="Navigate to pricing section">
+              <span itemProp="name">Pricing</span>
+            </a>
+            <a href="#contact" onClick={handleNavClick} itemProp="url" aria-label="Navigate to contact section">
+              <span itemProp="name">Contact</span>
+            </a>
           </nav>
           <button
             className="mobile-menu-btn"
             onClick={toggleMobileMenu}
-            aria-label="Toggle mobile menu"
+            aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? '✕' : '☰'}
           </button>

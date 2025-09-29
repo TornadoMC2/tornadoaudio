@@ -16,6 +16,7 @@ const PricingSection = () => {
       id: 'basic-mix',
       name: "Basic Mix",
       price: "$40 / song",
+      priceValue: "40",
       description: "Perfect for demos and independent artists",
       features: [
         "Up to 24 tracks",
@@ -31,6 +32,7 @@ const PricingSection = () => {
       id: 'professional-mix',
       name: "Professional Mix",
       price: "$75 / song",
+      priceValue: "75",
       bulkPricing: [
         { quantity: "3-5 songs", price: "$65 / song", savings: "Save $30", turnaround: "5-7 days" },
         { quantity: "6+ songs", price: "$55 / song", savings: "Save $120+", turnaround: "7-10 days" }
@@ -51,6 +53,7 @@ const PricingSection = () => {
       id: 'premium-mix-master',
       name: "Premium Mix & Master",
       price: "$200 / song",
+      priceValue: "200",
       bulkPricing: [
         { quantity: "3-5 songs", price: "$175 / song", savings: "Save $75", turnaround: "7-10 days" },
         { quantity: "6+ songs", price: "$150 / song", savings: "Save $300+", turnaround: "10-14 days" }
@@ -100,44 +103,65 @@ const PricingSection = () => {
   };
 
   return (
-    <section id="pricing" className="pricing-section">
+    <section id="pricing" className="pricing-section" itemScope itemType="https://schema.org/Service">
       <div className="container">
-        <h2>Pricing & Services</h2>
-        <p className="section-subtitle">Professional audio mixing services tailored to your needs</p>
+        <header>
+          <h2 itemProp="name">Pricing & Services</h2>
+          <p className="section-subtitle" itemProp="description">Professional audio mixing services tailored to your needs</p>
+        </header>
 
-        <div className="pricing-grid">
+        <div className="pricing-grid" itemScope itemType="https://schema.org/ItemList">
           {pricingTiers.map((tier, index) => (
-            <div key={index} className={`pricing-card ${tier.popular ? 'popular' : ''}`}>
+            <article
+              key={index}
+              className={`pricing-card ${tier.popular ? 'popular' : ''}`}
+              itemScope
+              itemType="https://schema.org/Offer"
+              itemProp="itemListElement"
+            >
               {tier.popular && <div className="popular-badge">Most Popular</div>}
-              <h3>{tier.name}</h3>
-              <div className="price">{tier.price}</div>
-              <p className="description">{tier.description}</p>
-              <ul className="features">
+              <h3 itemProp="name">{tier.name}</h3>
+              <div className="price" itemScope itemType="https://schema.org/PriceSpecification">
+                <span itemProp="price" content={tier.priceValue}>{tier.price}</span>
+                <meta itemProp="priceCurrency" content="USD" />
+                <meta itemProp="valueAddedTaxIncluded" content="false" />
+              </div>
+              <p className="description" itemProp="description">{tier.description}</p>
+
+              <ul className="features" itemProp="includesObject" itemScope itemType="https://schema.org/TypeAndQuantityNode">
                 {tier.features.map((feature, idx) => (
-                  <li key={idx}>{feature}</li>
+                  <li key={idx} itemProp="description">{feature}</li>
                 ))}
               </ul>
+
+              <meta itemProp="seller" content="Hunter Johanson" />
+              <meta itemProp="availability" content="https://schema.org/InStock" />
+              <meta itemProp="category" content="Audio Mixing Services" />
 
               {tier.bulkPricing && (
                 <div className="bulk-pricing">
                   <button
                     className="bulk-pricing-toggle"
                     onClick={() => toggleBulkPricing(tier.id)}
+                    aria-expanded={expandedBulkPricing[tier.id]}
+                    aria-controls={`bulk-pricing-${tier.id}`}
                   >
-                    💰 Bulk Pricing Available
+                    💡 Bulk Pricing Available
                     <span className={`arrow ${expandedBulkPricing[tier.id] ? 'expanded' : ''}`}>▼</span>
                   </button>
 
                   {expandedBulkPricing[tier.id] && (
-                    <div className="bulk-pricing-content">
+                    <div className="bulk-pricing-content" id={`bulk-pricing-${tier.id}`}>
                       <ul>
                         {tier.bulkPricing.map((bulkOption, idx) => (
-                          <li key={idx}>
+                          <li key={idx} itemScope itemType="https://schema.org/Offer">
                             <div className="bulk-option">
-                              <span className="quantity">{bulkOption.quantity}</span>
-                              <span className="bulk-price">{bulkOption.price}</span>
+                              <span className="quantity" itemProp="eligibleQuantity">{bulkOption.quantity}</span>
+                              <span className="bulk-price" itemProp="price">{bulkOption.price}</span>
                               <span className="savings">{bulkOption.savings}</span>
                               <span className="turnaround">({bulkOption.turnaround})</span>
+                              <meta itemProp="priceCurrency" content="USD" />
+                              <meta itemProp="seller" content="Hunter Johanson" />
                             </div>
                           </li>
                         ))}
@@ -154,22 +178,23 @@ const PricingSection = () => {
                 <button
                   className="cta-button"
                   onClick={() => handleGetStarted(tier)}
+                  aria-label={`Get started with ${tier.name} service`}
                 >
                   Get Started
                 </button>
               </div>
-            </div>
+            </article>
           ))}
         </div>
 
-        <div className="pricing-footer">
+        <footer className="pricing-footer">
           <p className="pricing-note">
             * All services include professional communication throughout the process and satisfaction guarantee
           </p>
           <p className="custom-pricing">
-            Need something custom? <span className="contact-link" onClick={handleContactUs}>Contact us</span> for personalized pricing and services.
+            Need something custom? <button className="contact-link" onClick={handleContactUs} aria-label="Contact us for custom pricing">Contact us</button> for personalized pricing and services.
           </p>
-        </div>
+        </footer>
       </div>
     </section>
   );

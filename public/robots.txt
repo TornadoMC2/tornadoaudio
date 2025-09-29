@@ -1,3 +1,11 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /static/
+Disallow: *.map$
+
+# Sitemap location
+Sitemap: https://tornadoaudio.net/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
