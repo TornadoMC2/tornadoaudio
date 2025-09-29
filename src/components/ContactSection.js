@@ -90,19 +90,6 @@ const ContactSection = () => {
               <p itemProp="email">contact@tornadoaudio.net</p>
             </div>
             <div className="contact-item">
-              <h4>📸 Follow Us</h4>
-              <p>
-                <a
-                  href="https://instagram.com/tornadoaudio_mixing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: '#4f46e5', textDecoration: 'none' }}
-                >
-                  @tornadoaudio_mixing
-                </a>
-              </p>
-            </div>
-            <div className="contact-item">
               <h4>⏱ Response Time</h4>
               <p itemProp="hoursAvailable">Within 24 hours</p>
             </div>
