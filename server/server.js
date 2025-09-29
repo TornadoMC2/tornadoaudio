@@ -99,7 +99,8 @@ const sendEmailWithResend = async (name, email, project, message) => {
           <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
           <p style="color: #666; font-size: 12px;">
             <em>Submitted at: ${new Date().toLocaleString()}</em><br>
-            <em>Sent via TornadoAudio.net contact form</em>
+            <em>Sent via TornadoAudio.net contact form</em><br>
+            <em>Instagram: <a href="https://instagram.com/tornadoaudio_mixing" target="_blank" style="color: #4f46e5;">@tornadoaudio_mixing</a></em>
           </p>
         </div>
       `

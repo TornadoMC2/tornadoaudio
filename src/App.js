@@ -40,12 +40,32 @@ function App() {
 
       <footer className="footer" role="contentinfo" itemScope itemType="https://schema.org/WPFooter">
         <div className="container">
-          <p itemProp="copyrightNotice">
-            &copy; 2025 <span itemScope itemType="https://schema.org/Organization">
-              <span itemProp="name">Tornado Audio</span> - <span itemProp="founder">Hunter Johanson</span>
-            </span>. All rights reserved.
-          </p>
-          <meta itemProp="copyrightYear" content="2025" />
+          <div className="footer-content">
+            <div className="footer-social">
+              <h4>Follow Us</h4>
+              <div className="social-links">
+                <a
+                  href="https://instagram.com/tornadoaudio_mixing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Follow Tornado Audio on Instagram"
+                  itemScope
+                  itemType="https://schema.org/Organization"
+                >
+                  <span className="social-icon">📸</span>
+                  <span>@tornadoaudio_mixing</span>
+                </a>
+              </div>
+            </div>
+            <div className="footer-copyright">
+              <p itemProp="copyrightNotice">
+                &copy; 2025 <span itemScope itemType="https://schema.org/Organization">
+                  <span itemProp="name">Tornado Audio</span> - <span itemProp="founder">Hunter Johanson</span>
+                </span>. All rights reserved.
+              </p>
+              <meta itemProp="copyrightYear" content="2025" />
+            </div>
+          </div>
         </div>
       </footer>
     </div>
