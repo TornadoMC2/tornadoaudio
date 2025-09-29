@@ -14,8 +14,63 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 app.use(cors());
 app.use(express.json());
 
+// SEO-specific middleware and headers
+app.use((req, res, next) => {
+  // Add security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+
+  // Cache control for static assets
+  if (req.url.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
+  }
+
+  next();
+});
+
 // Serve static files from the React app build directory
 app.use(express.static(path.join(__dirname, '../build')));
+
+// Specific SEO file routes with proper headers
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml');
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+  res.sendFile(path.join(__dirname, '../build/sitemap.xml'));
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+  res.sendFile(path.join(__dirname, '../build/robots.txt'));
+});
+
+// Favicon with proper headers
+app.get('/favicon.ico', (req, res) => {
+  res.setHeader('Content-Type', 'image/x-icon');
+  res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
+  res.sendFile(path.join(__dirname, '../build/favicon.ico'));
+});
+
+// Manifest file for PWA
+app.get('/manifest.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+  res.sendFile(path.join(__dirname, '../build/manifest.json'));
+});
+
+// Logo files with proper headers
+app.get('/logo192.png', (req, res) => {
+  res.setHeader('Content-Type', 'image/png');
+  res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
+  res.sendFile(path.join(__dirname, '../build/logo192.png'));
+});
+
+app.get('/logo512.png', (req, res) => {
+  res.setHeader('Content-Type', 'image/png');
+  res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
+  res.sendFile(path.join(__dirname, '../build/logo512.png'));
+});
 
 // Professional email function using Resend
 const sendEmailWithResend = async (name, email, project, message) => {
@@ -231,7 +286,51 @@ app.post('/api/contact', async (req, res) => {
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Tornado Audio API is running' });
+  const fs = require('fs');
+  const sitemapExists = fs.existsSync(path.join(__dirname, '../build/sitemap.xml'));
+  const robotsExists = fs.existsSync(path.join(__dirname, '../build/robots.txt'));
+
+  res.json({
+    status: 'OK',
+    message: 'Tornado Audio API is running',
+    seo: {
+      sitemap: sitemapExists ? 'Available' : 'Missing',
+      robots: robotsExists ? 'Available' : 'Missing',
+      sitemapUrl: 'http://localhost:3001/sitemap.xml',
+      robotsUrl: 'http://localhost:3001/robots.txt'
+    }
+  });
+});
+
+// SEO test endpoint for verification
+app.get('/api/seo-check', (req, res) => {
+  const fs = require('fs');
+  const buildPath = path.join(__dirname, '../build');
+
+  const seoFiles = {
+    sitemap: fs.existsSync(path.join(buildPath, 'sitemap.xml')),
+    robots: fs.existsSync(path.join(buildPath, 'robots.txt')),
+    favicon: fs.existsSync(path.join(buildPath, 'favicon.ico')),
+    manifest: fs.existsSync(path.join(buildPath, 'manifest.json')),
+    logo192: fs.existsSync(path.join(buildPath, 'logo192.png')),
+    logo512: fs.existsSync(path.join(buildPath, 'logo512.png'))
+  };
+
+  const urls = {
+    sitemap: `${req.protocol}://${req.get('host')}/sitemap.xml`,
+    robots: `${req.protocol}://${req.get('host')}/robots.txt`,
+    favicon: `${req.protocol}://${req.get('host')}/favicon.ico`,
+    manifest: `${req.protocol}://${req.get('host')}/manifest.json`,
+    logo192: `${req.protocol}://${req.get('host')}/logo192.png`,
+    logo512: `${req.protocol}://${req.get('host')}/logo512.png`
+  };
+
+  res.json({
+    message: 'SEO Files Status Check',
+    files: seoFiles,
+    urls: urls,
+    allFilesPresent: Object.values(seoFiles).every(exists => exists)
+  });
 });
 
 // Catch-all route for React Router
@@ -241,4 +340,7 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Sitemap available at: http://localhost:${PORT}/sitemap.xml`);
+  console.log(`Robots.txt available at: http://localhost:${PORT}/robots.txt`);
+  console.log(`SEO check available at: http://localhost:${PORT}/api/seo-check`);
 });
