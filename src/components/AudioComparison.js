@@ -579,7 +579,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
 
           <div className="playback-controls">
             {audioLoadingState === 'unloaded' && (
-              <span className="play-hint">Click to load and play</span>
+              <span className="play-hint">Click to load and play  </span>
             )}
             <button
               className="play-btn"

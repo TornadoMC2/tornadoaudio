@@ -6,96 +6,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#4f46e5" />
 
+    <!-- Preload critical resources for better performance -->
+    <link rel="preload" href="%PUBLIC_URL%/logo192.png" as="image" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+
     <!-- Enhanced SEO Meta Tags -->
-    <meta name="description" content="Professional audio mixing services by Tornado Audio. Hunter Johanson provides expert mixing for rock, country, and all genres. Transform your recordings into radio-ready tracks." />
-    <meta name="keywords" content="audio mixing, music production, Hunter Johanson, Tornado Audio, professional mixing, rock mixing, music engineering, audio mastering, mixing engineer, music mixer, recording studio services" />
+    <meta name="description" content="Professional audio mixing services by Hunter Johanson at Tornado Audio. Expert mixing engineer specializing in rock, country & all genres. Transform your recordings into radio-ready tracks with 3+ years experience. Get professional mixes starting at $40." />
+    <meta name="keywords" content="audio mixing services, professional mixing engineer, Hunter Johanson, Tornado Audio, music production, rock mixing, country mixing, audio mastering, mixing engineer near me, professional music mixing, radio ready tracks, audio post production" />
     <meta name="author" content="Hunter Johanson" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
-    <link rel="canonical" href="https://tornadoaudio.net" />
+    <meta name="geo.region" content="US" />
+    <meta name="geo.placename" content="United States" />
+    <meta name="distribution" content="global" />
+    <meta name="rating" content="general" />
+    <link rel="canonical" href="https://tornadoaudio.net/" />
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tornadoaudio.net" />
-    <meta property="og:title" content="Tornado Audio - Professional Audio Mixing by Hunter Johanson" />
-    <meta property="og:description" content="Transform your recordings into professional, radio-ready tracks. Specializing in rock and all genres with over 3 years of mixing experience." />
-    <meta property="og:image" content="%PUBLIC_URL%/logo512.png" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
+    <meta property="og:type" content="business.business" />
+    <meta property="og:url" content="https://tornadoaudio.net/" />
+    <meta property="og:title" content="Tornado Audio - Professional Audio Mixing Services | Hunter Johanson" />
+    <meta property="og:description" content="Transform your recordings into professional, radio-ready tracks. Expert audio mixing by Hunter Johanson with 3+ years experience. Rock, country & all genres. Starting at $40." />
+    <meta property="og:image" content="https://tornadoaudio.net/logo512.png" />
+    <meta property="og:image:alt" content="Tornado Audio Professional Audio Mixing Services Logo" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Tornado Audio" />
     <meta property="og:locale" content="en_US" />
+    <meta property="business:contact_data:street_address" content="Remote Services Available Worldwide" />
+    <meta property="business:contact_data:locality" content="United States" />
+    <meta property="business:contact_data:region" content="US" />
+    <meta property="business:contact_data:country_name" content="United States" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://tornadoaudio.net" />
-    <meta name="twitter:title" content="Tornado Audio - Professional Audio Mixing" />
-    <meta name="twitter:description" content="Expert audio mixing services by Hunter Johanson. Professional mixing for all genres." />
-    <meta name="twitter:image" content="%PUBLIC_URL%/logo512.png" />
+    <meta name="twitter:site" content="@tornadoaudio_mixing" />
+    <meta name="twitter:creator" content="@tornadoaudio_mixing" />
+    <meta name="twitter:url" content="https://tornadoaudio.net/" />
+    <meta name="twitter:title" content="Tornado Audio - Professional Audio Mixing Services" />
+    <meta name="twitter:description" content="Expert audio mixing by Hunter Johanson. Transform recordings into radio-ready tracks. Rock, country & all genres. 3+ years experience." />
+    <meta name="twitter:image" content="https://tornadoaudio.net/logo512.png" />
+    <meta name="twitter:image:alt" content="Tornado Audio Professional Mixing Services" />
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-    <!-- Structured Data for Local Business and Services -->
+    <!-- Enhanced Structured Data for Professional Service -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ProfessionalService",
+      "@type": ["ProfessionalService", "LocalBusiness"],
       "name": "Tornado Audio",
-      "image": "%PUBLIC_URL%/logo512.png",
+      "alternateName": "Tornado Audio Mixing",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://tornadoaudio.net/logo512.png",
+        "width": 512,
+        "height": 512
+      },
+      "logo": "https://tornadoaudio.net/logo512.png",
       "url": "https://tornadoaudio.net",
-      "telephone": "",
+      "sameAs": [
+        "https://instagram.com/tornadoaudio_mixing"
+      ],
+      "telephone": "Contact via website",
       "address": {
         "@type": "PostalAddress",
+        "addressCountry": "US",
+        "addressRegion": "United States"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
         "addressCountry": "US"
       },
-      "description": "Professional audio mixing and mastering services specializing in rock music and all genres. Expert mixing engineer Hunter Johanson transforms recordings into radio-ready tracks.",
+      "description": "Professional audio mixing and mastering services specializing in rock music and all genres. Expert mixing engineer Hunter Johanson transforms recordings into radio-ready tracks with over 3 years of experience.",
+      "priceRange": "$40-$200",
+      "currenciesAccepted": "USD",
+      "paymentAccepted": "PayPal, Venmo, Cash App",
       "founder": {
         "@type": "Person",
         "name": "Hunter Johanson",
-        "jobTitle": "Audio Mixing Engineer",
-        "description": "Professional audio mixing engineer with over 3 years of experience specializing in rock music production."
+        "jobTitle": "Professional Audio Mixing Engineer",
+        "description": "Professional audio mixing engineer with over 3 years of experience specializing in rock music production and all genres.",
+        "sameAs": [
+          "https://instagram.com/tornadoaudio_mixing"
+        ]
       },
       "serviceType": [
         "Audio Mixing",
         "Music Production",
         "Audio Mastering",
         "Multi-Track Mixing",
-        "Audio Enhancement"
+        "Audio Enhancement",
+        "Music Post-Production"
       ],
-      "areaServed": "Worldwide",
+      "areaServed": {
+        "@type": "Place",
+        "name": "Worldwide"
+      },
+      "availableLanguage": "English",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Audio Mixing Services",
+        "name": "Professional Audio Mixing Services",
         "itemListElement": [
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Basic Mix",
-              "description": "Perfect for demos and independent artists - up to 24 tracks with basic processing"
+              "name": "Basic Mix Package",
+              "description": "Perfect for demos and independent artists - up to 24 tracks with professional processing, EQ, compression, and effects",
+              "category": "Audio Mixing"
             },
             "price": "40",
-            "priceCurrency": "USD"
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "deliveryLeadTime": "P2D"
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Professional Mix",
-              "description": "Industry-standard mixing for serious projects - up to 48 tracks with advanced processing"
+              "name": "Professional Mix Package",
+              "description": "Industry-standard mixing for serious projects - up to 48 tracks with advanced processing, automation, and professional polish",
+              "category": "Audio Mixing"
             },
             "price": "75",
-            "priceCurrency": "USD"
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "deliveryLeadTime": "P2D"
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Premium Mix & Master",
-              "description": "Complete production package with unlimited tracks, mixing and mastering"
+              "name": "Premium Mix & Master Package",
+              "description": "Complete production package with unlimited tracks, professional mixing and mastering for radio-ready sound",
+              "category": "Audio Production"
             },
             "price": "200",
-            "priceCurrency": "USD"
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "deliveryLeadTime": "P3D"
           }
         ]
       },
@@ -105,33 +157,69 @@
         "reviewCount": "15",
         "bestRating": "5",
         "worstRating": "1"
-      }
+      },
+      "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 09:00-21:00"
     }
     </script>
 
-    <!-- Audio Service Specific Schema -->
+    <!-- Additional Service Schema for Better SEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Service",
-      "serviceType": "Audio Mixing and Mastering",
+      "serviceType": "Professional Audio Mixing and Mastering",
+      "name": "Professional Audio Mixing Services",
       "provider": {
         "@type": "Person",
         "name": "Hunter Johanson",
         "jobTitle": "Professional Audio Mixing Engineer",
-        "url": "https://tornadoaudio.net"
+        "url": "https://tornadoaudio.net",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Tornado Audio"
+        }
       },
-      "description": "Professional audio mixing services transforming raw recordings into polished, radio-ready tracks. Specializing in rock music with expertise in all genres.",
+      "description": "Professional audio mixing services transforming raw recordings into polished, radio-ready tracks. Specializing in rock music with expertise in all genres including country, pop, and electronic music.",
+      "category": "Music Production",
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Musicians, Bands, Independent Artists, Record Labels"
+      },
       "offers": {
-        "@type": "Offer",
+        "@type": "AggregateOffer",
         "priceRange": "$40-$200",
         "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
+        "availability": "https://schema.org/InStock",
+        "offerCount": "3"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Audio Production Services"
       }
     }
     </script>
 
-    <title>Tornado Audio - Professional Audio Mixing by Hunter Johanson</title>
+    <!-- Website Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Tornado Audio",
+      "url": "https://tornadoaudio.net",
+      "description": "Professional audio mixing services by Hunter Johanson",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Tornado Audio"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://tornadoaudio.net/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <title>Professional Audio Mixing Services | Tornado Audio by Hunter Johanson | Rock, Country & All Genres</title>
   </head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-0VXXHRNEQK"></script>
