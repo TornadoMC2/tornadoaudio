@@ -7,7 +7,6 @@ const Portfolio = () => {
   const portfolioSamples = [
     {
       id: 1,
-      title: "Take32 - 'Rotten Eyes'",
       description: "Full band mix with emphasis on punch and clarity. Enhanced drum presence and guitar separation.",
       beforeAudio: "/audio/mp3/rock-before.mp3",
       afterAudio: "/audio/mp3/rock-after.mp3",
@@ -17,7 +16,6 @@ const Portfolio = () => {
     },
     {
       id: 2,
-      title: "Bryce Allin - 'Shark Infested Waters'",
       description: "Modern rock mix focused on bringing out vocal detail and dynamic range. Bringing out clarity in the Drums. Tight low end and wide stereo image.",
       beforeAudio: "/audio/mp3/rock2-before.mp3",
       afterAudio: "/audio/mp3/rock2-after.mp3",
@@ -27,7 +25,6 @@ const Portfolio = () => {
     },
     {
       id: 3,
-      title: "Chad Hollister Band - 'Eyes'",
       description: "Energy filled mix with non-conventional instrumentation. Emphasizing warmth and presence for an intimate yet powerful sound. Drums are punchy and upfront, vocals are clear and present, and the acoustic instruments have a natural warmth.",
       beforeAudio: "/audio/mp3/eyes-before.mp3",
       afterAudio: "/audio/mp3/eyes-after.mp3",
@@ -45,6 +42,14 @@ const Portfolio = () => {
       isPromo: true
     }
   ];
+
+  // Helper function to generate display title for audio samples
+  const getDisplayTitle = (sample) => {
+    if (sample.isPromo) {
+      return sample.title;
+    }
+    return `${sample.artist} - '${sample.songName}'`;
+  };
 
   return (
     <section id="portfolio" className="portfolio-section" itemScope itemType="https://schema.org/CreativeWork">
@@ -81,16 +86,17 @@ const Portfolio = () => {
                 </div>
               ) : (
                 <div itemScope itemType="https://schema.org/MusicComposition">
-                  <h3 itemProp="name">{sample.title}</h3>
+                  <h3 itemProp="name">{getDisplayTitle(sample)}</h3>
                   <meta itemProp="byArtist" content={sample.artist} />
                   <meta itemProp="name" content={sample.songName} />
                   <meta itemProp="genre" content={sample.genre} />
                   <meta itemProp="producer" content="Hunter Johanson" />
                   <AudioComparison
-                    title={sample.title}
+                    title={getDisplayTitle(sample)}
                     description={sample.description}
                     beforeAudio={sample.beforeAudio}
                     afterAudio={sample.afterAudio}
+                    showTitle={false}
                   />
                 </div>
               )}

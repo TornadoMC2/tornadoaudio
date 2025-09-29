@@ -192,7 +192,7 @@ const PricingSection = () => {
             * All services include professional communication throughout the process and satisfaction guarantee
           </p>
           <p className="custom-pricing">
-            Need something custom? <button className="contact-link" onClick={handleContactUs} aria-label="Contact us for custom pricing">Contact us</button> for personalized pricing and services.
+            Need something custom? <a href="#contact" className="contact-link" onClick={handleContactUs} aria-label="Contact us for custom pricing">Contact us</a> for personalized pricing and services.
           </p>
         </footer>
       </div>

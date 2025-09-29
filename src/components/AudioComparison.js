@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './AudioComparison.css';
 
-const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceholder }) => {
+const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceholder, showTitle = true }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState('before'); // 'before' or 'after'
   const [volume, setVolume] = useState(0.7); // Single volume control for both tracks (0.0 to 1.0)
@@ -486,7 +486,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
 
   return (
       <div className="audio-comparison">
-        <h3>{title}</h3>
+        {showTitle && <h3>{title}</h3>}
         <p>{description}</p>
 
         {/* Volume Dropdown - positioned in top right corner */}
