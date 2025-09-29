@@ -120,10 +120,10 @@ const sendConfirmationCopyToOwner = async (name, email) => {
               <strong>💡 Pro tip:</strong> Reply to this email to send your response directly to the client!
             </p>
           </div>
-          
+
           <div style="border: 2px dashed #ccc; padding: 20px; border-radius: 5px;">
             <h4 style="color: #666; margin-top: 0;">Email sent to client:</h4>
-            
+
             <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px;">
               <h2 style="color: #333;">Thank you for reaching out!</h2>
               <p style="color: #555;">
@@ -141,7 +141,7 @@ const sendConfirmationCopyToOwner = async (name, email) => {
               </p>
             </div>
           </div>
-          
+
           <div style="margin-top: 20px; padding: 15px; background-color: #f1f8e9; border-radius: 5px; border-left: 4px solid #4caf50;">
             <h4 style="margin: 0 0 10px 0; color: #388e3c;">🚀 Quick Actions:</h4>
             <p style="margin: 0; color: #555;">

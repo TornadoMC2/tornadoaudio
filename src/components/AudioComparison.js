@@ -313,10 +313,10 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     }
 
     // Get references to both audio elements
-    const beforeAudio = beforeRef.current;
-    const afterAudio = afterRef.current;
-    const currentAudio = currentTrack === 'before' ? beforeAudio : afterAudio;
-    const newActiveAudio = track === 'before' ? beforeAudio : afterAudio;
+    const beforeAudioEl = beforeRef.current;
+    const afterAudioEl = afterRef.current;
+    const currentAudio = currentTrack === 'before' ? beforeAudioEl : afterAudioEl;
+    const newActiveAudio = track === 'before' ? beforeAudioEl : afterAudioEl;
 
     // If switching to the same track, do nothing
     if (currentTrack === track) {
@@ -324,7 +324,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     }
 
     const wasPlaying = isPlaying;
-    const currentTime = currentAudio.currentTime;
+    const currentTimeValue = currentAudio.currentTime;
 
     // Pre-sync the new track to the exact current time
     syncBothTracks(currentAudio, newActiveAudio);
@@ -333,7 +333,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
     if (wasPlaying) {
       try {
         // Start the new track playing at the exact same time
-        newActiveAudio.currentTime = currentTime;
+        newActiveAudio.currentTime = currentTimeValue;
         await newActiveAudio.play();
 
         // Immediately pause the old track to avoid overlap
@@ -351,13 +351,13 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         console.error('Error playing audio after track switch:', error);
         setAudioError('Unable to play audio. Please try again.');
         // Fallback: pause everything if there's an error
-        beforeAudio.pause();
-        afterAudio.pause();
+        beforeAudioEl.pause();
+        afterAudioEl.pause();
         setIsPlaying(false);
       }
     } else {
       // When not playing, just sync and switch
-      newActiveAudio.currentTime = currentTime;
+      newActiveAudio.currentTime = currentTimeValue;
       currentAudio.pause();
       setCurrentTrack(track);
 
