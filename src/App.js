@@ -6,8 +6,17 @@ import ServicesSection from './components/ServicesSection';
 import Portfolio from './components/Portfolio';
 import PricingSection from './components/PricingSection';
 import ContactSection from './components/ContactSection';
+import MaintenanceMode from './components/MaintenanceMode';
+import useSiteConfig from './hooks/useSiteConfig';
 
 function App() {
+  const { isMaintenanceMode } = useSiteConfig();
+
+  // Show maintenance mode if enabled
+  if (isMaintenanceMode) {
+    return <MaintenanceMode />;
+  }
+
   return (
     <div className="App" itemScope itemType="https://schema.org/WebSite">
       <meta itemProp="url" content="https://tornadoaudio.net" />

@@ -1,0 +1,175 @@
+.maintenance-mode {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.maintenance-container {
+  max-width: 600px;
+  width: 100%;
+}
+
+.maintenance-content {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.maintenance-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.maintenance-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.maintenance-subtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #667eea;
+  margin-bottom: 2rem;
+  line-height: 1.3;
+}
+
+.maintenance-message {
+  margin-bottom: 2.5rem;
+}
+
+.maintenance-message p {
+  font-size: 1.1rem;
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.maintenance-contact {
+  background: #f7fafc;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid #e2e8f0;
+}
+
+.maintenance-email {
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #667eea;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  border-radius: 10px;
+  border: 2px solid #667eea;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.maintenance-email:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.maintenance-response {
+  font-size: 0.9rem;
+  color: #718096;
+  margin: 0;
+}
+
+.maintenance-footer {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.maintenance-footer p {
+  font-size: 1rem;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.maintenance-signature {
+  font-style: italic;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .maintenance-mode {
+    padding: 1rem;
+  }
+
+  .maintenance-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .maintenance-title {
+    font-size: 2rem;
+  }
+
+  .maintenance-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .maintenance-message p {
+    font-size: 1rem;
+  }
+
+  .maintenance-contact {
+    padding: 1.5rem;
+  }
+
+  .maintenance-email {
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .maintenance-title {
+    font-size: 1.8rem;
+  }
+
+  .maintenance-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .maintenance-icon {
+    font-size: 3rem;
+  }
+}
