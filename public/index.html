@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#4f46e5" />
 
+    <!-- Enhanced preconnect and resource hints for Google Core Web Vitals -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="//googleads.g.doubleclick.net" />
+
     <!-- Preload critical resources for better performance -->
     <link rel="preload" href="%PUBLIC_URL%/logo192.png" as="image" />
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
@@ -158,7 +165,15 @@
         "bestRating": "5",
         "worstRating": "1"
       },
-      "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 09:00-21:00"
+      "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 09:00-21:00",
+      "foundingDate": "2020",
+      "slogan": "Transforming Sound, Elevating Artistry",
+      "email": "contact@tornadoaudio.net",
+      "sameAs": [
+        "https://www.facebook.com/tornadoaudio",
+        "https://twitter.com/tornadoaudio_mixing",
+        "https://www.instagram.com/tornadoaudio_mixing/"
+      ]
     }
     </script>
 
@@ -215,7 +230,83 @@
         "@type": "SearchAction",
         "target": "https://tornadoaudio.net/?s={search_term_string}",
         "query-input": "required name=search_term_string"
-      }
+      },
+      "mainEntity": {
+        "@type": "WebPage",
+        "@id": "https://tornadoaudio.net/#webpage"
+      },
+      "hasPart": [
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Services",
+          "url": "https://tornadoaudio.net/#services"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Portfolio",
+          "url": "https://tornadoaudio.net/#portfolio"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Pricing",
+          "url": "https://tornadoaudio.net/#pricing"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Contact",
+          "url": "https://tornadoaudio.net/#contact"
+        }
+      ]
+    }
+    </script>
+
+    <!-- FAQ Schema for Better Google Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What audio mixing services does Tornado Audio offer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tornado Audio offers professional audio mixing services including Basic Mix Package ($40), Professional Mix Package ($75), and Premium Mix & Master Package ($200). We specialize in rock, country, and all music genres with expert processing, EQ, compression, and effects."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does professional audio mixing cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our professional audio mixing services range from $40-$200 depending on the package. Basic Mix starts at $40 for up to 24 tracks, Professional Mix is $75 for up to 48 tracks, and Premium Mix & Master is $200 for unlimited tracks with mastering included."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take to mix a song?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mixing turnaround time is typically 2-3 days depending on the package selected. Basic and Professional packages are completed within 2 days, while Premium Mix & Master packages take up to 3 days for the complete production process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What music genres does Hunter Johanson specialize in?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hunter Johanson specializes in rock music mixing but has over 3 years of experience working with all genres including country, pop, electronic, indie, and more. Every genre receives the same professional treatment and attention to detail."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What file formats do you accept for mixing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We accept all standard audio file formats including WAV, AIFF, MP3, and various DAW project files. For best results, we recommend sending individual track stems in WAV format at the highest quality available from your recording session."
+          }
+        }
+      ]
     }
     </script>
 

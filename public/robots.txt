@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 Disallow: /static/
-Disallow: *.map$
+Disallow: /*.map
 
 # Sitemap location
 Sitemap: https://tornadoaudio.net/sitemap.xml
