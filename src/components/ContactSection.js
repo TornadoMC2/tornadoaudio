@@ -11,6 +11,26 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
+  // Google Ads conversion tracking function
+  const gtag_report_conversion = (url) => {
+    const callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+
+    // Check if gtag is available
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-719494667/d9bwCKzws6gbEIu8itcC',
+        'value': 1.0,
+        'currency': 'USD',
+        'event_callback': callback
+      });
+    }
+    return false;
+  };
+
   // Check for selected service from pricing section
   useEffect(() => {
     const selectedService = sessionStorage.getItem('selectedService');
@@ -57,6 +77,10 @@ const ContactSection = () => {
 
       if (result.success) {
         setSubmitMessage(result.message);
+
+        // Track conversion for successful form submission
+        gtag_report_conversion();
+
         setFormData({
           name: '',
           email: '',
