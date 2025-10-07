@@ -91,6 +91,22 @@ const PricingSection = () => {
       return;
     }
 
+    // Track Google Ads conversion for pricing interest
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-719494667/pricing_interest',
+        'value': tier.priceValue * 0.1, // 10% of service value as lead value
+        'currency': 'USD'
+      });
+
+      // Track custom event for enhanced analytics
+      window.gtag('event', 'pricing_cta_click', {
+        'event_category': 'Pricing',
+        'event_label': tier.name,
+        'value': tier.priceValue
+      });
+    }
+
     // Scroll to contact section
     const contactSection = document.getElementById('contact');
     if (contactSection) {

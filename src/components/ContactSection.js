@@ -11,8 +11,8 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
-  // Google Ads conversion tracking function
-  const gtag_report_conversion = (url) => {
+  // Enhanced Google Ads conversion tracking function
+  const gtag_report_conversion = (url, conversionValue = 1.0, conversionLabel = 'd9bwCKzws6gbEIu8itcC') => {
     const callback = function () {
       if (typeof(url) != 'undefined') {
         window.location = url;
@@ -22,13 +22,35 @@ const ContactSection = () => {
     // Check if gtag is available
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'conversion', {
-        'send_to': 'AW-719494667/d9bwCKzws6gbEIu8itcC',
-        'value': 1.0,
+        'send_to': `AW-719494667/${conversionLabel}`,
+        'value': conversionValue,
         'currency': 'USD',
         'event_callback': callback
       });
+
+      // Also send a custom event for enhanced tracking
+      window.gtag('event', 'form_submit', {
+        'event_category': 'Contact',
+        'event_label': 'Contact Form Submission',
+        'value': conversionValue
+      });
     }
     return false;
+  };
+
+  // Function to get conversion value based on selected service
+  const getConversionValue = () => {
+    const projectType = formData.project;
+    switch(projectType) {
+      case 'basic':
+        return 40.0;
+      case 'professional':
+        return 75.0;
+      case 'premium':
+        return 200.0;
+      default:
+        return 1.0; // Default lead value
+    }
   };
 
   // Check for selected service from pricing section
@@ -79,7 +101,7 @@ const ContactSection = () => {
         setSubmitMessage(result.message);
 
         // Track conversion for successful form submission
-        gtag_report_conversion();
+        gtag_report_conversion(undefined, getConversionValue());
 
         setFormData({
           name: '',
