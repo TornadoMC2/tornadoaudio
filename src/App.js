@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -12,10 +12,40 @@ import useSiteConfig from './hooks/useSiteConfig';
 function App() {
   const { isMaintenanceMode } = useSiteConfig();
 
+  // Handle initial page load with hash in URL
+  useEffect(() => {
+    // Small delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      const hash = window.location.hash;
+      if (hash) {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // Show maintenance mode if enabled
   if (isMaintenanceMode) {
     return <MaintenanceMode />;
   }
+
+  // Handle smooth scrolling for breadcrumb links
+  const handleBreadcrumbClick = (e) => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    if (href.startsWith('#')) {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="App" itemScope itemType="https://schema.org/WebSite">
@@ -26,13 +56,15 @@ function App() {
       <nav aria-label="Breadcrumb" itemScope itemType="https://schema.org/BreadcrumbList">
         <ol style={{ display: 'none' }}>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <a itemProp="item" href="https://tornadoaudio.net">
+            <a itemProp="item" href="#home" onClick={handleBreadcrumbClick}>
               <span itemProp="name">Professional Audio Mixing Services</span>
             </a>
             <meta itemProp="position" content="1" />
           </li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <span itemProp="name">Hunter Johanson Audio Engineer</span>
+            <a itemProp="item" href="#services" onClick={handleBreadcrumbClick}>
+              <span itemProp="name">Hunter Johanson Audio Engineer</span>
+            </a>
             <meta itemProp="position" content="2" />
           </li>
         </ol>

@@ -3,7 +3,7 @@ import './HeroSection.css';
 
 const HeroSection = () => {
   return (
-    <section className="hero-section" itemScope itemType="https://schema.org/ProfessionalService">
+    <section id="home" className="hero-section" itemScope itemType="https://schema.org/ProfessionalService">
       <div className="hero-content">
         <header className="hero-text">
           <div className="hero-logo">
