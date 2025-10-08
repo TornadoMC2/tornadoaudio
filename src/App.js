@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -117,6 +118,9 @@ function App() {
                 <small>Professional audio mixing services for musicians, bands, and independent artists worldwide.
                 Transform your recordings into radio-ready tracks with expert mixing by Hunter Johanson.</small>
               </p>
+              <div className="footer-links">
+                <Link to="/privacy-policy">Privacy Policy</Link> | <Link to="/terms-of-service">Terms of Service</Link>
+              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
@@ -6,6 +7,8 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +49,7 @@ const Header = () => {
     <header className={`header ${isScrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : 'hidden'}`} role="banner" itemScope itemType="https://schema.org/WPHeader">
       <div className="container">
         <div className="header-content">
-          <div className="logo" itemScope itemType="https://schema.org/Organization">
+          <Link to="/" className="logo" itemScope itemType="https://schema.org/Organization">
             <img
               src="/logo192.png"
               alt="Tornado Audio Logo - Professional Audio Mixing Services"
@@ -61,23 +64,45 @@ const Header = () => {
               <meta itemProp="url" content="https://tornadoaudio.net" />
               <meta itemProp="founder" content="Hunter Johanson" />
             </div>
-          </div>
+          </Link>
           <nav className={`nav ${mobileMenuOpen ? 'mobile-open' : ''}`} role="navigation" aria-label="Main navigation" itemScope itemType="https://schema.org/SiteNavigationElement">
-            <a href="#home" onClick={handleNavClick} itemProp="url" aria-label="Navigate to home section">
-              <span itemProp="name">Home</span>
-            </a>
-            <a href="#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
-              <span itemProp="name">Services</span>
-            </a>
-            <a href="#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
-              <span itemProp="name">Portfolio</span>
-            </a>
-            <a href="#pricing" onClick={handleNavClick} itemProp="url" aria-label="Navigate to pricing section">
-              <span itemProp="name">Pricing</span>
-            </a>
-            <a href="#contact" onClick={handleNavClick} itemProp="url" aria-label="Navigate to contact section">
-              <span itemProp="name">Contact</span>
-            </a>
+            {isHomePage ? (
+              <>
+                <a href="#home" onClick={handleNavClick} itemProp="url" aria-label="Navigate to home section">
+                  <span itemProp="name">Home</span>
+                </a>
+                <a href="#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
+                  <span itemProp="name">Services</span>
+                </a>
+                <a href="#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
+                  <span itemProp="name">Portfolio</span>
+                </a>
+                <a href="#pricing" onClick={handleNavClick} itemProp="url" aria-label="Navigate to pricing section">
+                  <span itemProp="name">Pricing</span>
+                </a>
+                <a href="#contact" onClick={handleNavClick} itemProp="url" aria-label="Navigate to contact section">
+                  <span itemProp="name">Contact</span>
+                </a>
+              </>
+            ) : (
+              <>
+                <Link to="/" onClick={handleNavClick} itemProp="url" aria-label="Return to home page">
+                  <span itemProp="name">Home</span>
+                </Link>
+                <Link to="/#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
+                  <span itemProp="name">Services</span>
+                </Link>
+                <Link to="/#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
+                  <span itemProp="name">Portfolio</span>
+                </Link>
+                <Link to="/#pricing" onClick={handleNavClick} itemProp="url" aria-label="Navigate to pricing section">
+                  <span itemProp="name">Pricing</span>
+                </Link>
+                <Link to="/#contact" onClick={handleNavClick} itemProp="url" aria-label="Navigate to contact section">
+                  <span itemProp="name">Contact</span>
+                </Link>
+              </>
+            )}
           </nav>
           <button
             className="mobile-menu-btn"

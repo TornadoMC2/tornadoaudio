@@ -322,6 +322,24 @@ button, a, input, select, textarea {
   font-size: 0.9rem;
 }
 
+/* Footer styles */
+.footer-links {
+  margin-top: 15px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.9rem;
+  padding: 0 5px;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
 @media (min-width: 768px) {
   .footer-content {
     flex-direction: row;
