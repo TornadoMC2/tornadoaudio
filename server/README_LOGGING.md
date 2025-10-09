@@ -139,8 +139,7 @@ Visitor trends over time
 
 **Check your connection:**
 ```bash
-# Your .env file should have:
-MONGODB_URI=mongodb+srv://webserver:Hsu5p7NcAV3cNEM0@logs.a1jdndt.mongodb.net/?retryWrites=true&w=majority&appName=Logs
+# Your .env file should 
 ```
 
 **Test the connection:**
