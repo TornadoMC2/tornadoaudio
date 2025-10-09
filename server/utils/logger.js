@@ -187,10 +187,16 @@ function visitorLoggingMiddleware(req, res, next) {
     // Skip logging for any of these conditions
     const shouldSkipLogging = isStaticAsset || isApiEndpoint || isAnalyticsEndpoint;
 
+    // DEBUG: Temporary logging to see what requests are being processed
+    console.log(`REQUEST: ${req.method} ${req.path} | URL: ${req.url} | API: ${isApiEndpoint} | Analytics: ${isAnalyticsEndpoint} | Skip: ${shouldSkipLogging}`);
+
     if (!shouldSkipLogging) {
+      console.log(`⚠️  LOGGING AS VISITOR: ${req.method} ${req.path}`);
       logVisitor(req, responseTime, res.statusCode).catch(err => {
         console.error('Visitor logging failed:', err);
       });
+    } else {
+      console.log(`✅ SKIPPED: ${req.method} ${req.path}`);
     }
 
     return res.send(data);
