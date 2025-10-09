@@ -167,26 +167,27 @@ function visitorLoggingMiddleware(req, res, next) {
     const responseTime = Date.now() - startTime;
 
     // Don't log static assets to reduce noise
-    // Don't log API endpoints to prevent analytics looping when viewing dashboard
-    // Don't log the analytics page itself to prevent inflating visitor counts
     const isStaticAsset = req.path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|map|woff|woff2|ttf)$/);
 
-    // Check both req.path and req.url for API endpoints
-    const isApiEndpoint = req.path.includes('/api/') || req.url.includes('/api/') || req.originalUrl?.includes('/api/');
+    // More comprehensive API endpoint detection
+    const pathToCheck = req.path || req.url || '';
+    const urlToCheck = req.url || req.originalUrl || '';
 
-    // Also check for analytics endpoints specifically
-    const isAnalyticsEndpoint = req.path.includes('analytics') || req.url.includes('analytics');
+    const isApiEndpoint = pathToCheck.startsWith('/api/') ||
+                         pathToCheck.includes('/api/') ||
+                         urlToCheck.startsWith('/api/') ||
+                         urlToCheck.includes('/api/');
 
-    const isAnalyticsPage = req.path === '/analytics' || req.path.startsWith('/analytics/');
+    // Specifically exclude analytics endpoints
+    const isAnalyticsEndpoint = pathToCheck.includes('analytics') ||
+                               urlToCheck.includes('analytics') ||
+                               pathToCheck === '/analytics' ||
+                               pathToCheck.startsWith('/analytics/');
 
     // Skip logging for any of these conditions
-    const shouldSkipLogging = isStaticAsset || isApiEndpoint || isAnalyticsPage || isAnalyticsEndpoint;
-
-    // TEMPORARY DEBUG - Remove this after fixing
-    // console.log(`DEBUG: ${req.method} ${req.path} (URL: ${req.url}) | Static: ${!!isStaticAsset} | API: ${!!isApiEndpoint} | Analytics: ${!!isAnalyticsEndpoint} | Skip: ${shouldSkipLogging}`);
+    const shouldSkipLogging = isStaticAsset || isApiEndpoint || isAnalyticsEndpoint;
 
     if (!shouldSkipLogging) {
-      console.log(`LOGGING VISITOR: ${req.method} ${req.path}`);
       logVisitor(req, responseTime, res.statusCode).catch(err => {
         console.error('Visitor logging failed:', err);
       });

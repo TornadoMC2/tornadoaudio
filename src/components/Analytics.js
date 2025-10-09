@@ -4,7 +4,7 @@ import Header from './Header';
 import './Analytics.css';
 
 const API_KEY = '9b43e514e660bd3937b2372cd7ee1f7d47a53889c31f0d264e95d04135fe2abe';
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || ''; // Use relative paths in production
 
 function Analytics() {
     // Authentication state
