@@ -19,13 +19,13 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-    .then(() => {
-      console.log('✅ Connected to MongoDB successfully');
-      logEvent('api_call', { message: 'Server started and connected to MongoDB' });
-    })
-    .catch((err) => {
-      console.error('❌ MongoDB connection error:', err);
-    });
+  .then(() => {
+    console.log('✅ Connected to MongoDB successfully');
+    logEvent('api_call', { message: 'Server started and connected to MongoDB' });
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err);
+  });
 
 // Middleware
 app.use(cors());
