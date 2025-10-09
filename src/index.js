@@ -6,6 +6,8 @@ import './index.css';
 import App from './App';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import BlogList from './components/BlogList';
+import BlogPost from './components/BlogPost';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -17,6 +19,8 @@ root.render(
           <Route path="/" element={<App />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/blog" element={<BlogList />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>

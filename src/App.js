@@ -9,9 +9,11 @@ import PricingSection from './components/PricingSection';
 import ContactSection from './components/ContactSection';
 import MaintenanceMode from './components/MaintenanceMode';
 import useSiteConfig from './hooks/useSiteConfig';
+import useBlogPosts from './hooks/useBlogPosts';
 
 function App() {
   const { isMaintenanceMode } = useSiteConfig();
+  const { posts } = useBlogPosts(2); // Get 2 most recent posts
 
   // Handle initial page load with hash in URL
   useEffect(() => {
@@ -89,6 +91,36 @@ function App() {
       <footer className="footer" role="contentinfo" itemScope itemType="https://schema.org/WPFooter">
         <div className="container">
           <div className="footer-content">
+            {/* Latest Blog Posts Section */}
+            {posts.length > 0 && (
+              <div className="footer-blog">
+                <h4>Latest from the Blog</h4>
+                <div className="footer-blog-posts">
+                  {posts.map((post) => (
+                    <Link
+                      key={post.slug}
+                      to={`/blog/${post.slug}`}
+                      className="footer-blog-link"
+                    >
+                      <div className="footer-blog-post">
+                        <h5>{post.title}</h5>
+                        <time dateTime={post.date}>
+                          {new Date(post.date + 'T12:00:00').toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </time>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <Link to="/blog" className="footer-blog-view-all">
+                  View All Articles →
+                </Link>
+              </div>
+            )}
+
             <div className="footer-social">
               <h4>Follow Tornado Audio</h4>
               <div className="social-links">
