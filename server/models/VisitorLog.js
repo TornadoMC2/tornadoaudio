@@ -54,5 +54,5 @@ visitorLogSchema.index({ timestamp: -1 });
 visitorLogSchema.index({ country: 1, timestamp: -1 });
 visitorLogSchema.index({ path: 1, timestamp: -1 });
 
+// Export the model
 module.exports = mongoose.model('VisitorLog', visitorLogSchema);
-

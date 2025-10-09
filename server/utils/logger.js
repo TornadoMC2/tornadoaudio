@@ -159,55 +159,42 @@ async function logEvent(eventType, eventData, req = null, success = true, error 
 function visitorLoggingMiddleware(req, res, next) {
   const startTime = Date.now();
 
-  // Capture the original res.send
-  const originalSend = res.send;
-
-  res.send = function(data) {
-    res.send = originalSend; // Restore original
+  // Capture response data after headers are sent
+  res.on('finish', () => {
     const responseTime = Date.now() - startTime;
 
+    // Get the path to check - normalize it to handle different Express configurations
+    const path = req.path || req.originalUrl || req.url || '';
+
+    // Check for referrer to detect if request came from analytics page
+    const referrer = req.headers.referer || req.headers.referrer || '';
+    const isFromAnalyticsPage = referrer.includes('/analytics');
+
+    // Check if the request itself is for the analytics page
+    const isAnalyticsPage = path.startsWith('/analytics') || path === '/analytics';
+
     // Don't log static assets to reduce noise
-    const isStaticAsset = req.path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|map|woff|woff2|ttf)$/);
+    const isStaticAsset = path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|map|woff|woff2|ttf|eot)$/);
 
-    // Get all possible path variations
-    const pathToCheck = req.path || req.url || '';
-    const urlToCheck = req.url || req.originalUrl || '';
-    const baseUrlToCheck = req.baseUrl || '';
-
-    // Check for standard API endpoints
-    const isApiEndpoint = pathToCheck.startsWith('/api/') ||
-                         pathToCheck.includes('/api/') ||
-                         urlToCheck.startsWith('/api/') ||
-                         urlToCheck.includes('/api/') ||
-                         baseUrlToCheck.includes('/api/');
-
-    // Specifically check for analytics endpoint patterns
-    const analyticsEndpoints = [
-      'summary', 'top-pages', 'traffic-by-country', 'browsers',
-      'devices', 'recent-contacts', 'errors', 'daily-visits'
-    ];
-
-    const isAnalyticsEndpoint = pathToCheck.includes('analytics') ||
-                               urlToCheck.includes('analytics') ||
-                               baseUrlToCheck.includes('analytics') ||
-                               pathToCheck === '/analytics' ||
-                               pathToCheck.startsWith('/analytics/') ||
-                               analyticsEndpoints.some(endpoint =>
-                                 pathToCheck.includes(endpoint) ||
-                                 urlToCheck.includes(endpoint)
-                               );
+    // Don't log analytics API endpoints to prevent circular logging
+    const isAnalyticsApiEndpoint =
+      path.startsWith('/api/analytics') ||
+      path.includes('/api/analytics/');
 
     // Skip logging for any of these conditions
-    const shouldSkipLogging = isStaticAsset || isApiEndpoint || isAnalyticsEndpoint;
+    const shouldSkipLogging =
+      isStaticAsset ||
+      isAnalyticsApiEndpoint ||
+      isAnalyticsPage ||
+      isFromAnalyticsPage;
 
     if (!shouldSkipLogging) {
+      // Log requests that aren't related to analytics
       logVisitor(req, responseTime, res.statusCode).catch(err => {
         console.error('Visitor logging failed:', err);
       });
     }
-
-    return res.send(data);
-  };
+  });
 
   next();
 }
