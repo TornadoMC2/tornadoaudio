@@ -28,8 +28,16 @@ function BlogPost() {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
   const [content, setContent] = useState('');
-  const [actualSlug, setActualSlug] = useState(slug); // Store the actual slug from frontmatter
+  const [actualSlug, setActualSlug] = useState(slug);
   const [loading, setLoading] = useState(true);
+  const [readingTime, setReadingTime] = useState(0);
+
+  // Calculate reading time (average 200 words per minute)
+  const calculateReadingTime = (text) => {
+    const wordsPerMinute = 200;
+    const wordCount = text.trim().split(/\s+/).length;
+    return Math.ceil(wordCount / wordsPerMinute);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,7 +74,8 @@ function BlogPost() {
 
         setPost(data);
         setContent(postContent);
-        setActualSlug(data.slug || foundSlug); // Use slug from frontmatter if available
+        setActualSlug(data.slug || foundSlug);
+        setReadingTime(calculateReadingTime(postContent));
         setLoading(false);
       } catch (error) {
         console.error('Error loading post:', error);
@@ -172,19 +181,52 @@ function BlogPost() {
         <div className="container">
           <Link to="/blog" className="back-to-blog">← Back to Blog</Link>
 
-          <header className="blog-post-header">
-            <h1>{post.title}</h1>
-            <div className="blog-post-meta">
-              <time dateTime={post.date}>
-                {new Date(post.date + 'T12:00:00').toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
-              <span className="blog-author">By {post.author}</span>
+          {/* Featured Image */}
+          {post.image && (
+            <div className="blog-featured-image">
+              <img src={post.image} alt={post.title} />
             </div>
-            {post.tags && (
+          )}
+
+          <header className="blog-post-header">
+            {/* Category Badge */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="blog-category-badge">
+                <span className="category-main">{post.tags[0]}</span>
+              </div>
+            )}
+
+            <h1>{post.title}</h1>
+
+            {/* Enhanced Meta Info */}
+            <div className="blog-post-meta">
+              <div className="meta-item">
+                <span className="meta-icon">📅</span>
+                <time dateTime={post.date}>
+                  {new Date(post.date + 'T12:00:00').toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+              </div>
+              <div className="meta-item">
+                <span className="meta-icon">✍️</span>
+                <span className="blog-author">{post.author}</span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-icon">⏱️</span>
+                <span className="reading-time">{readingTime} min read</span>
+              </div>
+            </div>
+
+            {/* Excerpt */}
+            {post.excerpt && (
+              <p className="blog-post-excerpt">{post.excerpt}</p>
+            )}
+
+            {/* Tags */}
+            {post.tags && post.tags.length > 0 && (
               <div className="blog-tags">
                 {post.tags.map((tag, index) => (
                   <span key={index} className="blog-tag">{tag}</span>
@@ -200,6 +242,33 @@ function BlogPost() {
             >
               {content}
             </ReactMarkdown>
+          </div>
+
+          {/* Author Bio Section */}
+          <div className="author-bio">
+            <div className="author-bio-content">
+              <div className="author-avatar">
+                <span className="avatar-icon">🎵</span>
+              </div>
+              <div className="author-info">
+                <h3>About {post.author}</h3>
+                <p>
+                  Professional mixing engineer at Tornado Audio with years of experience
+                  in music production. Specializing in rock, metal, and indie music,
+                  Hunter has helped hundreds of artists achieve their sonic vision.
+                </p>
+                <div className="author-social">
+                  <a
+                    href="https://instagram.com/tornadoaudio_mixing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="author-link"
+                  >
+                    Follow on Instagram →
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="blog-post-footer">
