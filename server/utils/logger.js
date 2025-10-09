@@ -176,6 +176,12 @@ function visitorLoggingMiddleware(req, res, next) {
     // Don't log static assets to reduce noise
     const isStaticAsset = path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|map|woff|woff2|ttf|eot)$/);
 
+    // Don't log static media files
+    const isStaticMedia =
+      path.includes('/static/media/') ||
+      path.includes('/static/js/') ||
+      path.includes('/static/css/');
+
     // Don't log analytics API endpoints to prevent circular logging
     const isAnalyticsApiEndpoint =
       path.startsWith('/api/analytics') ||
@@ -184,6 +190,7 @@ function visitorLoggingMiddleware(req, res, next) {
     // Skip logging for any of these conditions
     const shouldSkipLogging =
       isStaticAsset ||
+      isStaticMedia ||
       isAnalyticsApiEndpoint ||
       isAnalyticsPage ||
       isFromAnalyticsPage;
