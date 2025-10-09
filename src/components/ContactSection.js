@@ -1,6 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import './ContactSection.css';
 
+// GA4 and Google Ads Configuration
+const TRACKING_CONFIG = {
+  ga4MeasurementId: 'G-0VXXHRNEQK',
+  googleAdsId: 'AW-719494667',
+  currency: 'USD'
+};
+
+// Service tier conversion values
+const SERVICE_VALUES = {
+  basic: { value: 40.0, tier: 'Basic Mix' },
+  professional: { value: 75.0, tier: 'Professional Mix' },
+  premium: { value: 200.0, tier: 'Premium Mix & Master' },
+  custom: { value: 50.0, tier: 'Custom Quote' },
+  information: { value: 5.0, tier: 'General Inquiry' },
+  default: { value: 10.0, tier: 'Unknown' }
+};
+
 const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -10,46 +27,71 @@ const ContactSection = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [emailError, setEmailError] = useState('');
 
-  // Enhanced Google Ads conversion tracking function
-  const gtag_report_conversion = (url, conversionValue = 1.0, conversionLabel = 'd9bwCKzws6gbEIu8itcC') => {
-    const callback = function () {
-      if (typeof(url) != 'undefined') {
-        window.location = url;
-      }
-    };
-
-    // Check if gtag is available
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', {
-        'send_to': `AW-719494667/${conversionLabel}`,
-        'value': conversionValue,
-        'currency': 'USD',
-        'event_callback': callback
-      });
-
-      // Also send a custom event for enhanced tracking
-      window.gtag('event', 'form_submit', {
-        'event_category': 'Contact',
-        'event_label': 'Contact Form Submission',
-        'value': conversionValue
-      });
-    }
-    return false;
+  // Email validation function
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
-  // Function to get conversion value based on selected service
-  const getConversionValue = () => {
-    const projectType = formData.project;
-    switch(projectType) {
-      case 'basic':
-        return 40.0;
-      case 'professional':
-        return 75.0;
-      case 'premium':
-        return 200.0;
-      default:
-        return 1.0; // Default lead value
+  // Generate unique transaction ID
+  const generateTransactionId = () => {
+    return `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  };
+
+  // Get conversion details based on selected service
+  const getConversionDetails = () => {
+    const projectType = formData.project || 'default';
+    return SERVICE_VALUES[projectType] || SERVICE_VALUES.default;
+  };
+
+  // Modern GA4 event-based conversion tracking
+  const trackConversion = (transactionId) => {
+    const conversionDetails = getConversionDetails();
+
+    // Check if gtag is available
+    if (typeof window.gtag !== 'function') {
+      console.warn('Google Analytics gtag not available. Conversion tracking skipped.');
+      return;
+    }
+
+    try {
+      // GA4 custom event for contact form submission
+      // This is the primary event that Google Ads will import as a conversion
+      window.gtag('event', 'contact_form_submission', {
+        // Event parameters
+        'value': conversionDetails.value,
+        'currency': TRACKING_CONFIG.currency,
+        'transaction_id': transactionId,
+        'service_tier': conversionDetails.tier,
+        'service_type': formData.project,
+
+        // User information for enhanced conversions
+        'user_data': {
+          'email_address': formData.email,
+          'address': {
+            'first_name': formData.name.split(' ')[0] || '',
+            'last_name': formData.name.split(' ').slice(1).join(' ') || ''
+          }
+        }
+      });
+
+      // Also track as standard GA4 'generate_lead' event for Analytics
+      window.gtag('event', 'generate_lead', {
+        'value': conversionDetails.value,
+        'currency': TRACKING_CONFIG.currency,
+        'transaction_id': transactionId
+      });
+
+      console.log('Conversion tracked successfully:', {
+        event: 'contact_form_submission',
+        transactionId,
+        service: conversionDetails.tier,
+        value: conversionDetails.value
+      });
+    } catch (error) {
+      console.error('Error tracking conversion:', error);
     }
   };
 
@@ -75,9 +117,16 @@ const ContactSection = () => {
   }, []);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Clear email error when user starts typing in email field
+    if (name === 'email') {
+      setEmailError('');
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
@@ -85,6 +134,17 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitMessage('');
+    setEmailError('');
+
+    // Validate email before submission
+    if (!isValidEmail(formData.email)) {
+      setEmailError('Please enter a valid email address');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Generate transaction ID before submission
+    const transactionId = generateTransactionId();
 
     try {
       const response = await fetch('/api/contact', {
@@ -92,7 +152,10 @@ const ContactSection = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          transactionId // Include transaction ID in submission
+        })
       });
 
       const result = await response.json();
@@ -100,8 +163,8 @@ const ContactSection = () => {
       if (result.success) {
         setSubmitMessage(result.message);
 
-        // Track conversion for successful form submission
-        gtag_report_conversion(undefined, getConversionValue());
+        // Track conversion only on successful form submission
+        trackConversion(transactionId);
 
         setFormData({
           name: '',
@@ -186,7 +249,11 @@ const ContactSection = () => {
                 disabled={isSubmitting}
                 aria-describedby="email-help"
                 itemProp="email"
+                className={emailError ? 'error' : ''}
               />
+              {emailError && (
+                <span className="error-message" role="alert">{emailError}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -206,6 +273,7 @@ const ContactSection = () => {
                 <option value="professional">Professional Mix ($75 / song)</option>
                 <option value="premium">Premium Mix & Master ($200 / song)</option>
                 <option value="custom">Custom Quote</option>
+                <option value="information">General Inquiry / Learn More</option>
               </select>
             </div>
 
