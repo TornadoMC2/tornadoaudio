@@ -1,6 +1,7 @@
 {
   "name": "tornadoaudio",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "proxy": "http://localhost:3001",
   "main": "server/server.js",
