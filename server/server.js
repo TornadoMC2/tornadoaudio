@@ -76,7 +76,7 @@ app.get('/logo512.png', (req, res) => {
 const sendEmailWithResend = async (name, email, project, message) => {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Hunter Johanson <contact@tornadoaudio.net>', // Your professional email address
+      from: 'Tornado Audio <contact@tornadoaudio.net>', // Your professional email address
       to: [process.env.RECIPIENT_EMAIL],
       replyTo: email, // Client's email for easy replies
       subject: `New Project Inquiry - ${project}`,
@@ -122,7 +122,7 @@ const sendEmailWithResend = async (name, email, project, message) => {
 const sendConfirmationEmail = async (name, email) => {
   try {
     const { data, error } = await resend.emails.send({
-      from: `Hunter Johanson <contact@tornadoaudio.net>`,
+      from: `Hunter Johanson <hunter@tornadoaudio.net>`,
       to: [email],
       bcc: [process.env.RECIPIENT_EMAIL, email], // BCC to both owner and client
       replyTo: [email], // Client's email - when you reply, it goes to them
