@@ -1,0 +1,47 @@
+# https://www.robotstxt.org/robotstxt.html
+# Tornado Audio - Professional Audio Mixing Services
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+Disallow: /static/
+Disallow: /*.map
+Disallow: /build/
+
+# Allow crawling of key pages
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /audio/
+Allow: /*.css$
+Allow: /*.js$
+
+# Google bots - specific instructions
+User-agent: Googlebot
+Allow: /
+Disallow: /static/
+Disallow: /*.map
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /logo192.png
+Allow: /logo512.png
+Allow: /audio/
+
+# Bing bot
+User-agent: Bingbot
+Allow: /
+Disallow: /static/
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://tornadoaudio.net/sitemap.xml
+
+# Crawl-delay for general bots (not Google/Bing)
+Crawl-delay: 2
+
+# Block bad bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10

@@ -29,7 +29,7 @@
     "eject": "react-scripts eject",
     "server": "cd server && npm start",
     "server:dev": "cd server && npm run dev",
-    "build:deploy": "npm run generate-sitemap && npm run build && cd server && npm start",
+    "build:deploy": "npm run build && cd server && npm start",
     "install:server": "cd server && npm install",
     "postinstall": "npm run install:server",
     "generate-sitemap": "node scripts/generate-sitemap.js",
