@@ -127,4 +127,3 @@ const writeSitemap = () => {
 
 // Run the generator
 writeSitemap();
-

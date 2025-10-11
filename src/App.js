@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import './App.css';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -52,6 +53,75 @@ function App() {
 
   return (
     <div className="App" itemScope itemType="https://schema.org/WebSite">
+      <Helmet>
+        <title>Tornado Audio - Professional Audio Mixing Services by Hunter Johanson</title>
+        <meta name="description" content="Professional audio mixing services by Hunter Johanson. Transform your recordings into radio-ready tracks with expert mixing for rock, country, and all genres. Affordable rates, fast turnaround." />
+        <meta name="keywords" content="audio mixing, music mixing, professional mixing engineer, Hunter Johanson, rock mixing, country mixing, mixing services, audio production, mastering" />
+        <meta name="author" content="Hunter Johanson" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://tornadoaudio.net" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Tornado Audio - Professional Audio Mixing Services" />
+        <meta property="og:description" content="Professional audio mixing services by Hunter Johanson. Transform your recordings into radio-ready tracks with expert mixing for rock, country, and all genres." />
+        <meta property="og:url" content="https://tornadoaudio.net" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://tornadoaudio.net/logo512.png" />
+        <meta property="og:site_name" content="Tornado Audio" />
+        <meta property="og:locale" content="en_US" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Tornado Audio - Professional Audio Mixing Services" />
+        <meta name="twitter:description" content="Professional audio mixing services by Hunter Johanson. Transform your recordings into radio-ready tracks." />
+        <meta name="twitter:image" content="https://tornadoaudio.net/logo512.png" />
+        <meta name="twitter:creator" content="@tornadoaudio_mixing" />
+        <meta name="twitter:site" content="@tornadoaudio_mixing" />
+
+        {/* Schema.org Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "Tornado Audio",
+            "description": "Professional audio mixing services by Hunter Johanson. Transform your recordings into radio-ready tracks with expert mixing for rock, country, and all genres.",
+            "url": "https://tornadoaudio.net",
+            "logo": "https://tornadoaudio.net/logo512.png",
+            "image": "https://tornadoaudio.net/logo512.png",
+            "founder": {
+              "@type": "Person",
+              "name": "Hunter Johanson",
+              "jobTitle": "Audio Mixing Engineer",
+              "url": "https://tornadoaudio.net"
+            },
+            "serviceType": "Audio Mixing Services",
+            "areaServed": "Worldwide",
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Audio Mixing Services",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Professional Audio Mixing",
+                    "description": "Transform your recordings into radio-ready tracks"
+                  }
+                }
+              ]
+            },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer service",
+              "url": "https://tornadoaudio.net#contact"
+            },
+            "sameAs": [
+              "https://instagram.com/tornadoaudio_mixing"
+            ]
+          })}
+        </script>
+      </Helmet>
+
       <meta itemProp="url" content="https://tornadoaudio.net" />
       <meta itemProp="name" content="Tornado Audio - Professional Audio Mixing Services" />
 

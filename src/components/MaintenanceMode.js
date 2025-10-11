@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import './MaintenanceMode.css';
 import useSiteConfig from '../hooks/useSiteConfig';
 
@@ -7,6 +8,11 @@ const MaintenanceMode = () => {
 
   return (
     <div className="maintenance-mode">
+      <Helmet>
+        <title>Maintenance Mode - Tornado Audio</title>
+        <meta name="description" content="Tornado Audio is currently under maintenance. We'll be back online shortly." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="maintenance-container">
         <div className="maintenance-content">
           <div className="maintenance-icon">
