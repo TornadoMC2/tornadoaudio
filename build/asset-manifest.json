@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.9ec93911.css",
-    "main.js": "/static/js/main.747003e7.js",
+    "main.js": "/static/js/main.41d9e644.js",
     "static/js/453.e1bf9007.chunk.js": "/static/js/453.e1bf9007.chunk.js",
     "static/media/2025-10-common-mixing-mistakes.md": "/static/media/2025-10-common-mixing-mistakes.d6b93b5d009a3e2d61db.md",
     "index.html": "/index.html",
@@ -9,13 +9,13 @@
     "static/media/2025-10-outboard-gear.md": "/static/media/2025-10-outboard-gear.4b467c4c7da99e7291b5.md",
     "static/media/2025-10-eq-tips.md": "/static/media/2025-10-eq-tips.c64c0d738a9036b8cfc1.md",
     "static/media/2025-10-mixing-vs-mastering.md": "/static/media/2025-10-mixing-vs-mastering.78598125f2a0dbb2acc4.md",
-    "static/media/2025-10-preparing-tracks-for-mixing.md": "/static/media/2025-10-preparing-tracks-for-mixing.07d68ce17d37664ac6e0.md",
+    "static/media/2025-10-preparing-tracks-for-mixing.md": "/static/media/2025-10-preparing-tracks-for-mixing.9da2b7508db655f9a319.md",
     "main.9ec93911.css.map": "/static/css/main.9ec93911.css.map",
-    "main.747003e7.js.map": "/static/js/main.747003e7.js.map",
+    "main.41d9e644.js.map": "/static/js/main.41d9e644.js.map",
     "453.e1bf9007.chunk.js.map": "/static/js/453.e1bf9007.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9ec93911.css",
-    "static/js/main.747003e7.js"
+    "static/js/main.41d9e644.js"
   ]
 }

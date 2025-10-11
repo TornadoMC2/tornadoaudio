@@ -1,9 +1,9 @@
 ---
-title: "5 Essential Tips for Preparing Your Tracks for Professional Mixing"
+title: "Preparing Your Tracks for Professional Mixing"
 date: "2025-10-08"
 author: "Hunter Johanson"
-excerpt: "Want to get the best results from your mixing engineer? Here are 5 crucial steps to prepare your tracks before sending them off for professional mixing."
-image: "/logo512.png"
+excerpt: "Want to get the best results from your mixing engineer? Here are the crucial steps to prepare your tracks before sending them off for professional mixing."
+image: "/images/blog/pro-tools-dialog.png"
 tags: ["mixing tips", "recording", "audio production"]
 slug: "preparing-tracks-for-mixing"
 ---
