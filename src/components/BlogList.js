@@ -8,9 +8,17 @@ import useBlogPosts from '../hooks/useBlogPosts';
 function BlogList() {
   const { posts, loading } = useBlogPosts(); // Use the dynamic hook
 
+  // Generate canonical URL dynamically
+  const getCanonicalUrl = () => {
+    const baseUrl = 'https://tornadoaudio.net';
+    return `${baseUrl}/blog`;
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const canonicalUrl = getCanonicalUrl();
 
   return (
     <div className="blog-page">
@@ -18,17 +26,41 @@ function BlogList() {
         <title>Blog - Audio Mixing Tips & Tutorials | Tornado Audio</title>
         <meta name="description" content="Expert audio mixing tips, tutorials, and industry insights from professional mixing engineer Hunter Johanson. Learn mixing techniques, production advice, and more." />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://tornadoaudio.net/blog" />
+        <link rel="canonical" href={canonicalUrl} />
 
         {/* Open Graph */}
         <meta property="og:title" content="Blog - Audio Mixing Tips | Tornado Audio" />
         <meta property="og:description" content="Expert audio mixing tips and tutorials from professional mixing engineer Hunter Johanson." />
-        <meta property="og:url" content="https://tornadoaudio.net/blog" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="blog" />
 
         {/* Twitter */}
         <meta name="twitter:title" content="Blog - Audio Mixing Tips | Tornado Audio" />
         <meta name="twitter:description" content="Expert audio mixing tips and tutorials from professional mixing engineer Hunter Johanson." />
+
+        {/* Schema.org structured data for blog listing */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            "name": "Tornado Audio Blog",
+            "description": "Expert audio mixing tips, tutorials, and industry insights from professional mixing engineer Hunter Johanson.",
+            "url": canonicalUrl,
+            "author": {
+              "@type": "Person",
+              "name": "Hunter Johanson",
+              "url": "https://tornadoaudio.net"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Tornado Audio",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://tornadoaudio.net/logo512.png"
+              }
+            }
+          })}
+        </script>
       </Helmet>
 
       <Header />

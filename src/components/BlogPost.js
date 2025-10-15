@@ -39,6 +39,13 @@ function BlogPost() {
     return Math.ceil(wordCount / wordsPerMinute);
   };
 
+  // Generate canonical URL dynamically
+  const getCanonicalUrl = () => {
+    const baseUrl = 'https://tornadoaudio.net';
+    const cleanSlug = actualSlug || slug;
+    return `${baseUrl}/blog/${cleanSlug}`;
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -114,7 +121,7 @@ function BlogPost() {
     );
   }
 
-  const postUrl = `https://tornadoaudio.net/blog/${actualSlug}`;
+  const postUrl = getCanonicalUrl();
   const shareText = encodeURIComponent(post.title);
 
   return (

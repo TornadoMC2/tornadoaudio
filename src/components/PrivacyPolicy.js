@@ -5,9 +5,17 @@ import './PrivacyPolicy.css';
 import Header from './Header';
 
 function PrivacyPolicy() {
+  // Generate canonical URL dynamically
+  const getCanonicalUrl = () => {
+    const baseUrl = 'https://tornadoaudio.net';
+    return `${baseUrl}/privacy-policy`;
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const canonicalUrl = getCanonicalUrl();
 
   return (
     <div className="privacy-policy-page">
@@ -15,17 +23,38 @@ function PrivacyPolicy() {
         <title>Privacy Policy | Tornado Audio - Professional Audio Mixing Services</title>
         <meta name="description" content="Tornado Audio's privacy policy. Learn how we collect, use, and protect your personal information when you use our professional audio mixing services." />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://tornadoaudio.net/privacy-policy" />
+        <link rel="canonical" href={canonicalUrl} />
 
         {/* Open Graph */}
         <meta property="og:title" content="Privacy Policy | Tornado Audio" />
         <meta property="og:description" content="Learn about Tornado Audio's privacy practices and how we protect your personal information." />
-        <meta property="og:url" content="https://tornadoaudio.net/privacy-policy" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
 
         {/* Twitter */}
         <meta name="twitter:title" content="Privacy Policy | Tornado Audio" />
         <meta name="twitter:description" content="Learn about Tornado Audio's privacy practices and data protection policies." />
+
+        {/* Schema.org structured data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "Privacy Policy | Tornado Audio",
+            "description": "Tornado Audio's privacy policy and data protection practices.",
+            "url": canonicalUrl,
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Tornado Audio",
+              "url": "https://tornadoaudio.net"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Tornado Audio",
+              "url": "https://tornadoaudio.net"
+            }
+          })}
+        </script>
       </Helmet>
 
       <Header />
