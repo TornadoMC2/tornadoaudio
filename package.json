@@ -26,15 +26,21 @@
   "scripts": {
     "start": "cd server && npm start",
     "build": "react-app-rewired build",
+    "build:memory-efficient": "cross-env NODE_OPTIONS='--max-old-space-size=512' GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "server": "cd server && npm start",
     "server:dev": "cd server && npm run dev",
-    "build:deploy": "npm run build && cd server && npm start",
+    "build:deploy": "npm run build:memory-efficient && cd server && npm start",
     "install:server": "cd server && npm install",
     "postinstall": "npm run install:server",
     "generate-sitemap": "node scripts/generate-sitemap.js",
-    "prebuild": "npm run generate-sitemap"
+    "prebuild": "npm run generate-sitemap",
+    "docker:build": "docker build -t tornadoaudio .",
+    "docker:run": "docker run -p 3001:3001 --env-file ./server/.env tornadoaudio",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +61,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.2.1"
   }

@@ -138,6 +138,43 @@ const PricingSection = () => {
     }
   };
 
+  const handleFreeSample = () => {
+    // Track Google Ads conversion for free sample interest
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-719494667/free_sample_interest',
+        'value': 10, // Lead value for free sample interest
+        'currency': 'USD'
+      });
+
+      // Track custom event for enhanced analytics
+      window.gtag('event', 'free_sample_cta_click', {
+        'event_category': 'Pricing',
+        'event_label': 'Free Sample Mix',
+        'value': 10
+      });
+    }
+
+    // Scroll to contact section
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+      // Store free sample selection in sessionStorage for the contact form
+      sessionStorage.setItem('selectedService', JSON.stringify({
+        name: 'Free Sample Mix',
+        price: 'Free',
+        originalPrice: null,
+        description: 'Try before you buy - 60-second professionally mixed sample',
+        onSale: false,
+        isSample: true
+      }));
+    }
+  };
+
   const orderCapacityStatus = getOrderCapacityStatus();
 
   return (
@@ -146,6 +183,30 @@ const PricingSection = () => {
         <header>
           <h2 itemProp="name">Pricing & Services</h2>
           <p className="section-subtitle" itemProp="description">Professional audio mixing services tailored to your needs</p>
+
+          {/* Free Sample Mix Banner */}
+          <div className="free-sample-banner">
+            <div className="sample-banner-content">
+              <div className="sample-icon">
+                <img
+                  src="/logo192.png"
+                  alt="Tornado Audio Logo"
+                  className="sample-logo"
+                />
+              </div>
+              <div className="sample-text">
+                <h3>Try Before You Buy - Free Sample Mix Available!</h3>
+                <p>Get a 60-second professionally mixed sample of your track before committing to a full service</p>
+              </div>
+              <button
+                className="sample-cta-button"
+                onClick={() => handleFreeSample()}
+                aria-label="Request free sample mix"
+              >
+                Get Free Sample
+              </button>
+            </div>
+          </div>
 
           {/* Sale Banner */}
           {isSaleActive && saleMessage && (

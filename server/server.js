@@ -37,6 +37,17 @@ app.use(visitorLoggingMiddleware);
 // Analytics API routes
 app.use('/api/analytics', analyticsRouter);
 
+// Health check endpoint for Docker and monitoring
+app.get('/api/analytics/health', (req, res) => {
+  const health = {
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+    status: 'OK',
+    mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  };
+  res.status(200).json(health);
+});
+
 // SEO-specific middleware and headers
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -312,4 +323,3 @@ app.listen(PORT, () => {
   console.log(`Robots.txt available at: http://localhost:${PORT}/robots.txt`);
   console.log(`SEO check available at: http://localhost:${PORT}/api/seo-check`);
 });
-

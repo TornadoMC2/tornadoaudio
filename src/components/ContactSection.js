@@ -13,6 +13,7 @@ const SERVICE_VALUES = {
   basic: { value: 40.0, tier: 'Basic Mix' },
   professional: { value: 75.0, tier: 'Professional Mix' },
   premium: { value: 200.0, tier: 'Premium Mix & Master' },
+  'free-sample': { value: 15.0, tier: 'Free Sample Mix' }, // Higher value for lead quality
   custom: { value: 50.0, tier: 'Custom Quote' },
   information: { value: 5.0, tier: 'General Inquiry' },
   default: { value: 10.0, tier: 'Unknown' }
@@ -101,11 +102,22 @@ const ContactSection = () => {
     if (selectedService) {
       try {
         const service = JSON.parse(selectedService);
+        let projectType = 'custom';
+
+        // Handle different service types including free sample
+        if (service.isSample || service.name.toLowerCase().includes('sample')) {
+          projectType = 'free-sample';
+        } else if (service.name.toLowerCase().includes('basic')) {
+          projectType = 'basic';
+        } else if (service.name.toLowerCase().includes('professional')) {
+          projectType = 'professional';
+        } else if (service.name.toLowerCase().includes('premium')) {
+          projectType = 'premium';
+        }
+
         setFormData(prev => ({
           ...prev,
-          project: service.name.toLowerCase().includes('basic') ? 'basic' :
-                   service.name.toLowerCase().includes('professional') ? 'professional' :
-                   service.name.toLowerCase().includes('premium') ? 'premium' : 'custom',
+          project: projectType,
           message: `I'm interested in the ${service.name} (${service.price}) service. ${service.description}\n\n`
         }));
         // Clear the session storage after using it
@@ -272,6 +284,7 @@ const ContactSection = () => {
                 <option value="basic">Basic Mix ($40 / song)</option>
                 <option value="professional">Professional Mix ($75 / song)</option>
                 <option value="premium">Premium Mix & Master ($200 / song)</option>
+                <option value="free-sample">Free Sample Mix</option>
                 <option value="custom">Custom Quote</option>
                 <option value="information">General Inquiry / Learn More</option>
               </select>
