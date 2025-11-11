@@ -139,6 +139,12 @@ function TermsOfService() {
               Email: terms@tornadoaudio.net
             </p>
           </section>
+
+          <div className="agreement-navigation">
+            <Link to="/service-agreement" className="related-link">View Service Agreement</Link>
+            <Link to="/privacy-policy" className="related-link">View Privacy Policy</Link>
+            <Link to="/#contact" className="related-link">Contact Us</Link>
+          </div>
         </div>
       </div>
 

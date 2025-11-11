@@ -101,6 +101,53 @@
   box-shadow: 0 6px 20px var(--shadow-heavy);
 }
 
+/* Agreement navigation links styling */
+.agreement-navigation {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.related-link {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--primary-gradient);
+  color: var(--text-inverse);
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.related-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-medium);
+  color: var(--text-inverse);
+  text-decoration: none;
+}
+
+/* Additional styling for signature section */
+.agreement-signature {
+  background-color: var(--bg-secondary);
+  padding: 25px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.signature-info {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: var(--bg-card);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
 @media (max-width: 768px) {
   .privacy-policy-page {
     padding-top: 70px;

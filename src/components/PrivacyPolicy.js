@@ -142,6 +142,12 @@ function PrivacyPolicy() {
               Email: privacy@tornadoaudio.net<br />
             </p>
           </section>
+
+          <div className="agreement-navigation">
+            <Link to="/service-agreement" className="related-link">View Service Agreement</Link>
+            <Link to="/terms-of-service" className="related-link">View Terms of Service</Link>
+            <Link to="/#contact" className="related-link">Contact Us</Link>
+          </div>
         </div>
       </div>
 
