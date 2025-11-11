@@ -1,5 +1,5 @@
 ---
-title: "Plugin Review: The Tool I Can't Mix Without (Plugin Alliance Metric AB)"
+title: "Plugin Review: Plugin Alliance Metric AB"
 date: "2025-11-11"
 author: "Hunter Johanson"
 excerpt: "An essential review of the Plugin Alliance Metric AB and why it's a non-negotiable tool for professional mixing and mastering at Tornado Audio."
@@ -8,7 +8,7 @@ tags: ["plugin review", "mixing tips", "mastering", "referencing"]
 slug: "plugin-alliance-metric-ab-review"
 ---
 
-# 🎛️ Plugin Review: The Tool I Can't Mix Without (Metric AB)
+# 🎛️ Plugin Review: Metric AB
 
 In my last post on [Common Mixing Mistakes](slug: "common-mixing-mistakes"), I drilled home the importance of using reference tracks. Mixing in a vacuum is the fastest way to get a mix that doesn't "translate"—sounding great in your studio but falling apart in a car or on earbuds.
 
