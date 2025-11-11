@@ -68,8 +68,7 @@ function TermsOfService() {
             <h2>4. Payment Terms</h2>
             <p>Our service fees are as listed on our Site or as quoted to you directly. Payment terms include:</p>
             <ul>
-              <li>50% deposit required to secure project booking</li>
-              <li>Remaining balance due before final files are delivered</li>
+              <li>Full payment required upon completion of work before final file delivery</li>
               <li>All payments are processed through secure third-party payment processors</li>
               <li>Prices are subject to change, but not for already booked and confirmed projects</li>
             </ul>

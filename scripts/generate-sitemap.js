@@ -103,6 +103,12 @@ ${posts.map(post => `  <url>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://tornadoaudio.net/service-agreement</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
 `;
 
@@ -127,4 +133,3 @@ const writeSitemap = () => {
 
 // Run the generator
 writeSitemap();
-

@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import ServiceAgreement from './components/ServiceAgreement';
 import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
 import Analytics from './components/Analytics';
@@ -20,6 +21,7 @@ root.render(
           <Route path="/" element={<App />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/service-agreement" element={<ServiceAgreement />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/analytics" element={<Analytics />} />

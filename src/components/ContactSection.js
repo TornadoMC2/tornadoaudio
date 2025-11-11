@@ -98,33 +98,77 @@ const ContactSection = () => {
 
   // Check for selected service from pricing section
   useEffect(() => {
-    const selectedService = sessionStorage.getItem('selectedService');
-    if (selectedService) {
-      try {
-        const service = JSON.parse(selectedService);
-        let projectType = 'custom';
+    const checkSelectedService = () => {
+      const selectedService = sessionStorage.getItem('selectedService');
+      if (selectedService) {
+        try {
+          const service = JSON.parse(selectedService);
+          let projectType = 'custom';
 
-        // Handle different service types including free sample
-        if (service.isSample || service.name.toLowerCase().includes('sample')) {
-          projectType = 'free-sample';
-        } else if (service.name.toLowerCase().includes('basic')) {
-          projectType = 'basic';
-        } else if (service.name.toLowerCase().includes('professional')) {
-          projectType = 'professional';
-        } else if (service.name.toLowerCase().includes('premium')) {
-          projectType = 'premium';
+          // Handle different service types including free sample
+          if (service.isSample || service.name.toLowerCase().includes('sample')) {
+            projectType = 'free-sample';
+          } else if (service.name.toLowerCase().includes('basic')) {
+            projectType = 'basic';
+          } else if (service.name.toLowerCase().includes('professional')) {
+            projectType = 'professional';
+          } else if (service.name.toLowerCase().includes('premium')) {
+            projectType = 'premium';
+          }
+
+          // Only update the project dropdown, not the message field
+          setFormData(prev => ({
+            ...prev,
+            project: projectType
+          }));
+
+          // Clear the session storage after using it
+          sessionStorage.removeItem('selectedService');
+        } catch (error) {
+          console.error('Error parsing selected service:', error);
         }
-
-        setFormData(prev => ({
-          ...prev,
-          project: projectType,
-          message: `I'm interested in the ${service.name} (${service.price}) service. ${service.description}\n\n`
-        }));
-        // Clear the session storage after using it
-        sessionStorage.removeItem('selectedService');
-      } catch (error) {
-        console.error('Error parsing selected service:', error);
       }
+    };
+
+    // Check initially
+    checkSelectedService();
+
+    // Add event listener for when the contact section comes into focus
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      const handleFocus = () => {
+        // Small delay to ensure sessionStorage is set before checking
+        setTimeout(checkSelectedService, 100);
+      };
+
+      // Listen for scroll events to the contact section
+      const handleScroll = () => {
+        const rect = contactSection.getBoundingClientRect();
+        const isVisible = rect.top >= 0 && rect.top <= window.innerHeight;
+        if (isVisible) {
+          setTimeout(checkSelectedService, 100);
+        }
+      };
+
+      contactSection.addEventListener('focus', handleFocus);
+      window.addEventListener('scroll', handleScroll);
+
+      // Also check when the section becomes visible via intersection observer
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(checkSelectedService, 100);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      observer.observe(contactSection);
+
+      return () => {
+        contactSection.removeEventListener('focus', handleFocus);
+        window.removeEventListener('scroll', handleScroll);
+        observer.disconnect();
+      };
     }
   }, []);
 

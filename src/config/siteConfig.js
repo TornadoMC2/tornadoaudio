@@ -47,7 +47,7 @@ const siteConfig = {
   payment: {
     methods: ["PayPal", "Venmo", "Bank Transfer"],
     depositRequired: false, // Set to true if you require deposits
-    depositPercentage: 50, // Percentage required as deposit
+    depositPercentage: 0, // Percentage required as deposit
     revisionPolicy: "Revisions included as specified in each package",
     rushOrdersAvailable: false, // Set to false if not offering rush orders
     rushOrderMultiplier: 1.5, // Price multiplier for rush orders

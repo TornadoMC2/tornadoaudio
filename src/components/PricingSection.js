@@ -128,6 +128,16 @@ const PricingSection = () => {
   };
 
   const handleContactUs = () => {
+    // Store service selection for contact form
+    const customQuoteService = {
+      name: 'Custom Quote',
+      price: 'Contact for pricing',
+      description: 'Custom audio mixing and mastering services tailored to your specific needs.',
+      isSample: false
+    };
+
+    sessionStorage.setItem('selectedService', JSON.stringify(customQuoteService));
+
     // Scroll to contact section
     const contactSection = document.getElementById('contact');
     if (contactSection) {
@@ -198,13 +208,18 @@ const PricingSection = () => {
                 <h3>Try Before You Buy - Free Sample Mix Available!</h3>
                 <p>Get a 60-second professionally mixed sample of your track before committing to a full service</p>
               </div>
-              <button
-                className="sample-cta-button"
-                onClick={() => handleFreeSample()}
-                aria-label="Request free sample mix"
-              >
-                Get Free Sample
-              </button>
+              <div className="sample-cta-container">
+                <button
+                  className="sample-cta-button"
+                  onClick={() => handleFreeSample()}
+                  aria-label="Request free sample mix"
+                >
+                  Get Free Sample
+                </button>
+                <p className="sample-disclaimer">
+                  One sample per customer • Preview quality for evaluation purposes
+                </p>
+              </div>
             </div>
           </div>
 
@@ -353,6 +368,9 @@ const PricingSection = () => {
           <p className="pricing-note">
             * All services include professional communication throughout the process
             {config.business.satisfactionGuarantee && ` and ${config.business.satisfactionGuarantee.toLowerCase()}`}
+          </p>
+          <p className="service-agreement-note">
+            📋 <a href="/service-agreement" className="agreement-link" target="_blank" rel="noopener noreferrer">Review our Service Agreement</a> before booking to understand terms, pricing, and project workflow.
           </p>
           <p className="custom-pricing">
             Need something custom? <a href="#contact" className="contact-link" onClick={handleContactUs} aria-label="Contact us for custom pricing">Contact us</a> for personalized pricing and services.
