@@ -4,11 +4,11 @@
 const siteConfig = {
   // Sales & Promotions
   sales: {
-    active: false, // Set to true to activate sale pricing
+    active: true, // Set to true to activate sale pricing
     percentage: 25, // Discount percentage (e.g., 20 for 20% off)
-    name: "Launch Sale", // Display name for the sale
-    endDate: new Date('2025-11-1'), // Optional: new Date('2024-12-31') for automatic expiry
-    excludeServiceIds: [], // Array of service IDs to exclude from sales: ['basic-mix', 'premium-mix-master']
+    name: "Holiday Season Sale!", // Display name for the sale
+    endDate: new Date('2026-1-1'), // Optional: new Date('2024-12-31') for automatic expiry
+    excludeServiceIds: ['basic-mix'], // Array of service IDs to exclude from sales: ['basic-mix', 'premium-mix-master']
   },
 
   // Order Management
@@ -49,7 +49,7 @@ const siteConfig = {
     depositRequired: false, // Set to true if you require deposits
     depositPercentage: 0, // Percentage required as deposit
     revisionPolicy: "Revisions included as specified in each package",
-    rushOrdersAvailable: false, // Set to false if not offering rush orders
+    rushOrdersAvailable: true, // Set to false if not offering rush orders
     rushOrderMultiplier: 1.5, // Price multiplier for rush orders
   },
 
