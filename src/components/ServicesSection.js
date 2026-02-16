@@ -4,37 +4,37 @@ import './ServicesSection.css';
 const ServicesSection = () => {
   const services = [
     {
-      icon: '🎚️',
+      icon: 'MIX',
       title: 'Multi-Track Mixing',
       description: 'Professional mixing of individual tracks with attention to balance, EQ, compression, and spatial placement.',
       serviceType: 'Multi-Track Audio Mixing'
     },
     {
-      icon: '🎧',
+      icon: 'ENH',
       title: 'Audio Enhancement',
       description: 'Enhancement of recordings with noise reduction, pitch correction, and creative effects processing.',
       serviceType: 'Audio Enhancement Services'
     },
     {
-      icon: '🔊',
+      icon: 'MST',
       title: 'Mastering Services',
       description: 'Final polish for your mixes with mastering for streaming platforms and physical media.',
       serviceType: 'Audio Mastering'
     },
     {
-      icon: '⚡',
+      icon: '24H',
       title: 'Rush Orders',
       description: '24-hour turnaround available for urgent projects and last-minute deadlines.',
       serviceType: 'Rush Audio Mixing'
     },
     {
-      icon: '🎵',
+      icon: 'RCK',
       title: 'Genre Specialization',
       description: 'Specializing primarily in Rock music with deep expertise in heavy guitar tones, drum processing, and dynamic mix arrangements that capture the energy and power of rock performances.',
       serviceType: 'Rock Music Mixing'
     },
     {
-      icon: '💾',
+      icon: 'STM',
       title: 'Stem Delivery',
       description: 'Receive individual stems and multitracks for maximum flexibility in your final production.',
       serviceType: 'Audio Stem Services'

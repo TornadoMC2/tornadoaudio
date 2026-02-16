@@ -10,7 +10,7 @@
   overflow: hidden;
 }
 
-/* Animated background particles */
+/* Subtle background accent */
 .hero-section::before {
   content: '';
   position: absolute;
@@ -18,16 +18,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: radial-gradient(circle at 20% 20%, var(--primary-light) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, var(--secondary-light) 0%, transparent 50%);
-  animation: floatingParticles 20s ease-in-out infinite;
+  background-image: radial-gradient(circle at 20% 20%, var(--primary-light) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 80%, var(--secondary-light) 0%, transparent 40%);
   pointer-events: none;
-}
-
-@keyframes floatingParticles {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  33% { transform: translateY(-20px) rotate(2deg); }
-  66% { transform: translateY(20px) rotate(-2deg); }
 }
 
 .hero-content {
@@ -41,14 +34,8 @@
   padding: 0 2rem;
   position: relative;
   z-index: 2;
-  opacity: 0;
-  animation: heroFadeIn 1.2s ease-out 0.5s forwards;
-}
-
-@keyframes heroFadeIn {
-  to {
-    opacity: 1;
-  }
+  opacity: 1;
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
 .hero-logo {
@@ -57,142 +44,103 @@
 }
 
 .hero-logo-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(79, 70, 229, 0.3);
-  transition: all 0.3s ease;
-  animation: logoFloat 3s ease-in-out infinite;
-}
-
-@keyframes logoFloat {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(2deg); }
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px var(--shadow-medium);
+  transition: all 0.2s ease;
 }
 
 .hero-logo-image:hover {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 12px 48px rgba(79, 70, 229, 0.4);
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px var(--shadow-heavy);
 }
 
 .hero-text {
-  opacity: 0;
-  animation: slideInLeft 0.8s ease-out 0.3s forwards;
+  opacity: 1;
+  animation: fadeInUp 0.5s ease-out 0.2s forwards;
 }
 
 .hero-text h1 {
-  font-size: 3.5rem;
-  font-weight: 800;
+  font-size: 3.25rem;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
-  line-height: 1.1;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .hero-text h2 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 1.5rem;
 }
 
 .hero-text p {
-  font-size: 1.2rem;
+  font-size: 1.125rem;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 2.5rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
   max-width: 500px;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .hero-buttons {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 .btn-primary {
   background: var(--primary-gradient);
   color: var(--text-inverse);
-  padding: 1rem 2.5rem;
+  padding: 0.875rem 1.75rem;
   border: none;
-  border-radius: 30px;
-  font-size: 1.1rem;
+  border-radius: 6px;
+  font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px var(--primary-medium);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px var(--primary-medium);
   position: relative;
   overflow: hidden;
   display: inline-block;
 }
 
 .btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: left 0.6s ease;
-}
-
-.btn-primary:hover::before {
-  left: 100%;
+  display: none;
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px var(--primary-medium);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--primary-medium);
 }
 
 .btn-secondary {
   background: transparent;
   color: var(--primary-color);
-  padding: 1rem 2.5rem;
+  padding: 0.875rem 1.75rem;
   border: 2px solid var(--primary-color);
-  border-radius: 30px;
-  font-size: 1.1rem;
+  border-radius: 6px;
+  font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   display: inline-block;
 }
 
 .btn-secondary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--primary-gradient);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-secondary:hover::before {
-  left: 0;
+  display: none;
 }
 
 .btn-secondary:hover {
+  background: var(--primary-color);
   color: var(--text-inverse);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px var(--primary-medium);
+  transform: translateY(-1px);
 }
 
 .hero-visual {
@@ -252,52 +200,36 @@
 }
 
 .hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  display: flex;
+  gap: 3rem;
   margin-top: 4rem;
-  max-width: 600px;
-  width: 100%;
+  padding: 2rem 3rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px var(--shadow-light);
+  border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 0.5s ease-out 0.4s forwards;
   opacity: 0;
-  animation: fadeInUp 0.8s ease-out 0.7s forwards;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .stat {
   text-align: center;
-  padding: 1.5rem;
-  background: var(--bg-card);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px var(--shadow-light);
-  border: 1px solid var(--border-color);
-  transition: transform 0.3s ease;
-}
-
-.stat:hover {
-  transform: translateY(-5px);
 }
 
 .stat h3 {
-  font-size: 2.5rem;
-  font-weight: 800;
+  font-size: 2.25rem;
+  font-weight: 700;
   color: var(--primary-color);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
 }
 
 .stat p {
   color: var(--text-secondary);
+  font-size: 0.9rem;
   font-weight: 500;
-  margin: 0;
 }
 
 /* Enhanced Responsive Design */

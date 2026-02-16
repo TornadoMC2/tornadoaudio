@@ -4,7 +4,7 @@
 const siteConfig = {
   // Sales & Promotions
   sales: {
-    active: true, // Set to true to activate sale pricing
+    active: false, // Set to true to activate sale pricing
     percentage: 25, // Discount percentage (e.g., 20 for 20% off)
     name: "Holiday Season Sale!", // Display name for the sale
     endDate: new Date('2026-1-1'), // Optional: new Date('2024-12-31') for automatic expiry

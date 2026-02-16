@@ -1,0 +1,226 @@
+.live-sound-section {
+  padding: 5rem 0;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+.live-sound-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.live-sound-section .section-subtitle {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+}
+
+/* Stats Section */
+.live-sound-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto 4rem auto;
+  padding: 2rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.live-sound-stat {
+  text-align: center;
+  padding: 1rem;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Experience Grid */
+.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.experience-card {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow-light);
+  transition: all 0.2s ease;
+}
+
+.experience-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--shadow-medium);
+  border-color: var(--primary-color);
+}
+
+.experience-icon {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-inverse);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--primary-gradient);
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.experience-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.experience-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.experience-list li {
+  padding: 0.5rem 0;
+  padding-left: 1.25rem;
+  color: var(--text-secondary);
+  position: relative;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.experience-list li:last-child {
+  border-bottom: none;
+}
+
+.experience-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--primary-color);
+  border-radius: 50%;
+}
+
+/* CTA Section */
+.live-sound-cta {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 3rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.live-sound-cta h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.live-sound-cta p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.live-sound-cta .btn-primary {
+  display: inline-block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .live-sound-section {
+    padding: 3rem 0;
+  }
+
+  .live-sound-section h2 {
+    font-size: 2rem;
+  }
+
+  .live-sound-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+  }
+
+  .experience-grid {
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .experience-card {
+    padding: 1.5rem;
+  }
+
+  .live-sound-cta {
+    margin-top: 3rem;
+    padding: 2rem;
+  }
+
+  .live-sound-cta h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .live-sound-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .live-sound-stat {
+    padding: 0.75rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+}
+

@@ -60,7 +60,7 @@ const Header = () => {
             />
             <div className="logo-text">
               <h1 itemProp="name">Tornado Audio</h1>
-              <span itemProp="description">Audio mixing by Hunter Johanson</span>
+              <span itemProp="description">Studio & Live Sound by Hunter Johanson</span>
               <meta itemProp="url" content="https://tornadoaudio.net" />
               <meta itemProp="founder" content="Hunter Johanson" />
             </div>
@@ -73,6 +73,9 @@ const Header = () => {
                 </a>
                 <a href="#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
                   <span itemProp="name">Services</span>
+                </a>
+                <a href="#live-sound" onClick={handleNavClick} itemProp="url" aria-label="Navigate to live sound section">
+                  <span itemProp="name">Live Sound</span>
                 </a>
                 <a href="#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
                   <span itemProp="name">Portfolio</span>
@@ -91,6 +94,9 @@ const Header = () => {
                 </Link>
                 <Link to="/#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
                   <span itemProp="name">Services</span>
+                </Link>
+                <Link to="/#live-sound" onClick={handleNavClick} itemProp="url" aria-label="Navigate to live sound section">
+                  <span itemProp="name">Live Sound</span>
                 </Link>
                 <Link to="/#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
                   <span itemProp="name">Portfolio</span>

@@ -1,5 +1,5 @@
 .portfolio-section {
-  padding: 6rem 0;
+  padding: 5rem 0;
   background: var(--bg-secondary);
   position: relative;
   overflow: hidden;
@@ -12,18 +12,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 70% 30%, var(--secondary-light) 0%, transparent 60%);
+  background: radial-gradient(circle at 70% 30%, var(--secondary-light) 0%, transparent 50%);
   pointer-events: none;
 }
 
 .portfolio-section h2 {
   text-align: center;
-  font-size: 3rem;
-  font-weight: 800;
+  font-size: 2.5rem;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 1rem;
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out forwards;
+  letter-spacing: -0.02em;
 }
 
 .portfolio-section .section-subtitle {
@@ -34,9 +33,9 @@
 .portfolio-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3rem;
-  margin-top: 4rem;
-  max-width: 1000px; /* Increased from 800px for wider comparisons */
+  gap: 2rem;
+  margin-top: 3rem;
+  max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -45,65 +44,47 @@
 
 .portfolio-item {
   background: var(--bg-card);
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 8px 30px var(--shadow-light);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px var(--shadow-light);
   border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out forwards;
-  animation-delay: calc(var(--item-index) * 0.3s);
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
-  margin-top: 1rem; /* Add top margin to prevent tag cutoff */
-}
-
-.portfolio-item:nth-child(1) { --item-index: 0; }
-.portfolio-item:nth-child(2) { --item-index: 1; }
-.portfolio-item:nth-child(3) { --item-index: 2; }
-.portfolio-item:nth-child(4) { --item-index: 3; }
-
-.portfolio-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-  transition: left 0.6s ease;
-}
-
-.portfolio-item:hover::before {
-  left: 100%;
+  margin-top: 0.5rem;
 }
 
 .portfolio-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 50px var(--shadow-medium);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--shadow-medium);
   border-color: var(--primary-color);
+}
+
+.portfolio-item::before {
+  display: none;
 }
 
 .genre-tag {
   background: var(--primary-gradient);
   color: var(--text-inverse);
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  padding: 0.35rem 0.875rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
   font-weight: 600;
   position: absolute;
-  top: 1rem; /* Changed from -12px to 1rem to keep it inside container */
-  right: 2rem;
+  top: 1rem;
+  right: 1.5rem;
   z-index: 3;
-  box-shadow: 0 4px 15px var(--primary-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .portfolio-note {
   text-align: center;
-  margin-top: 4rem;
-  padding: 2rem;
+  margin-top: 3rem;
+  padding: 1.5rem;
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid var(--border-color);
   max-width: 800px;
   margin-left: auto;
@@ -114,7 +95,7 @@
 
 .portfolio-note p {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   margin: 0;
   line-height: 1.6;
 }
@@ -125,29 +106,19 @@
 
 /* Promotional item styling */
 .promo-item {
-  background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+  background: var(--bg-card);
   border: 2px solid var(--primary-color);
   text-align: center;
-}
-
-.promo-item::before {
-  background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
 }
 
 .promo-tag {
   background: var(--accent-color) !important;
   color: var(--text-inverse);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
 }
 
 .promo-content h3 {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: var(--primary-color);
   margin-bottom: 1rem;
   position: relative;
@@ -155,10 +126,10 @@
 }
 
 .promo-content p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   position: relative;
   z-index: 2;
 }
@@ -174,23 +145,23 @@
 
 .promo-actions .btn-primary,
 .promo-actions .btn-secondary {
-  padding: 1rem 2rem;
-  border-radius: 25px;
+  padding: 0.875rem 1.75rem;
+  border-radius: 6px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .promo-actions .btn-primary {
   background: var(--primary-gradient);
   color: var(--text-inverse);
   border: none;
-  box-shadow: 0 4px 15px var(--primary-medium);
+  box-shadow: 0 2px 8px var(--primary-medium);
 }
 
 .promo-actions .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px var(--primary-medium);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--primary-medium);
 }
 
 .promo-actions .btn-secondary {
@@ -202,90 +173,29 @@
 .promo-actions .btn-secondary:hover {
   background: var(--primary-color);
   color: var(--text-inverse);
-  transform: translateY(-3px);
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .portfolio-grid {
-    max-width: 900px;
-  }
-}
-
+/* Responsive */
 @media (max-width: 768px) {
   .portfolio-section {
-    padding: 4rem 0;
+    padding: 3rem 0;
   }
 
-  .portfolio-section h2 {
-    font-size: 2.5rem;
-  }
-
-  .portfolio-grid {
-    gap: 2rem;
-    max-width: none;
-    padding: 0 1rem;
-  }
-
-  .portfolio-item {
-    padding: 2rem 1.5rem;
-    margin-top: 0.5rem; /* Reduce margin on mobile */
-  }
-
-  .genre-tag {
-    position: static; /* Remove absolute positioning on mobile */
-    margin-bottom: 1rem;
-    display: inline-block;
-  }
-
-  .promo-content h3 {
-    font-size: 1.8rem;
-  }
-
-  .promo-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .promo-actions .btn-primary,
-  .promo-actions .btn-secondary {
-    width: 100%;
-    max-width: 250px;
-  }
-
-  .portfolio-note {
-    margin: 3rem 1rem 0;
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
   .portfolio-section h2 {
     font-size: 2rem;
   }
 
   .portfolio-grid {
     gap: 1.5rem;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
   }
 
   .portfolio-item {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
   }
 
-  .promo-content h3 {
-    font-size: 1.5rem;
-  }
-
-  .promo-content p {
-    font-size: 1rem;
-  }
-
-  .portfolio-note {
-    padding: 1rem;
-  }
-
-  .portfolio-note p {
-    font-size: 0.9rem;
+  .genre-tag {
+    top: 0.75rem;
+    right: 1rem;
   }
 }
