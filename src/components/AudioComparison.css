@@ -1,885 +1,447 @@
+/* ==========================================================================
+   A/B audio comparison player
+
+   A piece of equipment, not a bubble: flat panel, hairline rules, square-ish
+   corners, solid fills. Mobile-first - the base rules are the phone layout and
+   min-width queries add to them. Every control clears 44px on touch.
+
+   The only animation kept is the loading spinner, which reports real state.
+   ========================================================================== */
+
 .audio-comparison {
-  background: var(--bg-card);
-  border-radius: 12px;
-  padding: 2rem;
-  margin: 2rem 0;
-  box-shadow: 0 4px 15px var(--shadow-light);
+  position: relative;
   width: 100%;
   box-sizing: border-box;
-  position: relative;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: slideInUp 0.6s ease-out forwards;
-  transition: all 0.3s ease;
-  border: 1px solid var(--border-color);
-}
-
-@keyframes slideInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.audio-comparison:hover {
-  box-shadow: 0 8px 30px var(--shadow-medium);
-  transform: translateY(-5px);
+  margin-block: var(--space-5);
+  padding: var(--space-4);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: none;
 }
 
 .audio-comparison h3 {
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-  line-height: 1.3;
-  opacity: 0;
-  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: var(--space-2);
+  /* Keeps the title clear of the volume button pinned top-right */
+  padding-right: calc(44px + var(--space-4));
 }
 
-.audio-comparison p {
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
+.audio-comparison > p {
+  color: var(--text-muted);
+  font-size: var(--step--1);
   line-height: 1.6;
-  font-size: 1rem;
-  opacity: 0;
-  animation: fadeInUp 0.6s ease-out 0.3s forwards;
+  margin-bottom: var(--space-5);
+  max-width: var(--measure);
+  padding-right: calc(44px + var(--space-4));
 }
 
-/* Volume Dropdown in top right corner */
+@media (min-width: 40em) {
+  .audio-comparison {
+    padding: var(--space-5);
+  }
+
+  .audio-comparison h3 {
+    font-size: var(--step-2);
+  }
+
+  .audio-comparison > p {
+    font-size: var(--step-0);
+  }
+}
+
+@media (min-width: 64em) {
+  .audio-comparison {
+    padding: var(--space-6);
+  }
+}
+
+/* ==========================================================================
+   Volume - a small labelled button, top right, with a flat panel below it
+   ========================================================================== */
+
 .volume-dropdown-container {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: var(--space-2);
+  right: var(--space-2);
   z-index: 10;
 }
 
 .volume-toggle-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--primary-color);
-  background: var(--bg-card);
-  color: var(--primary-color);
-  font-size: 0.9rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px var(--shadow-light);
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  box-shadow: none;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.volume-toggle-btn:hover {
-  background: var(--primary-color);
-  color: var(--text-inverse);
-  transform: scale(1.05);
+.volume-toggle-btn:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .volume-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 0.5rem;
-  background: var(--bg-card);
-  border: 2px solid var(--primary-color);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 4px 15px var(--shadow-medium);
-  min-width: 200px;
+  margin-top: var(--space-2);
+  width: 13rem;
+  /* Never wider than the viewport allows, even at 320px */
+  max-width: calc(100vw - var(--space-6));
+  padding: var(--space-4);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.volume-dropdown::before {
-  content: '';
-  position: absolute;
-  top: -8px;
-  right: 12px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid var(--primary-color);
+  gap: var(--space-3);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .volume-control-dropdown {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-1);
 }
 
 .volume-control-dropdown span:first-child {
+  font-size: var(--step--1);
   font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  text-align: center;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
 }
 
-.volume-slider-dropdown {
-  width: 100%;
-  height: 6px;
-  background: var(--border-color);
-  border-radius: 3px;
-  outline: none;
+.volume-percentage-dropdown {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Sliders
+
+   Both range inputs get a 44px-tall transparent hit area with a thin visible
+   track drawn inside it, so they stay draggable with a thumb.
+   ========================================================================== */
+
+.volume-slider-dropdown,
+.progress-slider {
   appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  outline: none;
   cursor: pointer;
-  /* Improve touch interaction */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.volume-slider-dropdown::-webkit-slider-runnable-track,
+.progress-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--rule-strong);
+  border: 0;
+  border-radius: var(--radius);
+}
+
+.volume-slider-dropdown::-webkit-slider-thumb,
+.progress-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  /* Centres the thumb on the 4px track: (4 - 16) / 2 */
+  margin-top: -6px;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.volume-slider-dropdown::-moz-range-track,
+.progress-slider::-moz-range-track {
+  height: 4px;
+  background: var(--rule-strong);
+  border: 0;
+  border-radius: var(--radius);
+}
+
+.volume-slider-dropdown::-moz-range-progress,
+.progress-slider::-moz-range-progress {
+  height: 4px;
+  background: var(--accent);
+  border-radius: var(--radius);
+}
+
+.volume-slider-dropdown::-moz-range-thumb,
+.progress-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.volume-slider-dropdown:disabled,
+.progress-slider:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.volume-slider-dropdown:disabled::-webkit-slider-thumb,
+.progress-slider:disabled::-webkit-slider-thumb {
+  background: var(--text-subtle);
+  border-color: var(--text-subtle);
+}
+
+.volume-slider-dropdown:disabled::-moz-range-thumb,
+.progress-slider:disabled::-moz-range-thumb {
+  background: var(--text-subtle);
+  border-color: var(--text-subtle);
+}
+
+/* ==========================================================================
+   Transport
+   ========================================================================== */
+
+.audio-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+/* The A/B toggle: one segmented control, split by a hairline. The active
+   side is a solid accent fill - this is the player's primary state readout. */
+.track-selector {
+  display: flex;
+  width: 100%;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.track-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
-.volume-slider-dropdown::-webkit-slider-thumb {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--primary-gradient);
-  cursor: pointer;
-  box-shadow: 0 2px 6px var(--primary-medium);
-  transition: transform 0.2s ease;
-  /* Improve touch interaction */
-  touch-action: manipulation;
+.track-btn + .track-btn {
+  border-left: 1px solid var(--rule-strong);
 }
 
-.volume-slider-dropdown::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 3px 8px var(--primary-medium);
+.track-btn:hover:not(:disabled):not(.active) {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
-.volume-slider-dropdown::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--primary-gradient);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 6px var(--primary-medium);
-  transition: transform 0.2s ease;
-  /* Improve touch interaction */
-  touch-action: manipulation;
-}
-
-.volume-slider-dropdown::-moz-range-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 3px 8px var(--primary-medium);
-}
-
-.volume-percentage-dropdown {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-  text-align: center;
-  font-family: 'Monaco', 'Consolas', monospace;
-}
-
-/* Audio Controls */
-.audio-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  opacity: 0;
-  animation: slideInLeft 0.6s ease-out 0.5s forwards;
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.track-selector {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.track-btn {
-  padding: 0.75rem 1.5rem;
-  border: 2px solid var(--primary-color);
-  background: var(--bg-card);
-  color: var(--primary-color);
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  position: relative;
-  overflow: hidden;
-}
-
-.track-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--primary-gradient);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.track-btn.active::before,
-.track-btn:hover::before {
-  left: 0;
-}
-
+/* Selected source - must stay unmistakable */
 .track-btn.active {
-  background: var(--primary-color);
+  background: var(--accent);
   color: var(--text-inverse);
 }
 
-.track-btn:hover {
+.track-btn.active:hover:not(:disabled) {
+  background: var(--accent-hover);
   color: var(--text-inverse);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px var(--primary-medium);
 }
 
 .playback-controls {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
 }
 
 .play-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  background: var(--primary-gradient);
-  color: var(--text-inverse);
-  font-size: 1.5rem;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px var(--primary-medium);
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.play-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: left 0.6s ease;
-}
-
-.play-btn:hover::before {
-  left: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-5);
+  background: var(--accent);
+  color: var(--text-inverse);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: none;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .play-btn:hover:not(:disabled) {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px var(--primary-medium);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
-.play-btn:disabled {
+.play-btn:disabled,
+.track-btn:disabled,
+.volume-toggle-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
+
+@media (min-width: 40em) {
+  .audio-controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+  }
+
+  .track-selector {
+    width: auto;
+  }
+
+  .track-btn {
+    flex: 0 0 auto;
+    min-width: 9rem;
+    font-size: var(--step-0);
+  }
+
+  .playback-controls {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .play-btn {
+    width: auto;
+    min-width: 7rem;
+  }
+}
+
+/* ==========================================================================
+   Scrub bar
+   ========================================================================== */
 
 .progress-control {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background: var(--primary-light);
-  border-radius: 12px;
-  border: 1px solid var(--border-light);
-  opacity: 0;
-  animation: slideInRight 0.6s ease-out 0.6s forwards;
-  transition: all 0.3s ease;
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.progress-control:hover {
-  background: var(--primary-medium);
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+  padding: 0 var(--space-2);
+  background: var(--bg-sunken);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
 }
 
 .time-display {
-  font-family: 'Monaco', 'Consolas', monospace;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-  min-width: 45px;
-  text-align: center;
   flex-shrink: 0;
-  transition: color 0.3s ease;
-}
-
-.progress-control:hover .time-display {
-  color: var(--primary-color);
+  min-width: 4ch;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  text-align: center;
 }
 
 .progress-slider {
-  flex: 1;
-  height: 8px;
-  background: var(--border-color);
-  border-radius: 4px;
-  outline: none;
-  appearance: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.progress-slider:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.progress-slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--primary-gradient);
-  cursor: pointer;
-  box-shadow: 0 2px 8px var(--primary-medium);
-  transition: all 0.2s ease;
-}
-
-.progress-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.3);
-  box-shadow: 0 4px 15px var(--primary-medium);
-}
-
-.progress-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--primary-gradient);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 8px var(--primary-medium);
-  transition: all 0.2s ease;
-}
-
-.progress-slider::-moz-range-thumb:hover {
-  transform: scale(1.3);
-  box-shadow: 0 4px 15px var(--primary-medium);
+  flex: 1 1 auto;
 }
 
 .current-track-info {
-  color: var(--text-secondary);
-  font-style: italic;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-  padding: 0.5rem 0;
-  text-align: center;
-  opacity: 0;
-  animation: fadeIn 0.6s ease-out 0.7s forwards;
-  transition: color 0.3s ease;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+  color: var(--text-subtle);
+  font-size: var(--step--1);
+  line-height: 1.5;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* ==========================================================================
+   Load / play hints
+   ========================================================================== */
+
+.load-indicator {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--step--1);
+  font-weight: 400;
+  color: inherit;
+  opacity: 0.75;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.current-track-info:hover {
-  color: var(--text-primary);
+.play-hint,
+.unloaded-indicator {
+  font-size: var(--step--1);
+  color: var(--text-subtle);
 }
 
 .loading-indicator {
-  color: var(--primary-color);
+  font-size: var(--step--1);
   font-weight: 600;
-  animation: pulse 1.5s ease-in-out infinite;
+  color: var(--accent);
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
+/* ==========================================================================
+   Loading and error states
 
-/* Enhanced mobile responsiveness */
-@media (max-width: 1024px) {
-  .audio-comparison {
-    padding: 1.8rem;
-  }
-}
+   Opaque panels over the player. The spinner keeps its rotation - it is the
+   only motion here that reports something real.
+   ========================================================================== */
 
-@media (max-width: 768px) {
-  .audio-comparison {
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-  }
-
-  .volume-dropdown-container {
-    top: 0.75rem;
-    right: 0.75rem;
-  }
-
-  .volume-toggle-btn {
-    width: 28px;
-    height: 28px;
-    font-size: 0.8rem;
-  }
-
-  .volume-dropdown {
-    min-width: 180px;
-    padding: 0.75rem;
-  }
-
-  .audio-comparison h3 {
-    padding-right: 2.5rem; /* Make room for volume button */
-  }
-
-  .audio-controls {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .track-selector {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .track-btn {
-    flex: 1;
-    min-width: 120px;
-  }
-
-  .progress-control {
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.875rem;
-  }
-
-  .progress-slider {
-    width: 100%;
-  }
-
-  .time-display {
-    font-size: 0.8rem;
-  }
-
-  .play-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-  }
-
-  /* Faster animations on mobile */
-  .audio-comparison,
-  .audio-controls,
-  .progress-control,
-  .current-track-info {
-    animation-duration: 0.4s;
-    animation-delay: 0.1s;
-  }
-}
-
-@media (max-width: 480px) {
-  .audio-comparison {
-    padding: 1rem;
-    margin: 1rem 0;
-  }
-
-  .audio-comparison h3 {
-    font-size: 1.3rem;
-  }
-
-  .volume-dropdown {
-    padding: 0.75rem;
-  }
-
-  .volume-control-dropdown span:first-child {
-    font-size: 0.85rem;
-  }
-
-  .volume-percentage-dropdown {
-    font-size: 0.75rem;
-  }
-
-  .track-btn {
-    padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-    min-width: 100px;
-  }
-
-  .play-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 1rem;
-  }
-
-  .progress-control {
-    padding: 0.75rem;
-    gap: 0.5rem;
-  }
-
-  .time-display {
-    font-size: 0.75rem;
-    min-width: 40px;
-  }
-
-  .current-track-info {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 320px) {
-  .audio-comparison {
-    padding: 0.75rem;
-  }
-
-  .volume-dropdown {
-    padding: 0.5rem;
-  }
-
-  .track-btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-    min-width: 90px;
-  }
-
-  .play-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 0.9rem;
-  }
-}
-
-/* Touch device optimizations */
-@media (hover: none) {
-  .audio-comparison:hover {
-    transform: none;
-  }
-
-  .volume-control:hover {
-    transform: none;
-  }
-
-  .track-btn:hover {
-    transform: none;
-  }
-
-  .play-btn:hover:not(:disabled) {
-    transform: none;
-  }
-
-  /* Larger touch targets for mobile */
-  .volume-slider-dropdown {
-    height: 12px; /* Larger touch area */
-    padding: 6px 0; /* Add padding for easier touching */
-  }
-
-  .volume-slider-dropdown::-webkit-slider-thumb {
-    width: 24px;
-    height: 24px;
-    /* Add larger touch area */
-    position: relative;
-  }
-
-  .volume-slider-dropdown::-webkit-slider-thumb::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: -8px;
-    right: -8px;
-    bottom: -8px;
-    background: transparent;
-  }
-
-  .volume-slider-dropdown::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
-  }
-
-  .progress-slider::-webkit-slider-thumb {
-    width: 24px;
-    height: 24px;
-  }
-
-  .progress-slider::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
-  }
-
-  /* Improve dropdown interaction on touch devices */
-  .volume-dropdown {
-    padding: 1rem;
-    min-width: 220px;
-    /* Prevent accidental closing */
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-  }
-
-  .volume-toggle-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
-    /* Better touch target */
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
-/* Additional mobile-specific improvements */
-@media (max-width: 768px) {
-  .volume-dropdown-container {
-    top: 0.75rem;
-    right: 0.75rem;
-  }
-
-  .volume-toggle-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 0.9rem;
-    /* Ensure good touch target size */
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  .volume-dropdown {
-    min-width: 200px;
-    padding: 1rem;
-    /* Better positioning for mobile */
-    right: -10px;
-    margin-top: 0.75rem;
-  }
-
-  .volume-slider-dropdown {
-    height: 14px;
-    /* Even larger on smaller screens */
-    padding: 8px 0;
-  }
-
-  .audio-comparison h3 {
-    padding-right: 3rem; /* Make room for larger volume button */
-  }
-}
-
-@media (max-width: 480px) {
-  .volume-toggle-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
-  }
-
-  .volume-dropdown {
-    padding: 1rem;
-    right: -20px;
-    /* Adjust for screen edge */
-    max-width: calc(100vw - 2rem);
-  }
-
-  .volume-slider-dropdown {
-    height: 16px;
-    padding: 10px 0;
-  }
-}
-
-/* Prevent zoom on double-tap for iOS */
-@media screen and (max-width: 768px) {
-  .volume-slider-dropdown,
-  .progress-slider,
-  .volume-toggle-btn {
-    touch-action: manipulation;
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
-/* Placeholder Comparison Styles */
-.placeholder-comparison {
-  background: var(--bg-gradient);
-  border: 2px dashed var(--primary-color);
-  position: relative;
-  overflow: hidden;
-}
-
-.placeholder-comparison::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-.placeholder-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 2rem 0;
-  position: relative;
-  z-index: 2;
-}
-
-.placeholder-visual {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.waveform-placeholder {
-  display: flex;
-  align-items: end;
-  gap: 4px;
-  height: 60px;
-  padding: 0 2rem;
-}
-
-.wave-bar {
-  width: 8px;
-  background: var(--primary-gradient);
-  border-radius: 4px;
-  animation: waveAnimation 2s ease-in-out infinite;
-  opacity: 0.7;
-}
-
-.wave-bar:nth-child(1) { height: 20px; animation-delay: 0s; }
-.wave-bar:nth-child(2) { height: 40px; animation-delay: 0.1s; }
-.wave-bar:nth-child(3) { height: 60px; animation-delay: 0.2s; }
-.wave-bar:nth-child(4) { height: 35px; animation-delay: 0.3s; }
-.wave-bar:nth-child(5) { height: 50px; animation-delay: 0.4s; }
-.wave-bar:nth-child(6) { height: 25px; animation-delay: 0.5s; }
-.wave-bar:nth-child(7) { height: 45px; animation-delay: 0.6s; }
-.wave-bar:nth-child(8) { height: 30px; animation-delay: 0.7s; }
-
-@keyframes waveAnimation {
-  0%, 100% { transform: scaleY(1); opacity: 0.7; }
-  50% { transform: scaleY(1.5); opacity: 1; }
-}
-
-.placeholder-text {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-align: center;
-  letter-spacing: 1px;
-}
-
-.get-started-btn {
-  background: var(--primary-gradient);
-  color: var(--text-inverse);
-  border: none;
-  padding: 1rem 2.5rem;
-  border-radius: 30px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px var(--primary-medium);
-  position: relative;
-  overflow: hidden;
-}
-
-.get-started-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: left 0.6s ease;
-}
-
-.get-started-btn:hover::before {
-  left: 100%;
-}
-
-.get-started-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px var(--primary-medium);
-}
-
-.placeholder-features {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.feature-item {
-  background: var(--primary-light);
-  color: var(--primary-color);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: 1px solid var(--primary-medium);
-  transition: all 0.3s ease;
-}
-
-.feature-item:hover {
-  background: var(--primary-medium);
-  transform: translateY(-2px);
-}
-
-/* Lazy Loading States */
 .audio-loading-overlay,
 .audio-error-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
+  inset: 0;
+  z-index: 15;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 15;
-  border-radius: 12px;
+  padding: var(--space-4);
+  background: var(--bg-raised);
+  border-radius: var(--radius);
 }
 
 .loading-content,
@@ -887,234 +449,208 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
+  gap: var(--space-3);
+  max-width: 20rem;
   text-align: center;
-  max-width: 300px;
 }
 
+.loading-content p,
+.error-content p {
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 100%;
+}
+
+.error-content p {
+  color: var(--text);
+}
+
+/* Functional: indeterminate loading feedback, kept deliberately */
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--border-color);
-  border-top: 4px solid var(--primary-color);
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--rule-strong);
+  border-top-color: var(--accent);
+  /* A spinner has to be round to read as a spinner */
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.9s linear infinite;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-progress-bar {
-  width: 200px;
-  height: 8px;
-  background: var(--border-color);
-  border-radius: 4px;
+  width: 100%;
+  max-width: 12rem;
+  height: 4px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
   overflow: hidden;
-  position: relative;
 }
 
+/* Functional: width is driven by real buffering progress */
 .loading-progress-fill {
   height: 100%;
-  background: var(--primary-gradient);
-  border-radius: 4px;
+  background: var(--accent);
   transition: width 0.3s ease;
-  position: relative;
-}
-
-.loading-progress-fill::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  animation: shimmer 1.5s ease-in-out infinite;
 }
 
 .loading-percentage {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  font-family: 'Monaco', 'Consolas', monospace;
-}
-
-.error-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
 }
 
 .retry-btn {
-  background: var(--primary-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-5);
+  background: var(--accent);
   color: var(--text-inverse);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 25px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: none;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
+  touch-action: manipulation;
 }
 
 .retry-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--primary-medium);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
-/* Loading indicators on buttons */
-.load-indicator {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 400;
-  opacity: 0.8;
-  margin-top: 0.25rem;
-  color: var(--text-secondary);
+/* ==========================================================================
+   Placeholder variant
+   ========================================================================== */
+
+.placeholder-comparison {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-sunken);
+  border: 1px dashed var(--rule-strong);
 }
 
-.play-hint {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-left: 1rem;
-  font-style: italic;
+.placeholder-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
+  padding-block: var(--space-5);
 }
 
-.unloaded-indicator {
-  color: var(--text-secondary);
-  font-weight: 400;
+.placeholder-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
 }
 
-/* Disabled states for loading */
-.track-btn:disabled,
-.play-btn:disabled,
-.volume-toggle-btn:disabled,
-.volume-slider-dropdown:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
+/* A static level display - it stands in for artwork, so it does not animate */
+.waveform-placeholder {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-1);
+  height: 48px;
 }
 
-.track-btn:disabled .load-indicator {
-  color: var(--primary-color);
-  animation: pulse 1.5s ease-in-out infinite;
+.wave-bar {
+  width: 6px;
+  background: var(--accent-rule);
+  border-radius: 0;
 }
 
-/* Loading state animations */
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+.wave-bar:nth-child(1) { height: 40%; }
+.wave-bar:nth-child(2) { height: 70%; }
+.wave-bar:nth-child(3) { height: 100%; }
+.wave-bar:nth-child(4) { height: 55%; }
+.wave-bar:nth-child(5) { height: 85%; }
+.wave-bar:nth-child(6) { height: 45%; }
+.wave-bar:nth-child(7) { height: 75%; }
+.wave-bar:nth-child(8) { height: 50%; }
+
+.placeholder-text {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
-/* Mobile optimizations for loading states */
-@media (max-width: 768px) {
-  .loading-content,
-  .error-content {
-    padding: 1.5rem;
-    max-width: 250px;
+.get-started-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-5);
+  background: var(--accent);
+  color: var(--text-inverse);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: none;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.get-started-btn:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.placeholder-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.feature-item {
+  padding: var(--space-1) var(--space-2);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-size: var(--step--1);
+}
+
+@media (min-width: 40em) {
+  .waveform-placeholder {
+    height: 64px;
+  }
+
+  .placeholder-text {
+    font-size: var(--step-2);
+  }
+}
+
+/* ==========================================================================
+   High contrast
+   ========================================================================== */
+
+@media (prefers-contrast: more) {
+  .track-btn,
+  .play-btn,
+  .retry-btn,
+  .volume-toggle-btn,
+  .loading-progress-bar {
+    border-color: var(--text);
   }
 
   .loading-spinner {
-    width: 32px;
-    height: 32px;
-    border-width: 3px;
-  }
-
-  .loading-progress-bar {
-    width: 150px;
-    height: 6px;
-  }
-
-  .load-indicator {
-    font-size: 0.65rem;
-  }
-
-  .play-hint {
-    font-size: 0.75rem;
-    margin-left: 0.5rem;
-    margin-top: 0.5rem;
-    display: block;
-  }
-
-  .retry-btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .audio-loading-overlay,
-  .audio-error-overlay {
-    background: rgba(255, 255, 255, 0.98);
-  }
-
-  .loading-content,
-  .error-content {
-    padding: 1rem;
-    max-width: 200px;
-    gap: 0.75rem;
-  }
-
-  .loading-progress-bar {
-    width: 120px;
-  }
-
-  .load-indicator {
-    display: none; /* Hide on very small screens to save space */
-  }
-
-  .play-hint {
-    font-size: 0.7rem;
-  }
-}
-
-/* Dark mode support for loading states */
-@media (prefers-color-scheme: dark) {
-  .audio-loading-overlay,
-  .audio-error-overlay {
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-  }
-
-  .loading-progress-bar {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .loading-percentage,
-  .unloaded-indicator {
-    color: rgba(255, 255, 255, 0.8);
-  }
-}
-
-/* Enhanced error state styling */
-.error-content p {
-  color: var(--error-color, #e74c3c);
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-/* Improved accessibility for loading states */
-.loading-content[aria-busy="true"],
-.error-content[role="alert"] {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 4px;
-  border-radius: 8px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .loading-spinner {
-    border-color: black;
-    border-top-color: var(--primary-color);
-  }
-
-  .loading-progress-bar {
-    border: 2px solid black;
-  }
-
-  .retry-btn {
-    border: 2px solid black;
+    border-color: var(--text);
+    border-top-color: var(--accent);
   }
 }

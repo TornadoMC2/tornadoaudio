@@ -163,8 +163,7 @@ function PrivacyPolicy() {
                   rel="noopener noreferrer"
                   aria-label="Follow Tornado Audio on Instagram"
                 >
-                  <span className="social-icon" role="img" aria-label="Instagram">📸</span>
-                  <span>@tornadoaudio_mixing</span>
+                  <span>Instagram — @tornadoaudio_mixing</span>
                 </a>
               </div>
             </div>

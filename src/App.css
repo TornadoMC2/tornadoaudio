@@ -1,104 +1,215 @@
+/* ==========================================================================
+   Design tokens
+
+   Warm paper neutrals with a deep ink blue. Flat surfaces, hairline rules
+   instead of shadows, near-square corners. Everything below is mobile-first:
+   base rules target small screens, min-width queries add on for larger ones.
+   ========================================================================== */
+
 :root {
-  /* Professional dark theme colors - Grounded palette */
-  --primary-color: #2563eb; /* Professional blue */
-  --primary-gradient: linear-gradient(135deg, #1e40af, #3b82f6);
-  --primary-light: rgba(37, 99, 235, 0.08);
-  --primary-medium: rgba(37, 99, 235, 0.2);
-  --primary-dark: #1e40af;
+  /* Blue, kept but taken down from electric to ink */
+  --accent: #1e4b7a;
+  --accent-hover: #16395c;
+  --accent-soft: #edf1f6;
+  --accent-rule: #b9cadd;
 
-  --secondary-color: #475569; /* Slate gray */
-  --secondary-light: rgba(71, 85, 105, 0.08);
-  --secondary-medium: rgba(71, 85, 105, 0.2);
+  /* Warm paper surfaces */
+  --bg: #fbfaf8;
+  --bg-raised: #ffffff;
+  --bg-sunken: #f3f0ea;
 
-  --accent-color: #0891b2; /* Professional cyan */
-  --accent-light: rgba(8, 145, 178, 0.08);
+  /* Warm ink text */
+  --text: #1c1917;
+  --text-muted: #57534e;
+  --text-subtle: #857f75;
+  --text-inverse: #fbfaf8;
 
-  /* Light theme backgrounds and text */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --bg-card: #ffffff;
-  --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  /* Hairline rules do the work shadows used to */
+  --rule: #e2ddd4;
+  --rule-strong: #c8c1b4;
 
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --text-inverse: #ffffff;
+  /* Semantic state. Muted brick and moss rather than siren red and green,
+     so they sit with the warm palette instead of shouting over it. */
+  --danger: #9b2c2c;
+  --danger-soft: #faf0ee;
+  --success: #2f6b4f;
+  --success-soft: #eef4f0;
 
-  /* Border and shadow colors */
-  --border-color: #e2e8f0;
-  --border-light: #f1f5f9;
-  --shadow-light: rgba(15, 23, 42, 0.04);
-  --shadow-medium: rgba(15, 23, 42, 0.08);
-  --shadow-heavy: rgba(15, 23, 42, 0.12);
+  /* Type */
+  --font-display: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+
+  /* Fluid type scale */
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: clamp(1.125rem, 1.05rem + 0.35vw, 1.3rem);
+  --step-2: clamp(1.35rem, 1.2rem + 0.7vw, 1.75rem);
+  --step-3: clamp(1.65rem, 1.35rem + 1.4vw, 2.4rem);
+  --step-4: clamp(2rem, 1.5rem + 2.4vw, 3.25rem);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Near-square. Nothing here should read as a pill or a bubble. */
+  --radius: 3px;
+  --radius-lg: 4px;
+
+  --measure: 68ch;
+  --container: 68rem;
+
+  /* Kept as no-ops so any stragglers referencing shadows stay flat */
+  --shadow-light: transparent;
+  --shadow-medium: transparent;
+  --shadow-heavy: transparent;
+
+  /* Legacy aliases - older component CSS still references these names */
+  --primary-color: var(--accent);
+  --primary-dark: var(--accent-hover);
+  --primary-light: var(--accent-soft);
+  --primary-medium: var(--accent-rule);
+  --primary-gradient: var(--accent);
+  --secondary-color: var(--text-muted);
+  --secondary-light: var(--bg-sunken);
+  --secondary-medium: var(--rule);
+  --accent-color: var(--accent);
+  --accent-light: var(--accent-soft);
+  --bg-primary: var(--bg);
+  --bg-secondary: var(--bg-sunken);
+  --bg-tertiary: var(--bg-sunken);
+  --bg-card: var(--bg-raised);
+  --bg-gradient: var(--bg);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-muted);
+  --border-color: var(--rule);
+  --border-light: var(--rule);
 }
 
-/* Dark theme colors */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #3b82f6;
-    --primary-gradient: linear-gradient(135deg, #2563eb, #60a5fa);
-    --primary-light: rgba(59, 130, 246, 0.1);
-    --primary-medium: rgba(59, 130, 246, 0.25);
-    --primary-dark: #2563eb;
+    --accent: #7ea8ce;
+    --accent-hover: #9cc1e0;
+    --accent-soft: #1c2530;
+    --accent-rule: #35506b;
 
-    --secondary-color: #94a3b8;
-    --secondary-light: rgba(148, 163, 184, 0.1);
-    --secondary-medium: rgba(148, 163, 184, 0.25);
+    --bg: #17150f;
+    --bg-raised: #1f1c16;
+    --bg-sunken: #110f0b;
 
-    --accent-color: #22d3ee;
-    --accent-light: rgba(34, 211, 238, 0.1);
+    --text: #f2eee6;
+    --text-muted: #b5aea1;
+    --text-subtle: #857e72;
+    --text-inverse: #17150f;
 
-    /* Dark theme backgrounds and text */
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --bg-card: #1e293b;
-    --bg-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    --rule: #322d25;
+    --rule-strong: #4a443a;
 
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --text-inverse: #0f172a;
-
-    /* Border and shadow colors for dark mode */
-    --border-color: #334155;
-    --border-light: #475569;
-    --shadow-light: rgba(0, 0, 0, 0.2);
-    --shadow-medium: rgba(0, 0, 0, 0.3);
-    --shadow-heavy: rgba(0, 0, 0, 0.4);
+    --danger: #e2938a;
+    --danger-soft: #2a1a17;
+    --success: #86bb9d;
+    --success-soft: #16211c;
   }
 }
 
-* {
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
-  font-size: 16px;
+  font-size: 100%;
+  /* Prevents iOS Safari inflating text in landscape */
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-  overflow-x: hidden;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  color: var(--text);
+  background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Stops long words blocking horizontal scroll on narrow screens */
+  overflow-wrap: break-word;
 }
 
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-2); }
+h4 { font-size: var(--step-1); }
+
+p { max-width: var(--measure); }
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+img, video, svg, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Visible focus for keyboard users, suppressed for mouse clicks */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* No entrance animations, no hover lifts. Transitions are colour only. */
+a, button, input, select, textarea {
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
 .App {
-  text-align: left;
-  position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-primary);
+  background-color: var(--bg);
 }
 
 main {
@@ -107,192 +218,148 @@ main {
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
   width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  /* Respects notches and rounded display corners */
+  padding-inline: max(var(--space-4), env(safe-area-inset-left));
 }
 
-.section-subtitle {
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-  margin-bottom: 3rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-  opacity: 1;
-  animation: none;
-}
-
-/* Global Animations - Simplified */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
+@media (min-width: 40em) {
+  .container {
+    padding-inline: var(--space-6);
   }
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Ensure sections don't overlap */
 section {
   width: 100%;
   position: relative;
-  padding: 5rem 0;
-  opacity: 1;
-  animation: fadeIn 0.5s ease-out forwards;
+  padding-block: var(--space-7);
 }
 
-/* Prevent overlap between sections */
-section:not(:last-child) {
-  margin-bottom: 2rem;
+@media (min-width: 48em) {
+  section {
+    padding-block: var(--space-8);
+  }
 }
 
-/* Smooth transitions for all interactive elements */
-button, a, input, select, textarea {
-  transition: all 0.3s ease;
+/* Hairline separators between sections, in place of drop shadows */
+section + section {
+  border-top: 1px solid var(--rule);
 }
 
-/* Global button styles - More professional */
-.btn-primary, .cta-button {
-  background: var(--primary-gradient);
-  color: var(--text-inverse);
-  border: none;
-  padding: 0.875rem 1.75rem;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: var(--step-1);
+  margin-bottom: var(--space-6);
+  max-width: var(--measure);
+  line-height: 1.6;
+}
+
+.route-loading {
+  padding: var(--space-8) var(--space-4);
+  color: var(--text-subtle);
   text-align: center;
-  box-shadow: 0 2px 8px var(--shadow-medium);
-  transition: all 0.2s ease;
 }
 
-.btn-primary:hover, .cta-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--shadow-heavy);
+/* ==========================================================================
+   Buttons
+
+   Solid fill, square-ish, no gradient, no lift on hover. Minimum 44px tall
+   so they stay comfortable targets on touch screens.
+   ========================================================================== */
+
+.btn-primary,
+.cta-button,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.btn-primary,
+.cta-button {
+  background: var(--accent);
+  color: var(--text-inverse);
+  border: 1px solid var(--accent);
+}
+
+.btn-primary:hover,
+.cta-button:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
-  padding: 0.875rem 1.75rem;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-  transition: all 0.2s ease;
+  color: var(--accent);
+  border: 1px solid var(--rule-strong);
 }
 
 .btn-secondary:hover {
-  background: var(--primary-color);
-  color: var(--text-inverse);
-  transform: translateY(-1px);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  transform: none;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
-
-  section {
-    padding: 2rem 0;
-  }
-
-  .section-subtitle {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-  }
-}
+/* ==========================================================================
+   Footer
+   ========================================================================== */
 
 .footer {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  padding: 2rem 0;
-  border-top: 1px solid var(--border-color);
-  margin-top: 4rem;
+  background: var(--bg-sunken);
+  color: var(--text);
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--rule);
+  margin-top: var(--space-7);
 }
 
 .footer-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
-/* Footer Blog Section */
 .footer-blog {
-  width: 100%;
-  text-align: center;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--rule);
 }
 
-.footer-blog h4 {
-  margin: 0 0 1rem 0;
-  color: var(--text-primary);
-  font-size: 1.2rem;
+.footer h4 {
+  margin-bottom: var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
 }
 
 .footer-blog-posts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+@media (min-width: 40em) {
+  .footer-blog-posts {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .footer-blog-link {
@@ -302,123 +369,103 @@ button, a, input, select, textarea {
 }
 
 .footer-blog-post {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px var(--shadow-light);
+  background: transparent;
+  border: none;
+  border-left: 2px solid var(--rule);
+  border-radius: 0;
+  padding: var(--space-1) 0 var(--space-1) var(--space-4);
+  box-shadow: none;
 }
 
 .footer-blog-post:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px var(--shadow-medium);
-  border-color: var(--primary-color);
+  border-left-color: var(--accent);
+  transform: none;
+  box-shadow: none;
 }
 
 .footer-blog-post h5 {
-  margin: 0 0 0.5rem 0;
-  color: var(--text-primary);
-  font-size: 1rem;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--step-0);
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.footer-blog-post:hover h5 {
+  color: var(--accent);
 }
 
 .footer-blog-post time {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: var(--step--1);
+  color: var(--text-subtle);
 }
 
 .footer-blog-view-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--primary-color);
+  display: inline-block;
+  color: var(--accent);
   text-decoration: none;
+  font-size: var(--step--1);
   font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
 }
 
 .footer-blog-view-all:hover {
-  gap: 0.5rem;
-  color: var(--primary-dark);
-}
-
-.footer-social h4 {
-  margin: 0 0 1rem 0;
-  color: var(--text-primary);
-  font-size: 1.1rem;
-  font-weight: 600;
+  text-decoration: underline;
 }
 
 .social-links {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .social-links a {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   text-decoration: none;
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-light);
+  color: var(--text-muted);
+  font-size: var(--step--1);
 }
 
 .social-links a:hover {
-  background: var(--primary-light);
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
-}
-
-.social-icon {
-  font-size: 1.2rem;
-}
-
-.footer-copyright {
-  text-align: center;
-}
-
-.footer-copyright p {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-/* Footer styles */
-.footer-links {
-  margin-top: 15px;
-}
-
-.footer-links a {
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  font-size: 0.9rem;
-  padding: 0 5px;
-}
-
-.footer-links a:hover {
-  color: var(--primary-color);
+  background: none;
+  color: var(--accent);
+  transform: none;
+  box-shadow: none;
   text-decoration: underline;
 }
 
-@media (min-width: 768px) {
-  .footer-content {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
+.footer-copyright p {
+  color: var(--text-subtle);
+  font-size: var(--step--1);
+  max-width: var(--measure);
+}
 
-  .footer-copyright {
-    text-align: right;
-  }
+.footer-copyright p + p {
+  margin-top: var(--space-2);
+}
+
+.footer-links {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.footer-links a {
+  color: var(--text-subtle);
+  text-decoration: none;
+  font-size: var(--step--1);
+  padding-block: var(--space-1);
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+  text-decoration: underline;
 }

@@ -14,9 +14,6 @@ services:
     restart: unless-stopped
     networks:
       - tornadoaudio-network
-    volumes:
-      # Mount logs directory if you want persistent logs
-      - ./server/logs:/app/server/logs
     # Resource limits for small servers
     deploy:
       resources:
@@ -28,7 +25,7 @@ services:
           memory: 256M
     # Health check
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/api/analytics/health", "||", "exit", "1"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/api/health", "||", "exit", "1"]
       interval: 30s
       timeout: 10s
       retries: 3

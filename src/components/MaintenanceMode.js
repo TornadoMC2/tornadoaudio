@@ -9,9 +9,6 @@ const MaintenanceMode = () => {
     <div className="maintenance-mode">
       <div className="maintenance-container">
         <div className="maintenance-content">
-          <div className="maintenance-icon">
-            🔧
-          </div>
           <h1 className="maintenance-title">We'll Be Right Back</h1>
           <h2 className="maintenance-subtitle">Tornado Audio is Currently Under Maintenance</h2>
 
@@ -27,7 +24,7 @@ const MaintenanceMode = () => {
 
           <div className="maintenance-contact">
             <a href={`mailto:${contactInfo.email}`} className="maintenance-email">
-              📧 {contactInfo.email}
+              {contactInfo.email}
             </a>
             <p className="maintenance-response">
               I typically respond {contactInfo.responseTime}

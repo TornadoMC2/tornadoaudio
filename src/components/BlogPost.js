@@ -201,7 +201,6 @@ function BlogPost() {
             {/* Enhanced Meta Info */}
             <div className="blog-post-meta">
               <div className="meta-item">
-                <span className="meta-icon">📅</span>
                 <time dateTime={post.date}>
                   {new Date(post.date + 'T12:00:00').toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -211,11 +210,9 @@ function BlogPost() {
                 </time>
               </div>
               <div className="meta-item">
-                <span className="meta-icon">✍️</span>
                 <span className="blog-author">{post.author}</span>
               </div>
               <div className="meta-item">
-                <span className="meta-icon">⏱️</span>
                 <span className="reading-time">{readingTime} min read</span>
               </div>
             </div>
@@ -247,9 +244,6 @@ function BlogPost() {
           {/* Author Bio Section */}
           <div className="author-bio">
             <div className="author-bio-content">
-              <div className="author-avatar">
-                <span className="avatar-icon">🎵</span>
-              </div>
               <div className="author-info">
                 <h3>About {post.author}</h3>
                 <p>
@@ -325,8 +319,7 @@ function BlogPost() {
                   rel="noopener noreferrer"
                   aria-label="Follow Tornado Audio on Instagram"
                 >
-                  <span className="social-icon" role="img" aria-label="Instagram">📸</span>
-                  <span>@tornadoaudio_mixing</span>
+                  <span>Instagram — @tornadoaudio_mixing</span>
                 </a>
               </div>
             </div>

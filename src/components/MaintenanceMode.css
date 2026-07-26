@@ -1,175 +1,141 @@
+/* Maintenance takeover: a single plain notice on paper. No gradient backdrop,
+   no spinning wrench, no entrance animation — the message is visible with no
+   JS and no motion. Mobile-first, and sized with svh so mobile browser chrome
+   cannot clip it. */
+
 .maintenance-mode {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  padding: var(--space-5) max(var(--space-4), env(safe-area-inset-left));
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
 }
 
 .maintenance-container {
-  max-width: 600px;
   width: 100%;
+  max-width: var(--measure);
 }
 
 .maintenance-content {
-  background: white;
-  border-radius: 20px;
-  padding: 3rem 2rem;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  animation: fadeInUp 0.8s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.maintenance-icon {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
-  animation: rotate 3s linear infinite;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: var(--space-6) var(--space-5);
+  text-align: left;
+  box-shadow: none;
 }
 
 .maintenance-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--space-2);
   line-height: 1.2;
+  text-wrap: balance;
 }
 
 .maintenance-subtitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #667eea;
-  margin-bottom: 2rem;
-  line-height: 1.3;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.5;
 }
 
 .maintenance-message {
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .maintenance-message p {
-  font-size: 1.1rem;
-  color: #4a5568;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  font-size: var(--step-0);
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: var(--measure);
+}
+
+.maintenance-message p + p {
+  margin-top: var(--space-4);
 }
 
 .maintenance-contact {
-  background: #f7fafc;
-  border-radius: 15px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  border: 2px solid #e2e8f0;
+  background: var(--bg-sunken);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
 }
 
 .maintenance-email {
-  display: inline-block;
-  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  background: var(--bg-raised);
+  color: var(--accent);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  box-shadow: none;
+  font-size: var(--step-0);
   font-weight: 600;
-  color: #667eea;
+  line-height: 1.3;
+  text-align: center;
   text-decoration: none;
-  padding: 0.75rem 1.5rem;
-  background: white;
-  border-radius: 10px;
-  border: 2px solid #667eea;
-  transition: all 0.3s ease;
-  margin-bottom: 1rem;
+  /* Long addresses must wrap rather than force the page sideways at 320px */
+  overflow-wrap: anywhere;
 }
 
 .maintenance-email:hover {
-  background: #667eea;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  box-shadow: none;
 }
 
 .maintenance-response {
-  font-size: 0.9rem;
-  color: #718096;
+  font-size: var(--step--1);
+  color: var(--text-subtle);
   margin: 0;
 }
 
 .maintenance-footer {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 2rem;
-  margin-top: 2rem;
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-5);
+  margin-top: var(--space-6);
 }
 
 .maintenance-footer p {
-  font-size: 1rem;
-  color: #4a5568;
-  margin-bottom: 0.5rem;
+  font-size: var(--step-0);
+  color: var(--text-muted);
+  margin-bottom: var(--space-1);
 }
 
 .maintenance-signature {
+  font-size: var(--step--1);
+  color: var(--text-subtle);
   font-style: italic;
-  color: #718096;
-  font-size: 0.9rem;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+@media (min-width: 40em) {
   .maintenance-mode {
-    padding: 1rem;
+    padding: var(--space-7) var(--space-6);
   }
 
   .maintenance-content {
-    padding: 2rem 1.5rem;
-  }
-
-  .maintenance-title {
-    font-size: 2rem;
-  }
-
-  .maintenance-subtitle {
-    font-size: 1.2rem;
-  }
-
-  .maintenance-message p {
-    font-size: 1rem;
-  }
-
-  .maintenance-contact {
-    padding: 1.5rem;
+    padding: var(--space-7) var(--space-6);
   }
 
   .maintenance-email {
-    font-size: 1rem;
-    padding: 0.6rem 1.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .maintenance-title {
-    font-size: 1.8rem;
-  }
-
-  .maintenance-subtitle {
-    font-size: 1.1rem;
-  }
-
-  .maintenance-icon {
-    font-size: 3rem;
+    width: auto;
   }
 }

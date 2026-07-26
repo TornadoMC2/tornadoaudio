@@ -1,12 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
+
+const NAV_ITEMS = [
+  { hash: '#home', label: 'Home' },
+  { hash: '#services', label: 'Services' },
+  { hash: '#live-sound', label: 'Live Sound' },
+  { hash: '#portfolio', label: 'Portfolio' },
+  { hash: '#pricing', label: 'Pricing' },
+  { hash: '#contact', label: 'Contact' }
+];
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  // Held in a ref so the scroll listener is registered once, rather than torn
+  // down and re-added on every scroll event.
+  const lastScrollY = useRef(0);
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
@@ -14,110 +25,106 @@ const Header = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Set scrolled state for styling
       setIsScrolled(currentScrollY > 50);
 
-      // Handle visibility based on scroll direction
       if (currentScrollY < 50) {
-        // Always show header at the top
         setIsVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down and past threshold - hide header
+      } else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         setIsVisible(false);
-        setMobileMenuOpen(false); // Close mobile menu when hiding
-      } else if (currentScrollY < lastScrollY) {
-        // Scrolling up - show header
+        setMobileMenuOpen(false);
+      } else if (currentScrollY < lastScrollY.current) {
         setIsVisible(true);
       }
 
-      setLastScrollY(currentScrollY);
+      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  // Stop the page scrolling behind the open mobile menu
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
-  const handleNavClick = () => {
-    setMobileMenuOpen(false);
-  };
+  useEffect(() => {
+    if (!mobileMenuOpen) return undefined;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
+
+  const handleNavClick = () => setMobileMenuOpen(false);
 
   return (
-    <header className={`header ${isScrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : 'hidden'}`} role="banner" itemScope itemType="https://schema.org/WPHeader">
+    <header
+      className={`header ${isScrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : 'hidden'}`}
+      role="banner"
+      itemScope
+      itemType="https://schema.org/WPHeader"
+    >
       <div className="container">
         <div className="header-content">
           <Link to="/" className="logo" itemScope itemType="https://schema.org/Organization">
             <img
               src="/logo192.png"
-              alt="Tornado Audio Logo - Professional Audio Mixing Services"
+              alt=""
               className="logo-image"
               itemProp="logo"
               width="192"
               height="192"
             />
-            <div className="logo-text">
-              <h1 itemProp="name">Tornado Audio</h1>
-              <span itemProp="description">Studio & Live Sound by Hunter Johanson</span>
+            <span className="logo-text">
+              <span className="logo-name" itemProp="name">Tornado Audio</span>
+              <span className="logo-tagline" itemProp="description">Studio &amp; Live Sound by Hunter Johanson</span>
               <meta itemProp="url" content="https://tornadoaudio.net" />
               <meta itemProp="founder" content="Hunter Johanson" />
-            </div>
+            </span>
           </Link>
-          <nav className={`nav ${mobileMenuOpen ? 'mobile-open' : ''}`} role="navigation" aria-label="Main navigation" itemScope itemType="https://schema.org/SiteNavigationElement">
-            {isHomePage ? (
-              <>
-                <a href="#home" onClick={handleNavClick} itemProp="url" aria-label="Navigate to home section">
-                  <span itemProp="name">Home</span>
+
+          <nav
+            id="main-navigation"
+            className={`nav ${mobileMenuOpen ? 'mobile-open' : ''}`}
+            role="navigation"
+            aria-label="Main navigation"
+            itemScope
+            itemType="https://schema.org/SiteNavigationElement"
+          >
+            {NAV_ITEMS.map(({ hash, label }) =>
+              isHomePage ? (
+                <a key={hash} href={hash} onClick={handleNavClick} itemProp="url">
+                  <span itemProp="name">{label}</span>
                 </a>
-                <a href="#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
-                  <span itemProp="name">Services</span>
-                </a>
-                <a href="#live-sound" onClick={handleNavClick} itemProp="url" aria-label="Navigate to live sound section">
-                  <span itemProp="name">Live Sound</span>
-                </a>
-                <a href="#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
-                  <span itemProp="name">Portfolio</span>
-                </a>
-                <a href="#pricing" onClick={handleNavClick} itemProp="url" aria-label="Navigate to pricing section">
-                  <span itemProp="name">Pricing</span>
-                </a>
-                <a href="#contact" onClick={handleNavClick} itemProp="url" aria-label="Navigate to contact section">
-                  <span itemProp="name">Contact</span>
-                </a>
-              </>
-            ) : (
-              <>
-                <Link to="/" onClick={handleNavClick} itemProp="url" aria-label="Return to home page">
-                  <span itemProp="name">Home</span>
+              ) : (
+                <Link key={hash} to={`/${hash}`} onClick={handleNavClick} itemProp="url">
+                  <span itemProp="name">{label}</span>
                 </Link>
-                <Link to="/#services" onClick={handleNavClick} itemProp="url" aria-label="Navigate to services section">
-                  <span itemProp="name">Services</span>
-                </Link>
-                <Link to="/#live-sound" onClick={handleNavClick} itemProp="url" aria-label="Navigate to live sound section">
-                  <span itemProp="name">Live Sound</span>
-                </Link>
-                <Link to="/#portfolio" onClick={handleNavClick} itemProp="url" aria-label="Navigate to portfolio section">
-                  <span itemProp="name">Portfolio</span>
-                </Link>
-                <Link to="/#pricing" onClick={handleNavClick} itemProp="url" aria-label="Navigate to pricing section">
-                  <span itemProp="name">Pricing</span>
-                </Link>
-                <Link to="/#contact" onClick={handleNavClick} itemProp="url" aria-label="Navigate to contact section">
-                  <span itemProp="name">Contact</span>
-                </Link>
-              </>
+              )
             )}
           </nav>
+
           <button
             className="mobile-menu-btn"
-            onClick={toggleMobileMenu}
-            aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-navigation"
+            aria-controls="main-navigation"
           >
-            {mobileMenuOpen ? '✕' : '☰'}
+            <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false">
+              {mobileMenuOpen ? (
+                <path d="M4 4 L18 18 M18 4 L4 18" stroke="currentColor" strokeWidth="1.75" fill="none" />
+              ) : (
+                <path d="M3 6h16 M3 11h16 M3 16h16" stroke="currentColor" strokeWidth="1.75" fill="none" />
+              )}
+            </svg>
           </button>
         </div>
       </div>

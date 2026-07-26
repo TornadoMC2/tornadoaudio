@@ -1,367 +1,242 @@
+/* ==========================================================================
+   Contact
+
+   Mobile-first. Single column at base, two columns from 48em. Flat surfaces,
+   hairline rules, near-square corners. Nothing here relies on an animation to
+   become visible.
+   ========================================================================== */
+
 .contact-section {
-  padding: 5rem 0;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  position: relative;
-  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
 }
 
-/* Subtle background element */
-.contact-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 40% 60%, var(--primary-light) 0%, transparent 50%);
-  pointer-events: none;
-}
-
+/* Section padding, h2 and .section-subtitle are handled by App.css. */
 .contact-section h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  position: relative;
-  z-index: 2;
-  color: var(--text-primary);
-}
-
-.contact-section .section-subtitle {
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-  margin-bottom: 3rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-  position: relative;
-  z-index: 2;
+  margin-bottom: var(--space-3);
 }
 
 .contact-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
 }
 
+@media (min-width: 48em) {
+  .contact-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+}
+
+@media (min-width: 64em) {
+  .contact-content {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--space-7);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Contact details
+
+   A definition list of hairline-separated rows rather than a stack of cards.
+   -------------------------------------------------------------------------- */
+
 .contact-info {
-  opacity: 1;
+  min-width: 0;
 }
 
 .contact-info h3 {
-  font-size: 1.5rem;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--rule-strong);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
   font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: var(--primary-color);
+  color: var(--text);
 }
 
 .contact-item {
-  margin-bottom: 1.5rem;
-  padding: 1.25rem;
-  background: var(--bg-card);
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px var(--shadow-light);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-.contact-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px var(--shadow-medium);
-  border-color: var(--primary-color);
+.contact-item:last-of-type {
+  border-bottom: none;
 }
 
 .contact-item h4 {
-  font-size: 1.1rem;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: var(--primary-color);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
 }
 
 .contact-item p {
-  color: var(--text-secondary);
   margin: 0;
-  font-size: 1rem;
-  line-height: 1.4;
+  max-width: var(--measure);
+  color: var(--text);
+  font-size: var(--step-0);
+  line-height: 1.5;
 }
+
+/* --------------------------------------------------------------------------
+   Form
+   -------------------------------------------------------------------------- */
 
 .contact-form {
-  background: var(--bg-card);
-  padding: 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px var(--shadow-light);
-  border: 1px solid var(--border-color);
-  opacity: 0;
-  animation: slideInRight 0.8s ease-out 0.5s forwards;
-  transition: all 0.3s ease;
+  min-width: 0;
+  padding: var(--space-4);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: none;
 }
 
-.contact-form:hover {
-  box-shadow: 0 12px 40px var(--shadow-medium);
+@media (min-width: 40em) {
+  .contact-form {
+    padding: var(--space-5);
+  }
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-5);
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
   font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
+  display: block;
   width: 100%;
-  padding: 0.875rem 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 1rem;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-  font-family: inherit;
+  max-width: 100%;
+  min-height: 44px;
+  padding: var(--space-3);
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  /* var(--step-0) is 1rem; anything under 16px makes iOS Safari zoom on focus */
+  font-size: var(--step-0);
+  line-height: 1.4;
+  box-shadow: none;
+}
+
+/* Kills the inner shadow iOS puts on text fields. The select keeps its native
+   appearance so it keeps its native chevron. */
+.form-group input,
+.form-group textarea {
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--primary-light);
-  transform: scale(1.02);
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+  box-shadow: none;
 }
 
 .form-group input:disabled,
 .form-group select:disabled,
 .form-group textarea:disabled {
-  opacity: 0.6;
+  background: var(--bg-sunken);
+  color: var(--text-subtle);
   cursor: not-allowed;
-  background: var(--bg-tertiary);
 }
 
 .form-group textarea {
+  min-height: 8rem;
   resize: vertical;
-  min-height: 120px;
+}
+
+.form-group input.error {
+  border-color: var(--danger);
+  border-left-width: 3px;
+}
+
+.error-message {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--danger);
+  font-size: var(--step--1);
+  font-weight: 600;
 }
 
 .submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 1rem 2rem;
-  background: var(--primary-gradient);
+  min-height: 44px;
+  padding: var(--space-3) var(--space-5);
+  background: var(--accent);
   color: var(--text-inverse);
-  border: none;
-  border-radius: 25px;
-  font-size: 1.1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
   font-weight: 600;
+  line-height: 1.2;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 15px var(--primary-medium);
-}
-
-.submit-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: left 0.6s ease;
-}
-
-.submit-btn:hover::before {
-  left: 100%;
+  box-shadow: none;
 }
 
 .submit-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px var(--primary-medium);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .submit-btn:disabled {
-  opacity: 0.6;
+  background: var(--bg-sunken);
+  color: var(--text-subtle);
+  border-color: var(--rule-strong);
   cursor: not-allowed;
-  transform: none;
 }
 
+/* --------------------------------------------------------------------------
+   Submit feedback
+
+   Visible immediately - no entrance animation, no starting opacity of 0.
+   -------------------------------------------------------------------------- */
+
 .submit-message {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-  text-align: center;
-  animation: slideInDown 0.3s ease-out;
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-size: var(--step--1);
+  line-height: 1.5;
 }
 
 .submit-message.success {
-  background: var(--accent-light);
-  color: var(--accent-color);
-  border: 1px solid var(--accent-color);
+  background: var(--success-soft);
+  color: var(--text);
+  border-color: var(--success);
+  border-left: 3px solid var(--success);
 }
 
 .submit-message.error {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid #ef4444;
-}
-
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Disabled form elements */
-.form-group input:disabled,
-.form-group select:disabled,
-.form-group textarea:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  animation: none;
-}
-
-/* Enhanced mobile responsiveness */
-@media (max-width: 1024px) {
-  .contact-content {
-    gap: 3rem;
-    padding: 0 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .contact-section {
-    padding: 4rem 0;
-  }
-
-  .contact-section h2 {
-    font-size: 2.5rem;
-  }
-
-  .contact-content {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 0 1rem;
-  }
-
-  .contact-info h3 {
-    font-size: 1.5rem;
-    text-align: center;
-  }
-
-  .contact-form {
-    padding: 1.5rem;
-  }
-
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    padding: 0.875rem;
-    font-size: 16px; /* Prevents zoom on iOS */
-  }
-
-  /* Faster animations on mobile */
-  .contact-info,
-  .contact-form {
-    animation-duration: 0.6s;
-    animation-delay: 0.2s;
-  }
-
-  .form-group {
-    animation-delay: 0.4s;
-  }
-
-  .submit-btn {
-    animation-delay: 0.6s;
-  }
-}
-
-@media (max-width: 480px) {
-  .contact-section {
-    padding: 3rem 0;
-  }
-
-  .contact-section h2 {
-    font-size: 2rem;
-  }
-
-  .contact-content {
-    padding: 0 0.75rem;
-  }
-
-  .contact-info h3 {
-    font-size: 1.3rem;
-  }
-
-  .contact-item h4 {
-    font-size: 1.1rem;
-  }
-
-  .contact-form {
-    padding: 1rem;
-  }
-
-  .form-group {
-    margin-bottom: 1rem;
-  }
-
-  .submit-btn {
-    font-size: 1rem;
-    padding: 0.875rem 1.5rem;
-  }
-}
-
-@media (max-width: 320px) {
-  .contact-content {
-    padding: 0 0.5rem;
-  }
-
-  .contact-form {
-    padding: 0.75rem;
-  }
-
-  .contact-item {
-    padding: 0.75rem;
-  }
-}
-
-/* Touch device optimizations */
-@media (hover: none) {
-  .contact-item:hover {
-    transform: none;
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .contact-form:hover {
-    transform: none;
-  }
+  background: var(--danger-soft);
+  color: var(--text);
+  border-color: var(--danger);
+  border-left: 3px solid var(--danger);
+  font-weight: 600;
 }

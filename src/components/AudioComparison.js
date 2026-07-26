@@ -475,9 +475,9 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
             </button>
 
             <div className="placeholder-features">
-              <div className="feature-item">✓ Professional Quality</div>
-              <div className="feature-item">✓ Fast Turnaround</div>
-              <div className="feature-item">✓ Unlimited Revisions*</div>
+              <div className="feature-item">Professional Quality</div>
+              <div className="feature-item">Fast Turnaround</div>
+              <div className="feature-item">Unlimited Revisions*</div>
             </div>
           </div>
         </div>
@@ -497,7 +497,7 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
               aria-label="Volume control"
               disabled={audioLoadingState !== 'loaded'}
           >
-            🔊
+            Vol
           </button>
           {showVolumeDropdown && (
               <div className="volume-dropdown" onClick={handleVolumeDropdownClick}>
@@ -548,7 +548,6 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
         {audioLoadingState === 'error' && (
           <div className="audio-error-overlay">
             <div className="error-content">
-              <div className="error-icon">⚠️</div>
               <p>{audioError}</p>
               <button className="retry-btn" onClick={retryLoading}>
                 Try Again
@@ -586,9 +585,9 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
               onClick={togglePlayback}
               disabled={audioLoadingState === 'loading' || audioLoadingState === 'error'}
             >
-              {audioLoadingState === 'loading' ? '⏳' :
-               audioLoadingState === 'error' ? '❌' :
-               isPlaying ? '⏸️' : '▶️'}
+              {audioLoadingState === 'loading' ? 'Loading' :
+               audioLoadingState === 'error' ? 'Error' :
+               isPlaying ? 'Pause' : 'Play'}
             </button>
           </div>
         </div>

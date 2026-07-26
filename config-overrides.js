@@ -23,12 +23,18 @@ module.exports = override(
               name: 'vendors',
               priority: 10,
               reuseExistingChunk: true,
+              // 'initial' rather than inheriting 'all': without this, a
+              // dependency reachable only from a lazy route (react-markdown
+              // and its plugins) still gets hoisted into the entry bundle,
+              // which defeats the code splitting in src/index.js.
+              chunks: 'initial',
             },
             react: {
               test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
               name: 'react-vendors',
               priority: 20,
               reuseExistingChunk: true,
+              chunks: 'initial',
             },
             common: {
               minChunks: 2,

@@ -239,11 +239,11 @@ const PricingSection = () => {
           {config.features.showCapacityIndicator && (
             <div className={`capacity-indicator ${orderCapacityStatus.isAtCapacity ? 'at-capacity' : orderCapacityStatus.isNearCapacity ? 'near-capacity' : 'available'}`}>
               {orderCapacityStatus.isAtCapacity ? (
-                <span className="status-closed">❌ Not Currently Accepting Orders</span>
+                <span className="status-closed">Not Currently Accepting Orders</span>
               ) : orderCapacityStatus.isNearCapacity ? (
-                <span className="status-warning">⚠️ High Demand - Limited Availability ({orderCapacityStatus.current}/{orderCapacityStatus.max} orders)</span>
+                <span className="status-warning">High Demand - Limited Availability ({orderCapacityStatus.current}/{orderCapacityStatus.max} orders)</span>
               ) : (
-                <span className="status-available">✅ Currently Accepting Orders ({orderCapacityStatus.current}/{orderCapacityStatus.max})</span>
+                <span className="status-available">Currently Accepting Orders ({orderCapacityStatus.current}/{orderCapacityStatus.max})</span>
               )}
             </div>
           )}
@@ -312,7 +312,7 @@ const PricingSection = () => {
                       aria-expanded={expandedBulkPricing[tier.id]}
                       aria-controls={`bulk-pricing-${tier.id}`}
                     >
-                      💡 Bulk Pricing Available
+                      Bulk Pricing Available
                       <span className={`arrow ${expandedBulkPricing[tier.id] ? 'expanded' : ''}`}>▼</span>
                     </button>
 
@@ -370,7 +370,7 @@ const PricingSection = () => {
             {config.business.satisfactionGuarantee && ` and ${config.business.satisfactionGuarantee.toLowerCase()}`}
           </p>
           <p className="service-agreement-note">
-            📋 <a href="/service-agreement" className="agreement-link" target="_blank" rel="noopener noreferrer">Review our Service Agreement</a> before booking to understand terms, pricing, and project workflow.
+            <a href="/service-agreement" className="agreement-link" target="_blank" rel="noopener noreferrer">Review our Service Agreement</a> before booking to understand terms, pricing, and project workflow.
           </p>
           <p className="custom-pricing">
             Need something custom? <a href="#contact" className="contact-link" onClick={handleContactUs} aria-label="Contact us for custom pricing">Contact us</a> for personalized pricing and services.
@@ -378,7 +378,7 @@ const PricingSection = () => {
 
           {config.payment.rushOrdersAvailable && (
             <p className="rush-orders">
-              🚀 Rush orders available at {config.payment.rushOrderMultiplier}x pricing
+              Rush orders available at {config.payment.rushOrderMultiplier}x pricing
             </p>
           )}
         </footer>

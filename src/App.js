@@ -134,8 +134,7 @@ function App() {
                   itemScope
                   itemType="https://schema.org/Organization"
                 >
-                  <span className="social-icon" role="img" aria-label="Instagram">📸</span>
-                  <span>@tornadoaudio_mixing</span>
+                  <span>Instagram — @tornadoaudio_mixing</span>
                 </a>
               </div>
             </div>

@@ -251,19 +251,19 @@ const ContactSection = () => {
           <div className="contact-info" itemScope itemType="https://schema.org/ContactPoint">
             <h3>Contact Information</h3>
             <div className="contact-item">
-              <h4>📧 Email</h4>
+              <h4>Email</h4>
               <p itemProp="email">contact@tornadoaudio.net</p>
             </div>
             <div className="contact-item">
-              <h4>⏱ Response Time</h4>
+              <h4>Response Time</h4>
               <p itemProp="hoursAvailable">Within 24 hours</p>
             </div>
             <div className="contact-item">
-              <h4>🎵 File Delivery</h4>
+              <h4>File Delivery</h4>
               <p>Dropbox, or Google Drive</p>
             </div>
             <div className="contact-item">
-              <h4>💳 Payment</h4>
+              <h4>Payment</h4>
               <p>Zelle, Venmo, or Bank Transfer</p>
             </div>
             <meta itemProp="contactType" content="Customer Service" />
