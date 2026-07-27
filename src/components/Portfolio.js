@@ -34,7 +34,7 @@ const Portfolio = () => {
       afterAudio: "/audio/mp3/eyes-after.mp3",
       genre: "Pop Rock",
       artist: "Eric Corriveau",
-      songName: "",
+      songName: "That's All it Was",
       releaseUrl: null
     },
     {
