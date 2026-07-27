@@ -1,7 +1,11 @@
 import React from 'react';
 import './LiveSoundSection.css';
+import useSiteConfig from '../hooks/useSiteConfig';
 
 const LiveSoundSection = () => {
+  const { locationInfo, config } = useSiteConfig();
+  const { venues } = config.liveSound;
+
   const experiences = [
     {
       category: 'Venue Types',
@@ -66,10 +70,17 @@ const LiveSoundSection = () => {
         <header>
           <h2 itemProp="name">Live Sound Engineering</h2>
           <p className="section-subtitle" itemProp="description">
-            Professional live sound services for events of all sizes. From intimate club shows to large-scale productions,
-            I bring clarity and power to every performance.
+            FOH and monitors for events across {locationInfo.serviceAreaLabel}. From
+            club shows to festival stages, based in {locationInfo.short}.
           </p>
         </header>
+
+        {venues.length > 0 && (
+          <p className="live-sound-venues">
+            <span className="live-sound-venues-label">Venues worked:</span>{' '}
+            {venues.join(' · ')}
+          </p>
+        )}
 
         <div className="live-sound-stats">
           {highlights.map((highlight, index) => (
@@ -96,8 +107,12 @@ const LiveSoundSection = () => {
 
         <div className="live-sound-cta">
           <h3>Need Live Sound for Your Event?</h3>
-          <p>Whether you're planning a concert, corporate event, or private gathering, I can help deliver professional sound reinforcement tailored to your needs.</p>
-          <a href="#contact" className="btn-primary">Get in Touch</a>
+          <p>
+            Concert, corporate event, wedding or church service — tell me the date,
+            the room and roughly how many inputs, and I'll come back with a quote.
+            Available throughout {locationInfo.serviceAreaLabel}.
+          </p>
+          <a href="#contact" className="btn-primary">Check My Availability</a>
         </div>
       </div>
     </section>

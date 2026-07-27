@@ -1,0 +1,133 @@
+/* ==========================================================================
+   Newsletter signup
+
+   Mobile-first: field above button, side by side from 34em.
+   ========================================================================== */
+
+.newsletter {
+  margin-block: var(--space-6);
+  padding: var(--space-5);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.newsletter h3 {
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.newsletter > p {
+  margin-bottom: var(--space-4);
+  max-width: var(--measure);
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 32rem;
+}
+
+@media (min-width: 34em) {
+  .newsletter-form {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.newsletter-form input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--space-3);
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  /* 1rem minimum, or iOS Safari zooms the page on focus */
+  font-size: var(--step-0);
+  line-height: 1.4;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.newsletter-form input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.newsletter-form input:disabled {
+  background: var(--bg-sunken);
+  color: var(--text-subtle);
+  cursor: not-allowed;
+}
+
+.newsletter-form button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-5);
+  background: var(--accent);
+  color: var(--text-inverse);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.newsletter-form button:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.newsletter-form button:disabled {
+  background: var(--bg-sunken);
+  color: var(--text-subtle);
+  border-color: var(--rule-strong);
+  cursor: not-allowed;
+}
+
+.newsletter-status {
+  margin: var(--space-3) 0 0;
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.newsletter-status.success {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.newsletter-status.error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Label kept for screen readers; the placeholder carries it visually. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

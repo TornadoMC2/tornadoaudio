@@ -22,9 +22,9 @@ const ServicesSection = () => {
       serviceType: 'Audio Mastering'
     },
     {
-      icon: '24H',
-      title: 'Rush Orders',
-      description: '24-hour turnaround available for urgent projects and last-minute deadlines.',
+      icon: 'RSH',
+      title: 'Rush Slots',
+      description: 'Got a deadline inside the standard turnaround? Rush slots are available at 1.5x when my schedule allows.',
       serviceType: 'Rush Audio Mixing'
     },
     {
@@ -45,8 +45,8 @@ const ServicesSection = () => {
     <section id="services" className="services-section" itemScope itemType="https://schema.org/Service">
       <div className="container">
         <header>
-          <h2 itemProp="name">Services & Expertise</h2>
-          <p className="section-subtitle" itemProp="description">Comprehensive audio mixing services to elevate your music</p>
+          <h2 itemProp="name">What I Do</h2>
+          <p className="section-subtitle" itemProp="description">Studio services for artists and bands, handled remotely from start to finish</p>
         </header>
 
         <div className="services-grid" itemScope itemType="https://schema.org/ItemList">

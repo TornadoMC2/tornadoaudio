@@ -28,3 +28,11 @@ yarn-error.log*
 public/audio/*.wav
 public/audio/*.mp3
 /server/.env
+
+# Claude Code worktrees (each is a full checkout; never commit these)
+.claude/worktrees/
+
+# Stray env files — only server/.env.example belongs in the repo
+server/env
+**/*.env
+!**/*.env.example

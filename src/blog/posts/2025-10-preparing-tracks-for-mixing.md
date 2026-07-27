@@ -10,7 +10,7 @@ slug: "preparing-tracks-for-mixing"
 
 # 5 Essential Tips for Preparing Your Tracks for Professional Mixing
 
-As a professional mixing engineer with over 3 years of experience at Tornado Audio, I've seen it all - from perfectly organized sessions to complete chaos. The way you prepare your tracks can make a huge difference in the final mix quality and turnaround time.
+As a mixing engineer with over 5 years of experience at Tornado Audio, I've seen it all - from perfectly organized sessions to complete chaos. The way you prepare your tracks can make a huge difference in the final mix quality and turnaround time.
 
 Here are my top 5 tips for preparing your tracks before sending them to a mixing engineer.
 
@@ -89,7 +89,7 @@ Create a clear folder structure:
 
 At Tornado Audio, I work with independent artists and bands to transform their recordings into radio-ready tracks. Whether you're working on a demo or your next album, I'm here to help.
 
-**Check out my mixing packages** starting at just $40, or [contact me](/#contact) to discuss your project.
+**[See my current rates](/#pricing)**, or [contact me](/#contact) to talk through your project. Introductory pricing is running on a limited number of projects.
 
 ---
 

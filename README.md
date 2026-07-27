@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# Tornado Audio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Marketing site for Tornado Audio — studio mixing, mastering, and live sound
+engineering by Hunter Johanson.
 
-## Available Scripts
+A Create React App frontend (via `react-app-rewired`) served in production by a
+small Express process that also handles the contact form.
 
-In the project directory, you can run:
+## Architecture
 
-### `npm start`
+```
+src/                React app
+  components/       Page sections and routes
+  blog/posts/       Blog posts as markdown, read at build time
+  config/           siteConfig.js - pricing, capacity, feature toggles
+server/             Express: serves build/ and handles POST /api/contact
+scripts/            Sitemap generator, runs on prebuild
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+There is no database. The server holds no state beyond an in-memory rate limit
+on the contact endpoint.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Running locally
 
-### `npm test`
+```bash
+npm install                 # also installs server deps via postinstall
+cp server/.env.example server/.env
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Fill in `server/.env` (see `server/SETUP_GUIDE.md` for SMTP settings), then:
 
-### `npm run build`
+```bash
+npm run server:dev          # API on :3001
+npm start                   # ...or the full production-style server
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+For frontend work with hot reload, run `react-app-rewired start` alongside the
+API — `package.json` proxies API requests to `:3001`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Building
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm run build                   # generates sitemap, then builds
+npm run build:memory-efficient  # same, capped at 512MB heap for small VPS boxes
+```
 
-### `npm run eject`
+## Docker
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm run docker:up
+npm run docker:logs
+npm run docker:down
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The compose file reads `server/.env` and health-checks `/api/health`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Design system
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Tokens live at the top of `src/App.css` — colours, a fluid type scale, spacing,
+and radii. Component stylesheets consume those custom properties and should not
+hardcode colours or font sizes.
 
-## Learn More
+The house style is deliberately plain: flat fills, hairline `1px` rules instead
+of drop shadows, near-square corners, a serif for headings and a system sans for
+body text. No gradients, no entrance animations, no hover lifts.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+All CSS is **mobile-first** — base rules target small screens and `min-width`
+media queries add complexity for larger ones. Please keep it that way; do not
+introduce `max-width` queries.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Content
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Blog posts** — add a markdown file to `src/blog/posts/` with frontmatter.
+  Picked up automatically and included in the sitemap.
+- **Pricing, capacity, sales, feature toggles** — `src/config/siteConfig.js`.
+- **Maintenance mode** — set `business.maintenanceMode` in `siteConfig.js`.

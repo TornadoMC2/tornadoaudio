@@ -1,37 +1,35 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import App from './App';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import TermsOfService from './components/TermsOfService';
-import ServiceAgreement from './components/ServiceAgreement';
-import BlogList from './components/BlogList';
-import BlogPost from './components/BlogPost';
-import Analytics from './components/Analytics';
-import reportWebVitals from './reportWebVitals';
+
+// Secondary routes are split out of the main bundle. The blog pages in
+// particular pull in react-markdown and its plugins, which most visitors
+// never need.
+const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./components/TermsOfService'));
+const ServiceAgreement = lazy(() => import('./components/ServiceAgreement'));
+const BlogList = lazy(() => import('./components/BlogList'));
+const BlogPost = lazy(() => import('./components/BlogPost'));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/service-agreement" element={<ServiceAgreement />} />
-          <Route path="/blog" element={<BlogList />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/analytics" element={<Analytics />} />
-        </Routes>
+        <Suspense fallback={<div className="route-loading">Loading…</div>}>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/service-agreement" element={<ServiceAgreement />} />
+            <Route path="/blog" element={<BlogList />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </HelmetProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

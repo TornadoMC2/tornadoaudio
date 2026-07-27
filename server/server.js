@@ -1,200 +1,180 @@
 const express = require('express');
 const cors = require('cors');
-const { Resend } = require('resend');
 const path = require('path');
-const mongoose = require('mongoose');
+const fs = require('fs');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
-
-const { logEvent, visitorLoggingMiddleware } = require('./utils/logger');
-const analyticsRouter = require('./routes/analytics');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const BUILD_DIR = path.join(__dirname, '../build');
 
-// Initialize Resend for professional email delivery
-const resend = new Resend(process.env.RESEND_API_KEY);
+// SMTP transport. Credentials live in server/.env - see SETUP_GUIDE.md
+const MAIL_ENABLED = process.env.MAIL_ENABLED === 'true';
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-    .then(() => {
-      console.log('✅ Connected to MongoDB successfully');
-      logEvent('api_call', { message: 'Server started and connected to MongoDB' });
+const transporter = MAIL_ENABLED
+  ? nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT) || 587,
+      // true for port 465 (implicit TLS), false for 587 (STARTTLS)
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
     })
-    .catch((err) => {
-      console.error('❌ MongoDB connection error:', err);
-    });
+  : null;
 
-// Middleware
+if (transporter) {
+  transporter.verify()
+    .then(() => console.log('SMTP connection verified'))
+    .catch((err) => console.error('SMTP verification failed:', err.message));
+} else {
+  console.warn('MAIL_ENABLED is not "true" - contact form will accept submissions without sending email');
+}
+
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '64kb' }));
 
-// Visitor logging middleware - tracks all requests
-app.use(visitorLoggingMiddleware);
-
-// Analytics API routes
-app.use('/api/analytics', analyticsRouter);
-
-// Health check endpoint for Docker and monitoring
-app.get('/api/analytics/health', (req, res) => {
-  const health = {
-    uptime: process.uptime(),
-    timestamp: Date.now(),
-    status: 'OK',
-    mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-  };
-  res.status(200).json(health);
-});
-
-// SEO-specific middleware and headers
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  if (req.url.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg)$/)) {
-    res.setHeader('Cache-Control', 'public, max-age=31536000');
+  if (req.url.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff2?)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
   }
 
   next();
 });
 
-// Serve static files from the React app build directory
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(BUILD_DIR));
 
-// Specific SEO file routes with proper headers
-app.get('/sitemap.xml', (req, res) => {
-  res.setHeader('Content-Type', 'application/xml');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
-  res.sendFile(path.join(__dirname, '../build/sitemap.xml'));
-});
+// SEO files need their own content type and a shorter cache than hashed assets
+const seoFile = (route, contentType, maxAge) => {
+  app.get(route, (req, res) => {
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Cache-Control', `public, max-age=${maxAge}`);
+    res.sendFile(path.join(BUILD_DIR, route));
+  });
+};
 
-app.get('/robots.txt', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
-  res.sendFile(path.join(__dirname, '../build/robots.txt'));
-});
+seoFile('/sitemap.xml', 'application/xml', 86400);
+seoFile('/robots.txt', 'text/plain', 86400);
+seoFile('/manifest.json', 'application/json', 86400);
 
-app.get('/favicon.ico', (req, res) => {
-  res.setHeader('Content-Type', 'image/x-icon');
-  res.setHeader('Cache-Control', 'public, max-age=31536000');
-  res.sendFile(path.join(__dirname, '../build/favicon.ico'));
-});
+// Escape user input before it goes into an HTML email body
+const escapeHtml = (value) => String(value)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
 
-app.get('/manifest.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
-  res.sendFile(path.join(__dirname, '../build/manifest.json'));
-});
+const fromAddress = () => {
+  const name = process.env.MAIL_FROM_NAME || 'Tornado Audio';
+  const address = process.env.MAIL_FROM || process.env.SMTP_USER;
+  return `"${name}" <${address}>`;
+};
 
-app.get('/logo192.png', (req, res) => {
-  res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Cache-Control', 'public, max-age=31536000');
-  res.sendFile(path.join(__dirname, '../build/logo192.png'));
-});
+const sendNotificationEmail = async (name, email, project, message) => {
+  const info = await transporter.sendMail({
+    from: fromAddress(),
+    to: process.env.RECIPIENT_EMAIL,
+    replyTo: email,
+    subject: `New Project Inquiry - ${project}`,
+    text: `Name: ${name}\nEmail: ${email}\nProject: ${project}\n\n${message}`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1c1917;">
+        <h2 style="border-bottom: 1px solid #d6d3d1; padding-bottom: 10px; font-weight: 600;">
+          New contact form submission
+        </h2>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+        <p><strong>Project type:</strong> ${escapeHtml(project)}</p>
+        <h3 style="font-weight: 600; margin-top: 24px;">Message</h3>
+        <p style="border-left: 3px solid #1d4ed8; padding-left: 12px; white-space: pre-wrap;">${escapeHtml(message)}</p>
+        <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+        <p style="color: #78716c; font-size: 12px;">
+          Submitted ${new Date().toLocaleString()} via tornadoaudio.net
+        </p>
+      </div>
+    `
+  });
 
-app.get('/logo512.png', (req, res) => {
-  res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Cache-Control', 'public, max-age=31536000');
-  res.sendFile(path.join(__dirname, '../build/logo512.png'));
-});
-
-// Professional email function using Resend
-const sendEmailWithResend = async (name, email, project, message) => {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: 'Tornado Audio <contact@tornadoaudio.net>',
-      to: [process.env.RECIPIENT_EMAIL],
-      replyTo: email,
-      subject: `New Project Inquiry - ${project}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px;">
-            New Contact Form Submission
-          </h2>
-          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-            <p><strong>Project Type:</strong> ${project}</p>
-          </div>
-          <div style="margin: 20px 0;">
-            <h3 style="color: #333;">Message:</h3>
-            <p style="background-color: #ffffff; padding: 15px; border-left: 4px solid #007bff; margin: 10px 0;">
-              ${message.replace(/\n/g, '<br>')}
-            </p>
-          </div>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-          <p style="color: #666; font-size: 12px;">
-            <em>Submitted at: ${new Date().toLocaleString()}</em><br>
-            <em>Sent via TornadoAudio.net contact form</em><br>
-            <em>Instagram: <a href="https://instagram.com/tornadoaudio_mixing" target="_blank" style="color: #4f46e5;">@tornadoaudio_mixing</a></em>
-          </p>
-        </div>
-      `
-    });
-
-    if (error) throw error;
-
-    console.log('Professional email sent successfully via Resend:', data.id);
-    return { success: true, id: data.id };
-  } catch (error) {
-    console.error('Resend email error:', error);
-    throw error;
-  }
+  return info.messageId;
 };
 
 const sendConfirmationEmail = async (name, email) => {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: `Hunter Johanson <hunter@tornadoaudio.net>`,
-      to: [email],
-      bcc: [process.env.RECIPIENT_EMAIL, email],
-      replyTo: [email],
-      subject: `Thank you for your inquiry, ${name}!`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">Thank you for reaching out!</h2>
-          <p style="color: #555;">Dear ${name},</p>
-          <p style="color: #555;">
-            Thank you for your interest in Tornado Audio. We have received your message and will get back to you within 24 hours.
-          </p>
-          <p style="color: #555;">
-            In the meantime, feel free to explore our website or reach out to us on social media.
-          </p>
-          <p style="color: #555;">
-            Best regards,<br>
-            Hunter Johanson at The Tornado Audio Team
-          </p>
-        </div>
-      `
-    });
+  const info = await transporter.sendMail({
+    from: fromAddress(),
+    to: email,
+    bcc: process.env.RECIPIENT_EMAIL,
+    subject: `Thank you for your inquiry, ${name}`,
+    text: `Hi ${name},\n\nThanks for reaching out to Tornado Audio. I've received your message and will get back to you within 24 hours.\n\nBest,\nHunter Johanson`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1c1917;">
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>Thanks for reaching out to Tornado Audio. I've received your message and will get back to you within 24 hours.</p>
+        <p>Best,<br>Hunter Johanson</p>
+      </div>
+    `
+  });
 
-    if (error) throw error;
-
-    console.log('Confirmation email sent successfully:', data.id);
-    return { success: true, id: data.id };
-  } catch (error) {
-    console.error('Confirmation email error:', error);
-    throw error;
-  }
+  return info.messageId;
 };
 
-// Contact form submission endpoint with logging
+// There's no database here, so a signup is delivered as mail to Hunter and
+// added to the list by hand. Fine at this volume; revisit if it stops being.
+const sendSubscriptionEmail = async (email, source) => {
+  const info = await transporter.sendMail({
+    from: fromAddress(),
+    to: process.env.RECIPIENT_EMAIL,
+    replyTo: email,
+    subject: 'New mailing list signup',
+    text: `Email: ${email}\nSource: ${source}`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1c1917;">
+        <h2 style="border-bottom: 1px solid #d6d3d1; padding-bottom: 10px; font-weight: 600;">
+          New mailing list signup
+        </h2>
+        <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+        <p><strong>Source:</strong> ${escapeHtml(source)}</p>
+        <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+        <p style="color: #78716c; font-size: 12px;">
+          Submitted ${new Date().toLocaleString()} via tornadoaudio.net
+        </p>
+      </div>
+    `
+  });
+
+  return info.messageId;
+};
+
+// Small in-memory rate limit so the public contact endpoint can't be hammered.
+// Resets on restart, which is fine for a single-instance deploy.
+const submissions = new Map();
+const RATE_WINDOW_MS = 60 * 60 * 1000;
+const RATE_MAX = 5;
+
+const rateLimited = (ip) => {
+  const now = Date.now();
+  const recent = (submissions.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
+
+  if (recent.length >= RATE_MAX) {
+    submissions.set(ip, recent);
+    return true;
+  }
+
+  recent.push(now);
+  submissions.set(ip, recent);
+  return false;
+};
+
 app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, project, message } = req.body;
 
-    // Log contact form submission
-    await logEvent('contact_form_submission', {
-      name,
-      email,
-      project,
-      messageLength: message?.length || 0
-    }, req);
-
-    // Validation
     if (!name || !email || !project || !message) {
       return res.status(400).json({
         success: false,
@@ -210,50 +190,38 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
-    // Send emails with logging
-    if (process.env.RESEND_ENABLED === 'true') {
+    if (rateLimited(req.ip)) {
+      return res.status(429).json({
+        success: false,
+        message: 'Too many submissions. Please try again later.'
+      });
+    }
+
+    if (transporter) {
       try {
-        const emailResult = await sendEmailWithResend(name, email, project, message);
-        await logEvent('email_sent', {
-          recipient: email,
-          emailId: emailResult.id,
-          emailType: 'contact_notification'
-        }, req);
-      } catch (emailError) {
-        await logEvent('email_failed', {
-          recipient: email,
-          emailType: 'contact_notification',
-          error: emailError.message
-        }, req, false, emailError);
+        await sendNotificationEmail(name, email, project, message);
+      } catch (err) {
+        console.error('Notification email failed:', err.message);
+        return res.status(500).json({
+          success: false,
+          message: 'Could not send your message. Please email contact@tornadoaudio.net directly.'
+        });
       }
 
+      // A failed confirmation shouldn't fail the request - the inquiry already landed
       try {
-        const confirmResult = await sendConfirmationEmail(name, email);
-        await logEvent('email_sent', {
-          recipient: email,
-          emailId: confirmResult.id,
-          emailType: 'confirmation'
-        }, req);
-      } catch (confirmationError) {
-        await logEvent('email_failed', {
-          recipient: email,
-          emailType: 'confirmation',
-          error: confirmationError.message
-        }, req, false, confirmationError);
+        await sendConfirmationEmail(name, email);
+      } catch (err) {
+        console.error('Confirmation email failed:', err.message);
       }
     }
 
     res.json({
       success: true,
-      message: 'Thank you for your message! I\'ll get back to you within 24 hours.'
+      message: "Thank you for your message! I'll get back to you within 24 hours."
     });
-
   } catch (error) {
     console.error('Contact form error:', error);
-    await logEvent('error', {
-      endpoint: '/api/contact',
-      error: error.message
-    }, req, false, error);
     res.status(500).json({
       success: false,
       message: 'Server error. Please try again later.'
@@ -261,65 +229,63 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// Health check endpoint with MongoDB status
-app.get('/api/health', (req, res) => {
-  const fs = require('fs');
-  const sitemapExists = fs.existsSync(path.join(__dirname, '../build/sitemap.xml'));
-  const robotsExists = fs.existsSync(path.join(__dirname, '../build/robots.txt'));
+app.post('/api/subscribe', async (req, res) => {
+  try {
+    const { email, source } = req.body;
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address'
+      });
+    }
+
+    if (rateLimited(req.ip)) {
+      return res.status(429).json({
+        success: false,
+        message: 'Too many submissions. Please try again later.'
+      });
+    }
+
+    if (transporter) {
+      try {
+        await sendSubscriptionEmail(email, source || 'unknown');
+      } catch (err) {
+        console.error('Subscription email failed:', err.message);
+        return res.status(500).json({
+          success: false,
+          message: 'Could not sign you up. Please try again later.'
+        });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: "You're on the list. New posts only — no spam."
+    });
+  } catch (error) {
+    console.error('Subscribe error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error. Please try again later.'
+    });
+  }
+});
+
+app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
-    message: 'Tornado Audio API is running',
-    database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
-    seo: {
-      sitemap: sitemapExists ? 'Available' : 'Missing',
-      robots: robotsExists ? 'Available' : 'Missing',
-      sitemapUrl: 'http://localhost:3001/sitemap.xml',
-      robotsUrl: 'http://localhost:3001/robots.txt'
-    }
+    uptime: process.uptime(),
+    mail: MAIL_ENABLED ? 'enabled' : 'disabled',
+    sitemap: fs.existsSync(path.join(BUILD_DIR, 'sitemap.xml')) ? 'available' : 'missing'
   });
 });
 
-// SEO test endpoint
-app.get('/api/seo-check', (req, res) => {
-  const fs = require('fs');
-  const buildPath = path.join(__dirname, '../build');
-
-  const seoFiles = {
-    sitemap: fs.existsSync(path.join(buildPath, 'sitemap.xml')),
-    robots: fs.existsSync(path.join(buildPath, 'robots.txt')),
-    favicon: fs.existsSync(path.join(buildPath, 'favicon.ico')),
-    manifest: fs.existsSync(path.join(buildPath, 'manifest.json')),
-    logo192: fs.existsSync(path.join(buildPath, 'logo192.png')),
-    logo512: fs.existsSync(path.join(buildPath, 'logo512.png'))
-  };
-
-  const urls = {
-    sitemap: `${req.protocol}://${req.get('host')}/sitemap.xml`,
-    robots: `${req.protocol}://${req.get('host')}/robots.txt`,
-    favicon: `${req.protocol}://${req.get('host')}/favicon.ico`,
-    manifest: `${req.protocol}://${req.get('host')}/manifest.json`,
-    logo192: `${req.protocol}://${req.get('host')}/logo192.png`,
-    logo512: `${req.protocol}://${req.get('host')}/logo512.png`
-  };
-
-  res.json({
-    message: 'SEO Files Status Check',
-    files: seoFiles,
-    urls: urls,
-    allFilesPresent: Object.values(seoFiles).every(exists => exists)
-  });
-});
-
-// Catch-all route for React Router
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+  res.sendFile(path.join(BUILD_DIR, 'index.html'));
 });
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Analytics available at: http://localhost:${PORT}/api/analytics/summary`);
-  console.log(`Sitemap available at: http://localhost:${PORT}/sitemap.xml`);
-  console.log(`Robots.txt available at: http://localhost:${PORT}/robots.txt`);
-  console.log(`SEO check available at: http://localhost:${PORT}/api/seo-check`);
 });

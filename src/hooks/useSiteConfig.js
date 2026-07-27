@@ -1,40 +1,25 @@
-import { useMemo } from 'react';
 import siteConfig from '../config/siteConfig';
 
 const useSiteConfig = () => {
-  // Helper function to calculate sale prices
-  const calculateSalePrice = (originalPrice, serviceId = null) => {
-    // Check if this specific service should be excluded from sales
-    const isExcludedFromSale = serviceId && siteConfig.sales.excludeServiceIds.includes(serviceId);
+  const introActive =
+    siteConfig.introOffer.active && siteConfig.introOffer.projectsRemaining > 0;
 
-    if (!siteConfig.sales.active || isExcludedFromSale) {
-      return {
-        price: originalPrice,
-        originalPrice: originalPrice,
-        onSale: false,
-        savings: 0,
-      };
-    }
-
-    const discount = siteConfig.sales.percentage / 100;
-    const discountedPrice = originalPrice * (1 - discount);
-
-    // Round down to nearest multiple of 5
-    const roundedPrice = Math.floor(discountedPrice / 5) * 5;
+  // Resolve a tier's displayed pricing. Intro prices are set per tier rather
+  // than derived from a percentage — the discount isn't uniform, and rounding a
+  // percentage produces prices nobody would choose to print.
+  const getTierPricing = (tier) => {
+    const onIntro = introActive && typeof tier.introPrice === 'number';
 
     return {
-      price: roundedPrice,
-      originalPrice: originalPrice,
-      onSale: true,
-      savings: originalPrice - roundedPrice,
-      salePercentage: siteConfig.sales.percentage,
+      price: onIntro ? tier.introPrice : tier.price,
+      standardPrice: tier.price,
+      onIntro,
+      savings: onIntro ? tier.price - tier.introPrice : 0,
     };
   };
 
-  // Helper function to format price
   const formatPrice = (price) => `$${price}`;
 
-  // Helper function to get order capacity status
   const getOrderCapacityStatus = () => {
     const { currentCount, maxCapacity, capacityWarningThreshold } = siteConfig.orders;
     const ratio = currentCount / maxCapacity;
@@ -42,7 +27,7 @@ const useSiteConfig = () => {
     return {
       current: currentCount,
       max: maxCapacity,
-      ratio: ratio,
+      ratio,
       isAtCapacity: !siteConfig.orders.accepting,
       isNearCapacity: ratio >= capacityWarningThreshold,
       statusMessage: !siteConfig.orders.accepting
@@ -51,33 +36,6 @@ const useSiteConfig = () => {
           ? siteConfig.orders.capacityMessage
           : null,
     };
-  };
-
-  // Check if sale has expired
-  const isSaleExpired = useMemo(() => {
-    if (!siteConfig.sales.endDate) return false;
-    return new Date() > new Date(siteConfig.sales.endDate);
-  }, []);
-
-  // Get dynamic sale message based on service inclusion
-  const getSaleMessage = () => {
-    if (!siteConfig.sales.active || isSaleExpired) return null;
-
-    // All available service IDs (you can expand this list as you add more services)
-    const allServiceIds = ['basic-mix', 'professional-mix', 'premium-mix-master'];
-    const excludedCount = siteConfig.sales.excludeServiceIds.length;
-    const totalServices = allServiceIds.length;
-
-    if (excludedCount === 0) {
-      // All services on sale
-      return `🔥 ${siteConfig.sales.name} - ${siteConfig.sales.percentage}% Off All Services! 🔥`;
-    } else if (excludedCount === totalServices) {
-      // No services on sale (shouldn't happen if sale is active, but just in case)
-      return `🔥 ${siteConfig.sales.name} - Special Pricing Available! 🔥`;
-    } else {
-      // Some services on sale
-      return `🔥 ${siteConfig.sales.name} - ${siteConfig.sales.percentage}% Off Select Services! 🔥`;
-    }
   };
 
   // Adjusted turnaround times based on multiplier
@@ -98,11 +56,9 @@ const useSiteConfig = () => {
         const adjustedMin = Math.ceil(minDays * siteConfig.business.turnaroundMultiplier);
         const adjustedMax = Math.ceil(maxDays * siteConfig.business.turnaroundMultiplier);
 
-        if (adjustedMin === adjustedMax) {
-          return `${adjustedMin} days`;
-        } else {
-          return `${adjustedMin}-${adjustedMax} days`;
-        }
+        return adjustedMin === adjustedMax
+          ? `${adjustedMin} days`
+          : `${adjustedMin}-${adjustedMax} days`;
       }
     }
     return originalTime;
@@ -113,31 +69,26 @@ const useSiteConfig = () => {
     config: siteConfig,
 
     // Calculated values
-    isSaleActive: siteConfig.sales.active && !isSaleExpired,
+    isIntroOfferActive: introActive,
     isMaintenanceMode: siteConfig.business.maintenanceMode,
     isAcceptingOrders: siteConfig.orders.accepting,
 
     // Helper functions
-    calculateSalePrice,
+    getTierPricing,
     formatPrice,
     getOrderCapacityStatus,
     adjustTurnaroundTime,
 
-    // Convenience getters
-    salesInfo: {
-      active: siteConfig.sales.active && !isSaleExpired,
-      name: siteConfig.sales.name,
-      percentage: siteConfig.sales.percentage,
-      endDate: siteConfig.sales.endDate,
+    introOffer: {
+      ...siteConfig.introOffer,
+      active: introActive,
     },
 
     contactInfo: siteConfig.contact,
     businessInfo: siteConfig.business,
+    locationInfo: siteConfig.location,
     paymentInfo: siteConfig.payment,
     features: siteConfig.features,
-
-    // Dynamic sale messaging
-    saleMessage: getSaleMessage(),
   };
 };
 

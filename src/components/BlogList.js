@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import './Blog.css';
 import Header from './Header';
+import NewsletterSignup from './NewsletterSignup';
 import useBlogPosts from '../hooks/useBlogPosts';
 
 function BlogList() {
@@ -75,6 +76,8 @@ function BlogList() {
             ))
           )}
         </div>
+
+        <NewsletterSignup source="blog-index" />
       </div>
 
       <footer className="footer" role="contentinfo">
@@ -89,15 +92,14 @@ function BlogList() {
                   rel="noopener noreferrer"
                   aria-label="Follow Tornado Audio on Instagram"
                 >
-                  <span className="social-icon" role="img" aria-label="Instagram">📸</span>
-                  <span>@tornadoaudio_mixing</span>
+                  <span>Instagram — @tornadoaudio_mixing</span>
                 </a>
               </div>
             </div>
             <div className="footer-copyright">
-              <p>&copy; 2025 Tornado Audio - Professional Audio Mixing by Hunter Johanson. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} Tornado Audio — Mixing, mastering and live sound by Hunter Johanson. All rights reserved.</p>
               <p>
-                <small>Professional audio mixing services for musicians, bands, and independent artists worldwide.</small>
+                <small>Based in Bloomington-Normal, IL. Mixing and mastering handled remotely for artists anywhere.</small>
               </p>
               <div className="footer-links">
                 <Link to="/">Home</Link> |

@@ -3,7 +3,9 @@ import AudioComparison from './AudioComparison';
 import './Portfolio.css';
 
 const Portfolio = () => {
-  // Sample audio data - replace with actual audio files
+  // TODO (Hunter): fill in `releaseUrl` with the Spotify/Apple/Bandcamp link for
+  // each released track. A verifiable credit someone can go and listen to is the
+  // strongest trust signal in this market, and it costs nothing to add.
   const portfolioSamples = [
     {
       id: 1,
@@ -12,7 +14,8 @@ const Portfolio = () => {
       afterAudio: "/audio/mp3/rock-after.mp3",
       genre: "Rock",
       artist: "Take32",
-      songName: "Rotten Eyes"
+      songName: "Rotten Eyes",
+      releaseUrl: null
     },
     {
       id: 2,
@@ -21,21 +24,23 @@ const Portfolio = () => {
       afterAudio: "/audio/mp3/rock2-after.mp3",
       genre: "Rock",
       artist: "Bryce Allin",
-      songName: "Shark Infested Waters"
+      songName: "Shark Infested Waters",
+      releaseUrl: null
     },
     {
       id: 3,
       description: "Energy filled mix with non-conventional instrumentation. Emphasizing warmth and presence for an intimate yet powerful sound. Drums are punchy and upfront, vocals are clear and present, and the acoustic instruments have a natural warmth.",
       beforeAudio: "/audio/mp3/eyes-before.mp3",
       afterAudio: "/audio/mp3/eyes-after.mp3",
-      genre: "Country Rock",
-      artist: "Chad Hollister Band",
-      songName: "Eyes"
+      genre: "Pop Rock",
+      artist: "Eric Corriveau",
+      songName: "That's All it Was",
+      releaseUrl: null
     },
     {
       id: 4,
-      title: "Your Song Here!",
-      description: "Ready to hear your music transformed? Upload your tracks and experience the same professional mixing treatment. Get your quote today!",
+      title: "Your Song Here",
+      description: "Send me a track and I'll mix a 60-second excerpt at no cost, so you can hear the treatment on your own material rather than someone else's.",
       beforeAudio: null,
       afterAudio: null,
       genre: "Get Started",
@@ -43,12 +48,16 @@ const Portfolio = () => {
     }
   ];
 
-  // Helper function to generate display title for audio samples
+  // Helper function to generate display title for audio samples.
+  // Artist is optional — some clients would rather not be named, and a blank
+  // one must not leave a dangling "- 'Song'".
   const getDisplayTitle = (sample) => {
     if (sample.isPromo) {
       return sample.title;
     }
-    return `${sample.artist} - '${sample.songName}'`;
+    return sample.artist
+      ? `${sample.artist} - '${sample.songName}'`
+      : `'${sample.songName}'`;
   };
 
   return (
@@ -87,7 +96,7 @@ const Portfolio = () => {
               ) : (
                 <div itemScope itemType="https://schema.org/MusicComposition">
                   <h3 itemProp="name">{getDisplayTitle(sample)}</h3>
-                  <meta itemProp="byArtist" content={sample.artist} />
+                  {sample.artist && <meta itemProp="byArtist" content={sample.artist} />}
                   <meta itemProp="name" content={sample.songName} />
                   <meta itemProp="genre" content={sample.genre} />
                   <meta itemProp="producer" content="Hunter Johanson" />
@@ -98,6 +107,18 @@ const Portfolio = () => {
                     afterAudio={sample.afterAudio}
                     showTitle={false}
                   />
+                  {sample.releaseUrl && (
+                    <p className="portfolio-release">
+                      <a
+                        href={sample.releaseUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        itemProp="url"
+                      >
+                        Listen to the release →
+                      </a>
+                    </p>
+                  )}
                 </div>
               )}
             </article>

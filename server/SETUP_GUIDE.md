@@ -1,127 +1,99 @@
-# Contact Form Backend Setup Guide
+# Contact Form Backend Setup
 
-This guide will help you set up the backend functionality for the TornadoAudio contact form with both email and Google Sheets integration.
+The backend is a single Express process. It serves the built React app and
+handles one POST endpoint (`/api/contact`), which sends mail over SMTP.
 
-## Prerequisites
-
-1. Node.js installed on your system
-2. A Gmail account (for email functionality)
-3. A Google account (for Google Sheets functionality)
+There is no database and no analytics store.
 
 ## Installation
 
-1. **Install backend dependencies:**
-   ```bash
-   cd server
-   npm install
-   ```
+```bash
+cd server
+npm install
+cp .env.example .env
+```
 
-2. **Create your environment file:**
-   ```bash
-   cp .env.example .env
-   ```
+Then fill in `.env`.
 
-## Configuration Options
+## SMTP configuration
 
-You can choose to use either email, Google Sheets, or both:
+| Variable | What it is |
+| --- | --- |
+| `MAIL_ENABLED` | `true` to actually send. Set `false` locally to test the form without sending mail. |
+| `SMTP_HOST` | Your provider's SMTP hostname. |
+| `SMTP_PORT` | `587` for STARTTLS (most common) or `465` for implicit TLS. |
+| `SMTP_SECURE` | `false` for port 587, `true` for port 465. Getting this wrong is the most common cause of connection hangs. |
+| `SMTP_USER` | SMTP login — usually the full mailbox address. |
+| `SMTP_PASS` | SMTP password or app password. |
+| `MAIL_FROM` | The address mail is sent from. Must be an address your SMTP account is authorised to send as. |
+| `MAIL_FROM_NAME` | Display name on outgoing mail. |
+| `RECIPIENT_EMAIL` | Where inquiries are delivered. |
 
-### Option 1: Email Setup (Recommended)
+### Common providers
 
-1. **Enable 2-Factor Authentication** on your Gmail account
-2. **Generate an App Password:**
-   - Go to Google Account settings
-   - Security → 2-Step Verification → App Passwords
-   - Generate a password for "Mail"
-   
-3. **Update your .env file:**
-   ```env
-   EMAIL_ENABLED=true
-   EMAIL_USER=your_email@gmail.com
-   EMAIL_PASS=your_16_character_app_password
-   RECIPIENT_EMAIL=hunterjohanson04@gmail.com
-   ```
+**Gmail / Google Workspace** — requires 2FA and an App Password
+(Google Account → Security → 2-Step Verification → App Passwords). Your normal
+password will not work.
 
-### Option 2: Google Sheets Setup
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+```
 
-1. **Create a Google Sheet:**
-   - Create a new Google Sheet
-   - Add headers in row 1: Date, Name, Email, Project Type, Message, Status
-   - Copy the Sheet ID from the URL
+**Fastmail**
 
-2. **Set up Google Service Account:**
-   - Go to Google Cloud Console
-   - Create a new project or select existing
-   - Enable Google Sheets API
-   - Create a Service Account
-   - Download the JSON key file
-   - Share your Google Sheet with the service account email
+```env
+SMTP_HOST=smtp.fastmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+```
 
-3. **Update your .env file:**
-   ```env
-   GOOGLE_SHEETS_ENABLED=true
-   GOOGLE_SHEET_ID=your_google_sheet_id_here
-   GOOGLE_SERVICE_ACCOUNT_KEY_FILE=./path/to/service-account-key.json
-   ```
+**Namecheap Private Email**
 
-## Running the Backend
+```env
+SMTP_HOST=mail.privateemail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+```
 
-1. **Development mode:**
-   ```bash
-   cd server
-   npm run dev
-   ```
+**Migadu / Zoho / most other hosts** — check their docs for host and port, then
+match `SMTP_SECURE` to the port using the rule above.
 
-2. **Production mode:**
-   ```bash
-   cd server
-   npm start
-   ```
+## Running
 
-The server will run on http://localhost:3001
+```bash
+npm run dev    # nodemon, from server/
+npm start      # production, from server/
+```
 
-## Features
+On boot the server verifies the SMTP connection and logs either
+`SMTP connection verified` or the failure reason. If you see a failure, mail
+will not send — fix it before deploying.
 
-### Contact Form Integration
-- Form submissions from the pricing section automatically populate with selected service
-- Smooth scrolling from "Get Started" buttons to contact form
-- Real-time form validation and user feedback
+## Deliverability
 
-### Email Notifications
-- Sends formatted HTML emails to your specified address
-- Includes all form data with timestamps
-- Professional email template
+Mail sent from your own domain needs SPF and DKIM records or it will land in
+spam. Your SMTP provider publishes the exact DNS records to add. This matters
+more with plain SMTP than it did with Resend, which handled some of it for you.
 
-### Google Sheets Integration
-- Automatically adds form submissions to your spreadsheet
-- Includes timestamp and status tracking
-- Easy to export and manage leads
+## Rate limiting
 
-### Error Handling
-- Graceful error handling for both email and sheets
-- User-friendly error messages
-- Server continues running even if one service fails
-
-## Testing
-
-1. Start the backend server
-2. Fill out the contact form on your website
-3. Check your email inbox and/or Google Sheet
+`/api/contact` allows 5 submissions per IP per hour, held in memory. It resets
+on restart, which is fine for a single-instance deploy. If you move to multiple
+instances you'll want a shared store.
 
 ## Troubleshooting
 
-### Email Issues
-- Make sure you're using an App Password, not your regular Gmail password
-- Check that 2FA is enabled on your Google account
-- Verify the EMAIL_USER matches the account that generated the App Password
+- **Connection hangs or times out** — `SMTP_SECURE` almost certainly doesn't
+  match `SMTP_PORT`. Use `true` only with port 465.
+- **`Invalid login`** — for Gmail, you're using your account password instead of
+  an App Password.
+- **`Mail from address not allowed`** — `MAIL_FROM` isn't an address your SMTP
+  account is authorised to send as.
+- **Mail sends but never arrives** — check spam, then check SPF/DKIM.
 
-### Google Sheets Issues
-- Ensure the service account has edit access to your sheet
-- Check that the Google Sheets API is enabled in your Google Cloud project
-- Verify the GOOGLE_SHEET_ID is correct (found in the sheet URL)
+## Security
 
-## Security Notes
-
-- Never commit your .env file to version control
-- Keep your service account key file secure
-- Use environment variables for all sensitive data
-- Consider using a dedicated email account for form submissions
+- Never commit `server/.env`. It is gitignored.
+- Keep `MAIL_FROM` on a domain you control.

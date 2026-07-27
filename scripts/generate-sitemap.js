@@ -47,7 +47,7 @@ const generateSitemap = () => {
     <image:image>
       <image:loc>https://tornadoaudio.net/logo512.png</image:loc>
       <image:title>Tornado Audio Professional Audio Mixing Services Logo</image:title>
-      <image:caption>Professional audio mixing services by Hunter Johanson - Transform your recordings into radio-ready tracks</image:caption>
+      <image:caption>Mixing, mastering and live sound engineering by Hunter Johanson, based in Bloomington-Normal, Illinois</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://tornadoaudio.net/logo192.png</image:loc>
@@ -56,7 +56,19 @@ const generateSitemap = () => {
     </image:image>
   </url>
   <url>
+    <loc>https://tornadoaudio.net/#about</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://tornadoaudio.net/#services</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tornadoaudio.net/#live-sound</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

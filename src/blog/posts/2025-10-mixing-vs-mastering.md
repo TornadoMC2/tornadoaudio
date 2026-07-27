@@ -72,12 +72,14 @@ Absolutely! Even a single track benefits from mastering to ensure it sounds prof
 
 ## At Tornado Audio
 
-I offer both mixing and mastering services, with my **Premium Mix & Master Package** ($200) providing the complete solution for artists who want radio-ready sound.
+I offer mixing and mastering separately or together, so you only pay for the stage you actually need.
 
-### My packages include:
-- **Basic Mix** ($40) - Perfect for demos and independent artists
-- **Professional Mix** ($75) - Industry-standard mixing for serious projects
-- **Premium Mix & Master** ($200) - Complete production package
+### My packages:
+- **Master Only** - For a finished mix that needs final polish and release-ready loudness
+- **Mix** - Full mix from your raw tracks, up to 48 tracks
+- **Mix + Master** - Raw tracks in, distribution-ready master out
+
+**[See current pricing](/#pricing)** for rates and turnaround times.
 
 ## The Bottom Line
 

@@ -45,9 +45,10 @@ function ServiceAgreement() {
             <h3>2.1 Service Categories</h3>
             <p>Tornado Audio provides the following professional audio services:</p>
             <ul>
-              <li><strong>Basic Mix:</strong> Up to 24 tracks, standard processing, 1 revision, 72-hour turnaround</li>
-              <li><strong>Professional Mix:</strong> Up to 48 tracks, advanced processing, 3 revisions, 48-hour turnaround</li>
-              <li><strong>Premium Mix & Master:</strong> Unlimited tracks, full treatment, unlimited revisions, 24-hour turnaround</li>
+              <li><strong>Master Only:</strong> Mastering of a finished mix, 2 revision rounds, 3 business day turnaround</li>
+              <li><strong>Mix:</strong> Up to 48 tracks, full mix treatment, 2 revision rounds, 5 business day turnaround</li>
+              <li><strong>Mix &amp; Master:</strong> No track count limit, mixing and mastering, 3 revision rounds, 7 business day turnaround</li>
+              <li><strong>Live Sound:</strong> Event engineering quoted individually</li>
               <li><strong>Custom Services:</strong> Tailored solutions as agreed in writing</li>
               <li><strong>Free Sample Mix:</strong> 60-second preview mix (one per client)</li>
             </ul>
@@ -65,21 +66,27 @@ function ServiceAgreement() {
           <section className="policy-section">
             <h2>3. Payment Terms & Pricing</h2>
             <h3>3.1 Pricing Structure</h3>
-            <p>Service pricing is as listed on our website or as quoted directly. Current rates:</p>
+            <p>Service pricing is as listed on our website or as quoted directly. Standard rates:</p>
             <ul>
-              <li>Basic Mix: $40 per song</li>
-              <li>Professional Mix: $75 per song (bulk discounts available)</li>
-              <li>Premium Mix & Master: $200 per song (bulk discounts available)</li>
+              <li>Master Only: $120 per song</li>
+              <li>Mix: $250 per song</li>
+              <li>Mix &amp; Master: $350 per song</li>
+              <li>Albums and EPs of 4 or more songs: 15% discount</li>
+              <li>Rush slots, where available: 1.5x the standard rate</li>
             </ul>
 
-            <h3>3.2 Payment Schedule</h3>
+            <h3>3.2 Introductory Rates</h3>
+            <p>Reduced introductory rates are offered for a limited number of projects. Accepting an introductory rate constitutes agreement that Tornado Audio may use the completed work in its portfolio and promotional materials, and that the client will provide a written testimonial on delivery. Introductory rates are withdrawn once the stated number of projects has been booked; standard rates apply thereafter.</p>
+
+            <h3>3.3 Payment Schedule</h3>
             <ul>
-              <li><strong>Payment:</strong> Full payment due upon completion of work before final file delivery</li>
-              <li><strong>Payment Methods:</strong> PayPal, Venmo, Bank Transfer (Via Stripe Invoice)</li>
+              <li><strong>Deposit:</strong> A 50% non-refundable deposit is required to reserve a project slot. Work does not begin until the deposit is received.</li>
+              <li><strong>Balance:</strong> The remaining 50% is due upon approval of the final mix, before final files are delivered.</li>
+              <li><strong>Payment Methods:</strong> Zelle, Venmo, Bank Transfer</li>
               <li><strong>Currency:</strong> All pricing in USD</li>
             </ul>
 
-            <h3>3.3 Late Payment Policy</h3>
+            <h3>3.4 Late Payment Policy</h3>
             <ul>
               <li>Final files held until payment received in full</li>
               <li>Projects abandoned for 30+ days may incur storage fees</li>
@@ -87,7 +94,7 @@ function ServiceAgreement() {
               <li><strong>Rights Retention:</strong> Tornado Audio retains all rights to the finished mixed/mastered audio until final payment is received in full</li>
             </ul>
 
-            <h3>3.4 Preview File Protection</h3>
+            <h3>3.5 Preview File Protection</h3>
             <ul>
               <li><strong>Preview files are for approval purposes only</strong> and remain the exclusive property of Tornado Audio until final payment</li>
               <li>Client is strictly prohibited from releasing, distributing, or using preview files for any commercial or public purpose</li>
@@ -103,9 +110,10 @@ function ServiceAgreement() {
             <ol>
               <li>Client selects service and submits booking request</li>
               <li>Tornado Audio provides project quote and timeline</li>
-              <li>Client confirms booking and submits source files via secure file transfer</li>
-              <li>Work begins within 24 hours of file receipt and booking confirmation</li>
-              <li>Payment collected upon completion before final file delivery</li>
+              <li>Client pays the 50% deposit to reserve the slot</li>
+              <li>Client submits source files via secure file transfer</li>
+              <li>Work begins on receipt of both the deposit and the complete source files</li>
+              <li>Balance collected on approval, before final file delivery</li>
             </ol>
 
             <h3>4.2 File Requirements</h3>
@@ -118,12 +126,13 @@ function ServiceAgreement() {
             </ul>
 
             <h3>4.3 Delivery Timeline</h3>
-            <p>Standard turnaround times begin from receipt of all required files:</p>
+            <p>Standard turnaround times begin from receipt of the deposit and all required files:</p>
             <ul>
-              <li>Basic Mix: 72 hours</li>
-              <li>Professional Mix: 48 hours</li>
-              <li>Premium Mix & Master: 24 hours</li>
-              <li>Bulk projects: Extended timelines as agreed</li>
+              <li>Master Only: 3 business days</li>
+              <li>Mix: 5 business days</li>
+              <li>Mix &amp; Master: 7 business days</li>
+              <li>Multi-song and album projects: extended timelines as agreed in writing</li>
+              <li>Rush slots, where available: expedited timeline at 1.5x the standard rate</li>
             </ul>
 
             <h3>4.4 Force Majeure</h3>
@@ -134,21 +143,22 @@ function ServiceAgreement() {
             <h2>5. Revision Policy</h2>
             <h3>5.1 Revision Allowances</h3>
             <ul>
-              <li><strong>Basic Mix:</strong> 1 revision included</li>
-              <li><strong>Professional Mix:</strong> 3 revisions included</li>
-              <li><strong>Premium Mix & Master:</strong> Unlimited revisions</li>
+              <li><strong>Master Only:</strong> 2 revision rounds included</li>
+              <li><strong>Mix:</strong> 2 revision rounds included</li>
+              <li><strong>Mix &amp; Master:</strong> 3 revision rounds included</li>
             </ul>
+            <p>A revision round means one consolidated set of notes, addressed together. Sending notes in several messages over several days counts as several rounds.</p>
 
             <h3>5.2 Revision Guidelines</h3>
             <ul>
               <li>Revision requests must be submitted within 14 days of mix delivery</li>
               <li>Feedback must be specific and actionable</li>
               <li>Major changes to creative direction may constitute a new project</li>
-              <li>Additional revisions beyond package limits: $25 per revision</li>
+              <li>Additional rounds beyond the package allowance are billed hourly at the rate quoted at the time of the request</li>
             </ul>
 
             <h3>5.3 Revision Timeline</h3>
-            <p>Revisions completed within 24-48 hours of receiving clear feedback.</p>
+            <p>Revisions completed within 2 business days of receiving clear, consolidated feedback.</p>
           </section>
 
           <section className="policy-section">
@@ -164,13 +174,10 @@ function ServiceAgreement() {
             <p>Tornado Audio retains all rights to:</p>
             <ul>
               <li>Mixing techniques, processes, and methodologies</li>
-            <p>Client retains all ownership rights to their original musical compositions, lyrics, and performances. <strong>However, Tornado Audio retains all rights to the finished mixed/mastered audio product until final payment is received in full.</strong> Upon full payment, client receives complete rights to the finished audio.</p>
-
-            <p><strong>Copyright Notice:</strong> All mixed and mastered audio files created by Tornado Audio are original derivative works subject to copyright protection under U.S. Copyright Law. Tornado Audio maintains exclusive copyright ownership of these derivative works until final payment transfer.</p>
-
-            <p>Client grants Tornado Audio a limited license to:</p>
               <li>Business methods and operational procedures</li>
             </ul>
+
+            <p><strong>Copyright Notice:</strong> All mixed and mastered audio files created by Tornado Audio are original derivative works subject to copyright protection under U.S. Copyright Law. Tornado Audio maintains exclusive copyright ownership of these derivative works until final payment transfer.</p>
 
             <h3>6.3 Portfolio Usage</h3>
 
@@ -251,7 +258,7 @@ function ServiceAgreement() {
             <h2>9. Cancellation & Refund Policy</h2>
             <h3>9.1 Client Cancellation</h3>
             <ul>
-              <li><strong>Before work begins:</strong> Full refund minus 3% processing fee</li>
+              <li><strong>Before work begins:</strong> The 50% deposit is non-refundable. Any amount paid above the deposit is refunded in full.</li>
               <li><strong>After work begins:</strong> No refund available</li>
               <li><strong>After first mix delivery:</strong> No refund available</li>
             </ul>
@@ -315,9 +322,9 @@ function ServiceAgreement() {
             <h2>13. Technical Support & Communication</h2>
             <h3>13.1 Communication Channels</h3>
             <ul>
-              <li><strong>Primary:</strong> Email (hunter@tornadoaudio.com)</li>
+              <li><strong>Primary:</strong> Email (contact@tornadoaudio.net)</li>
               <li><strong>Response Time:</strong> Within 24 hours during business days</li>
-              <li><strong>Business Hours:</strong> Monday-Friday, 9 AM - 6 PM EST</li>
+              <li><strong>Business Hours:</strong> Monday-Friday, 9 AM - 6 PM CT</li>
             </ul>
 
             <h3>13.2 File Transfer</h3>
@@ -341,9 +348,9 @@ function ServiceAgreement() {
             <p>For questions regarding this Service Agreement:</p>
             <p>
               <strong>Tornado Audio</strong><br />
-              Email: hunter@tornadoaudio.com<br />
+              Email: contact@tornadoaudio.net<br />
               Website: tornadoaudio.net<br />
-              Business Hours: Monday-Friday, 9 AM - 6 PM EST
+              Business Hours: Monday-Friday, 9 AM - 6 PM CT
             </p>
           </section>
 
