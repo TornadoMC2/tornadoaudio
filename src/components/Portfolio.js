@@ -30,8 +30,8 @@ const Portfolio = () => {
     {
       id: 3,
       description: "Energy filled mix with non-conventional instrumentation. Emphasizing warmth and presence for an intimate yet powerful sound. Drums are punchy and upfront, vocals are clear and present, and the acoustic instruments have a natural warmth.",
-      beforeAudio: "/audio/mp3/eyes-before.mp3",
-      afterAudio: "/audio/mp3/eyes-after.mp3",
+      beforeAudio: "/audio/mp3/all-it-was-before.mp3",
+      afterAudio: "/audio/mp3/all-it-was-after.mp3",
       genre: "Pop Rock",
       artist: "Eric Corriveau",
       songName: "That's All it Was",
