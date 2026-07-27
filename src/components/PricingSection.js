@@ -1,89 +1,85 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './PricingSection.css';
 import useSiteConfig from '../hooks/useSiteConfig';
 
+// Prices live here and are mirrored by the Project Type select in
+// ContactSection.js and the offer catalog in public/index.html. Change one,
+// change all three.
+const PRICING_TIERS = [
+  {
+    id: 'master',
+    name: 'Master Only',
+    price: 120,
+    introPrice: 75,
+    description: 'For a finished mix that needs final polish and release-ready loudness.',
+    features: [
+      'Tonal balance and loudness for streaming',
+      'Sequencing and spacing for EPs and albums',
+      'WAV and MP3 delivery',
+      '2 revision rounds',
+      '3 business day turnaround',
+    ],
+    popular: false,
+  },
+  {
+    id: 'mix',
+    name: 'Mix',
+    price: 250,
+    introPrice: 125,
+    description: 'Full mix from your raw tracks, built to sit alongside commercial releases.',
+    features: [
+      'Up to 48 tracks',
+      'Full EQ, dynamics, automation and effects',
+      'Stereo mix plus instrumental and vocal-up alternates',
+      'Stem delivery on request',
+      '2 revision rounds',
+      '5 business day turnaround',
+    ],
+    popular: false,
+  },
+  {
+    id: 'mix-master',
+    name: 'Mix + Master',
+    price: 350,
+    introPrice: 175,
+    description: 'Raw tracks in, distribution-ready master out. The complete package.',
+    features: [
+      'Everything in Mix, plus mastering',
+      'No track count limit',
+      'Stems and multitracks included',
+      'Distribution-ready master',
+      '3 revision rounds',
+      '7 business day turnaround',
+    ],
+    popular: true,
+  },
+];
+
 const PricingSection = () => {
-  const [expandedBulkPricing, setExpandedBulkPricing] = useState({});
   const {
-    calculateSalePrice,
+    getTierPricing,
     formatPrice,
     getOrderCapacityStatus,
     adjustTurnaroundTime,
-    isSaleActive,
-    salesInfo,
     isAcceptingOrders,
+    isIntroOfferActive,
+    introOffer,
     config,
-    saleMessage
   } = useSiteConfig();
 
-  const toggleBulkPricing = (tierId) => {
-    setExpandedBulkPricing(prev => ({
-      ...prev,
-      [tierId]: !prev[tierId]
-    }));
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
-  const pricingTiers = [
-    {
-      id: 'basic-mix',
-      name: "Basic Mix",
-      price: "$40 / song",
-      priceValue: 40,
-      description: "Perfect for demos and independent artists",
-      features: [
-        "Up to 24 tracks",
-        "EQ and compression",
-        "Basic effects processing",
-        "Stereo mix delivery",
-        "1 revision included",
-        "72-hour turnaround"
-      ],
-      popular: false
-    },
-    {
-      id: 'professional-mix',
-      name: "Professional Mix",
-      price: "$75 / song",
-      priceValue: 75,
-      bulkPricing: [
-        { quantity: "3-5 songs", price: 65, savings: "Save $30", turnaround: "5-7 days" },
-        { quantity: "6+ songs", price: 55, savings: "Save $120+", turnaround: "7-10 days" }
-      ],
-      description: "Industry-standard mixing for serious projects",
-      features: [
-        "Up to 48 tracks",
-        "Advanced EQ and dynamics",
-        "Creative effects processing",
-        "Stereo mix delivery",
-        "3 revisions included",
-        "48-hour turnaround",
-        "Stem delivery available (Drums, Bass, Guitars, Vocals, etc.)"
-      ],
-      popular: true
-    },
-    {
-      id: 'premium-mix-master',
-      name: "Premium Mix & Master",
-      price: "$200 / song",
-      priceValue: 200,
-      bulkPricing: [
-        { quantity: "3-5 songs", price: 175, savings: "Save $75", turnaround: "7-10 days" },
-        { quantity: "6+ songs", price: 150, savings: "Save $300+", turnaround: "10-14 days" }
-      ],
-      description: "Complete production package",
-      features: [
-        "Unlimited tracks",
-        "Full mixing treatment",
-        "Professional mastering",
-        "Multiple format delivery",
-        "Unlimited revisions",
-        "24-hour turnaround",
-        "Stems + multitracks included",
-        "Distribution-ready master"
-      ],
-      popular: false
-    }
-  ];
+  // The contact form reads this back out of sessionStorage to preselect the
+  // matching Project Type.
+  const selectService = (service) => {
+    sessionStorage.setItem('selectedService', JSON.stringify(service));
+    scrollToContact();
+  };
 
   const handleGetStarted = (tier) => {
     if (!isAcceptingOrders) {
@@ -91,151 +87,67 @@ const PricingSection = () => {
       return;
     }
 
-    // Track Google Ads conversion for pricing interest
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', {
-        'send_to': 'AW-719494667/pricing_interest',
-        'value': tier.priceValue * 0.1, // 10% of service value as lead value
-        'currency': 'USD'
-      });
-
-      // Track custom event for enhanced analytics
-      window.gtag('event', 'pricing_cta_click', {
-        'event_category': 'Pricing',
-        'event_label': tier.name,
-        'value': tier.priceValue
-      });
-    }
-
-    // Scroll to contact section
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-
-      // Store selected service in sessionStorage for the contact form
-      const priceInfo = calculateSalePrice(tier.priceValue, tier.id);
-      sessionStorage.setItem('selectedService', JSON.stringify({
-        name: tier.name,
-        price: formatPrice(priceInfo.price) + " / song",
-        originalPrice: priceInfo.onSale ? formatPrice(priceInfo.originalPrice) + " / song" : null,
-        description: tier.description,
-        onSale: priceInfo.onSale
-      }));
-    }
+    const pricing = getTierPricing(tier);
+    selectService({
+      id: tier.id,
+      name: tier.name,
+      price: `${formatPrice(pricing.price)} / song`,
+      standardPrice: pricing.onIntro ? `${formatPrice(pricing.standardPrice)} / song` : null,
+      description: tier.description,
+      onIntro: pricing.onIntro,
+    });
   };
 
-  const handleContactUs = () => {
-    // Store service selection for contact form
-    const customQuoteService = {
+  const handleContactUs = (e) => {
+    e.preventDefault();
+    selectService({
+      id: 'custom',
       name: 'Custom Quote',
       price: 'Contact for pricing',
-      description: 'Custom audio mixing and mastering services tailored to your specific needs.',
-      isSample: false
-    };
-
-    sessionStorage.setItem('selectedService', JSON.stringify(customQuoteService));
-
-    // Scroll to contact section
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+      description: 'Custom audio mixing and mastering tailored to your project.',
+    });
   };
 
   const handleFreeSample = () => {
-    // Track Google Ads conversion for free sample interest
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', {
-        'send_to': 'AW-719494667/free_sample_interest',
-        'value': 10, // Lead value for free sample interest
-        'currency': 'USD'
-      });
-
-      // Track custom event for enhanced analytics
-      window.gtag('event', 'free_sample_cta_click', {
-        'event_category': 'Pricing',
-        'event_label': 'Free Sample Mix',
-        'value': 10
-      });
-    }
-
-    // Scroll to contact section
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-
-      // Store free sample selection in sessionStorage for the contact form
-      sessionStorage.setItem('selectedService', JSON.stringify({
-        name: 'Free Sample Mix',
-        price: 'Free',
-        originalPrice: null,
-        description: 'Try before you buy - 60-second professionally mixed sample',
-        onSale: false,
-        isSample: true
-      }));
-    }
+    selectService({
+      id: 'free-sample',
+      name: 'Free Sample Mix',
+      price: 'Free',
+      description: 'A 60-second mixed excerpt of your track before you commit.',
+      isSample: true,
+    });
   };
 
   const orderCapacityStatus = getOrderCapacityStatus();
+  const { depositPercentage, albumDiscountPercentage, albumDiscountMinSongs } = config.payment;
 
   return (
     <section id="pricing" className="pricing-section" itemScope itemType="https://schema.org/Service">
       <div className="container">
         <header>
-          <h2 itemProp="name">Pricing & Services</h2>
-          <p className="section-subtitle" itemProp="description">Professional audio mixing services tailored to your needs</p>
+          <h2 itemProp="name">Pricing</h2>
+          <p className="section-subtitle" itemProp="description">
+            Flat per-song rates. No hourly billing, no surprises.
+          </p>
 
-          {/* Free Sample Mix Banner */}
-          <div className="free-sample-banner">
-            <div className="sample-banner-content">
-              <div className="sample-icon">
-                <img
-                  src="/logo192.png"
-                  alt="Tornado Audio Logo"
-                  className="sample-logo"
-                />
-              </div>
-              <div className="sample-text">
-                <h3>Try Before You Buy - Free Sample Mix Available!</h3>
-                <p>Get a 60-second professionally mixed sample of your track before committing to a full service</p>
-              </div>
-              <div className="sample-cta-container">
-                <button
-                  className="sample-cta-button"
-                  onClick={() => handleFreeSample()}
-                  aria-label="Request free sample mix"
-                >
-                  Get Free Sample
-                </button>
-                <p className="sample-disclaimer">
-                  One sample per customer • Preview quality for evaluation purposes
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Sale Banner */}
-          {isSaleActive && saleMessage && (
-            <div className="sale-banner">
-              {saleMessage}
-              {salesInfo.endDate && (
-                <span className="sale-end-date">
-                  Ends {new Date(salesInfo.endDate).toLocaleDateString()}
-                </span>
-              )}
+          {/* The intro rate needs its reason stated next to it — an unexplained
+              discount reads as a statement about the quality of the work. */}
+          {isIntroOfferActive && (
+            <div className="intro-offer-banner">
+              <p className="intro-offer-headline">
+                Introductory rates while I build out my portfolio
+              </p>
+              <p className="intro-offer-terms">
+                Reduced pricing on my next{' '}
+                {introOffer.showRemainingCount && (
+                  <strong>{introOffer.projectsRemaining}</strong>
+                )}{' '}
+                {introOffer.projectsRemaining === 1 ? 'project' : 'projects'},{' '}
+                {introOffer.reason}. Standard rates apply after that.
+              </p>
             </div>
           )}
 
-          {/* Order Capacity Status */}
           {config.features.showCapacityIndicator && (
             <div className={`capacity-indicator ${orderCapacityStatus.isAtCapacity ? 'at-capacity' : orderCapacityStatus.isNearCapacity ? 'near-capacity' : 'available'}`}>
               {orderCapacityStatus.isAtCapacity ? (
@@ -248,55 +160,50 @@ const PricingSection = () => {
             </div>
           )}
 
-          {/* Capacity Message */}
           {orderCapacityStatus.statusMessage && (
-            <div className="capacity-message">
-              {orderCapacityStatus.statusMessage}
-            </div>
+            <div className="capacity-message">{orderCapacityStatus.statusMessage}</div>
           )}
         </header>
 
         <div className="pricing-grid" itemScope itemType="https://schema.org/ItemList">
-          {pricingTiers.map((tier, index) => {
-            const priceInfo = calculateSalePrice(tier.priceValue, tier.id);
+          {PRICING_TIERS.map((tier) => {
+            const pricing = getTierPricing(tier);
 
             return (
               <article
-                key={index}
-                className={`pricing-card ${tier.popular ? 'popular' : ''} ${priceInfo.onSale ? 'on-sale' : ''} ${!isAcceptingOrders ? 'disabled' : ''}`}
+                key={tier.id}
+                className={`pricing-card ${tier.popular ? 'popular' : ''} ${pricing.onIntro ? 'on-intro' : ''} ${!isAcceptingOrders ? 'disabled' : ''}`}
                 itemScope
                 itemType="https://schema.org/Offer"
                 itemProp="itemListElement"
               >
                 {tier.popular && <div className="popular-badge">Most Popular</div>}
-                {priceInfo.onSale && <div className="sale-badge">SALE</div>}
 
                 <h3 itemProp="name">{tier.name}</h3>
 
                 <div className="price" itemScope itemType="https://schema.org/PriceSpecification">
-                  {priceInfo.onSale && (
-                    <span className="original-price">{formatPrice(priceInfo.originalPrice)} / song</span>
+                  {pricing.onIntro && (
+                    <span className="original-price">
+                      Standard rate <s>{formatPrice(pricing.standardPrice)} / song</s>
+                    </span>
                   )}
-                  <span itemProp="price" content={priceInfo.price}>{formatPrice(priceInfo.price)} / song</span>
-                  {priceInfo.onSale && (
-                    <span className="savings">Save {formatPrice(priceInfo.savings)}</span>
-                  )}
+                  <span itemProp="price" content={pricing.price}>
+                    {formatPrice(pricing.price)} <span className="price-unit">/ song</span>
+                  </span>
+                  {pricing.onIntro && <span className="savings">Introductory rate</span>}
                   <meta itemProp="priceCurrency" content="USD" />
                   <meta itemProp="valueAddedTaxIncluded" content="false" />
                 </div>
 
                 <p className="description" itemProp="description">{tier.description}</p>
 
-                <ul className="features" itemProp="includesObject" itemScope itemType="https://schema.org/TypeAndQuantityNode">
+                <ul className="features">
                   {tier.features.map((feature, idx) => {
-                    // Adjust turnaround times in features
                     const adjustedFeature = feature.includes('turnaround')
-                      ? feature.replace(/\d+(-\d+)?\s*(hour|day)s?/, (match) => adjustTurnaroundTime(match))
+                      ? feature.replace(/\d+(-\d+)?\s*(business day|hour|day)s?/, (match) => adjustTurnaroundTime(match))
                       : feature;
 
-                    return (
-                      <li key={idx} itemProp="description">{adjustedFeature}</li>
-                    );
+                    return <li key={idx}>{adjustedFeature}</li>;
                   })}
                 </ul>
 
@@ -304,57 +211,12 @@ const PricingSection = () => {
                 <meta itemProp="availability" content="https://schema.org/InStock" />
                 <meta itemProp="category" content="Audio Mixing Services" />
 
-                {tier.bulkPricing && config.features.showBulkPricing && (
-                  <div className="bulk-pricing">
-                    <button
-                      className="bulk-pricing-toggle"
-                      onClick={() => toggleBulkPricing(tier.id)}
-                      aria-expanded={expandedBulkPricing[tier.id]}
-                      aria-controls={`bulk-pricing-${tier.id}`}
-                    >
-                      Bulk Pricing Available
-                      <span className={`arrow ${expandedBulkPricing[tier.id] ? 'expanded' : ''}`}>▼</span>
-                    </button>
-
-                    {expandedBulkPricing[tier.id] && (
-                      <div className="bulk-pricing-content" id={`bulk-pricing-${tier.id}`}>
-                        <ul>
-                          {tier.bulkPricing.map((bulkOption, idx) => {
-                            const bulkPriceInfo = calculateSalePrice(bulkOption.price, tier.id);
-
-                            return (
-                              <li key={idx} itemScope itemType="https://schema.org/Offer">
-                                <div className="bulk-option">
-                                  <span className="quantity" itemProp="eligibleQuantity">{bulkOption.quantity}</span>
-                                  <div className="bulk-price-container">
-                                    {bulkPriceInfo.onSale && (
-                                      <span className="bulk-original-price">{formatPrice(bulkPriceInfo.originalPrice)}</span>
-                                    )}
-                                    <span className="bulk-price" itemProp="price">{formatPrice(bulkPriceInfo.price)} / song</span>
-                                  </div>
-                                  <span className="savings">{bulkPriceInfo.onSale ? `Save ${formatPrice(bulkPriceInfo.savings * 3)}+` : bulkOption.savings}</span>
-                                  <span className="turnaround">({adjustTurnaroundTime(bulkOption.turnaround)})</span>
-                                  <meta itemProp="priceCurrency" content="USD" />
-                                  <meta itemProp="seller" content="Hunter Johanson" />
-                                </div>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                        <p className="bulk-disclaimer">
-                          * Turnaround times increase with song count to ensure quality
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
                 <div className="card-actions">
                   <button
                     className={`cta-button ${!isAcceptingOrders ? 'disabled' : ''}`}
                     onClick={() => handleGetStarted(tier)}
                     disabled={!isAcceptingOrders}
-                    aria-label={`Get started with ${tier.name} service`}
+                    aria-label={`Get started with ${tier.name}`}
                   >
                     {!isAcceptingOrders ? 'Currently Unavailable' : 'Get Started'}
                   </button>
@@ -364,23 +226,66 @@ const PricingSection = () => {
           })}
         </div>
 
+        {/* Below the tiers on purpose: leading with "free" undercuts the prices
+            before anyone has read them. */}
+        {config.features.showFreeSample && (
+          <div className="free-sample-banner">
+            <div className="sample-banner-content">
+              <div className="sample-text">
+                <h3>Not sure yet? Hear your own track first.</h3>
+                <p>
+                  I'll mix a 60-second excerpt of your song at no cost, so you can judge
+                  the work on your own material rather than someone else's.
+                </p>
+              </div>
+              <div className="sample-cta-container">
+                <button
+                  className="sample-cta-button"
+                  onClick={handleFreeSample}
+                  aria-label="Request a free sample mix"
+                >
+                  Get a Free Sample
+                </button>
+                <p className="sample-disclaimer">
+                  One per customer &bull; Preview quality, for evaluation
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <footer className="pricing-footer">
-          <p className="pricing-note">
-            * All services include professional communication throughout the process
-            {config.business.satisfactionGuarantee && ` and ${config.business.satisfactionGuarantee.toLowerCase()}`}
-          </p>
+          <dl className="pricing-terms">
+            <div className="pricing-term">
+              <dt>Albums and EPs</dt>
+              <dd>{albumDiscountPercentage}% off when you book {albumDiscountMinSongs} or more songs together.</dd>
+            </div>
+            <div className="pricing-term">
+              <dt>Booking</dt>
+              <dd>{depositPercentage}% deposit to reserve your slot, balance due before final files are delivered.</dd>
+            </div>
+            <div className="pricing-term">
+              <dt>Revisions</dt>
+              <dd>{config.payment.revisionPolicy}</dd>
+            </div>
+            {config.payment.rushOrdersAvailable && (
+              <div className="pricing-term">
+                <dt>Rush work</dt>
+                <dd>Need it sooner than the standard turnaround? Rush slots are available at {config.payment.rushOrderMultiplier}x.</dd>
+              </div>
+            )}
+            <div className="pricing-term">
+              <dt>Payment</dt>
+              <dd>{config.payment.methods.join(', ')}.</dd>
+            </div>
+          </dl>
+
           <p className="service-agreement-note">
-            <a href="/service-agreement" className="agreement-link" target="_blank" rel="noopener noreferrer">Review our Service Agreement</a> before booking to understand terms, pricing, and project workflow.
+            <a href="/service-agreement" className="agreement-link" target="_blank" rel="noopener noreferrer">Review the Service Agreement</a> before booking for full terms and project workflow.
           </p>
           <p className="custom-pricing">
-            Need something custom? <a href="#contact" className="contact-link" onClick={handleContactUs} aria-label="Contact us for custom pricing">Contact us</a> for personalized pricing and services.
+            Something outside these packages? <a href="#contact" className="contact-link" onClick={handleContactUs}>Get in touch</a> for a quote.
           </p>
-
-          {config.payment.rushOrdersAvailable && (
-            <p className="rush-orders">
-              Rush orders available at {config.payment.rushOrderMultiplier}x pricing
-            </p>
-          )}
         </footer>
       </div>
     </section>

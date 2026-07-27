@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Testimonials
+
+   Flat panels, hairline rules. Mobile-first single column; columns added at
+   min-width. Matches the pricing and portfolio treatment.
+   ========================================================================== */
+
+.testimonials-section {
+  background: var(--bg-sunken);
+}
+
+.testimonials-section h2 {
+  margin-bottom: var(--space-3);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 48em) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
+
+@media (min-width: 64em) {
+  .testimonials-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-5);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-rule);
+  border-radius: var(--radius);
+}
+
+.testimonial blockquote {
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  border: none;
+}
+
+.testimonial blockquote p {
+  margin: 0;
+  max-width: var(--measure);
+  color: var(--text);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+
+.testimonial figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+}
+
+.testimonial-author {
+  color: var(--text);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.testimonial-role,
+.testimonial-project {
+  color: var(--text-muted);
+  font-size: var(--step--1);
+}
+
+.testimonial-project a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.testimonial-project a:hover {
+  color: var(--accent-hover);
+}

@@ -7,60 +7,52 @@
     <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#17150f" media="(prefers-color-scheme: dark)" />
 
-    <!-- Enhanced preconnect and resource hints for Google Core Web Vitals -->
+    <!-- Resource hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
     <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-    <link rel="dns-prefetch" href="//googleads.g.doubleclick.net" />
-
-    <!-- Preload critical resources for better performance -->
     <link rel="preload" href="%PUBLIC_URL%/logo192.png" as="image" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
-    <!-- Enhanced SEO Meta Tags -->
-    <meta name="description" content="Professional audio mixing services by Hunter Johanson at Tornado Audio. Expert mixing engineer specializing in rock, country & all genres. Transform your recordings into radio-ready tracks with 3+ years experience. Get professional mixes starting at $40." />
-    <meta name="keywords" content="audio mixing services, professional mixing engineer, Hunter Johanson, Tornado Audio, music production, rock mixing, country mixing, audio mastering, mixing engineer near me, professional music mixing, radio ready tracks, audio post production" />
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Mixing and mastering for independent artists and bands, by Hunter Johanson. Based in Bloomington-Normal, Illinois, working remotely with artists anywhere. Live sound engineering across Central Illinois and Chicago." />
     <meta name="author" content="Hunter Johanson" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="geo.region" content="US" />
-    <meta name="geo.placename" content="United States" />
-    <meta name="distribution" content="global" />
-    <meta name="rating" content="general" />
+    <meta name="geo.region" content="US-IL" />
+    <meta name="geo.placename" content="Bloomington-Normal, Illinois" />
     <link rel="canonical" href="https://tornadoaudio.net/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="business.business" />
     <meta property="og:url" content="https://tornadoaudio.net/" />
-    <meta property="og:title" content="Tornado Audio - Professional Audio Mixing Services | Hunter Johanson" />
-    <meta property="og:description" content="Transform your recordings into professional, radio-ready tracks. Expert audio mixing by Hunter Johanson with 3+ years experience. Rock, country & all genres. Starting at $40." />
+    <meta property="og:title" content="Tornado Audio | Mixing &amp; Mastering by Hunter Johanson" />
+    <meta property="og:description" content="Mixing and mastering for independent artists and bands. Based in Bloomington-Normal, Illinois, working remotely with artists anywhere. Live sound across Central Illinois and Chicago." />
     <meta property="og:image" content="https://tornadoaudio.net/logo512.png" />
-    <meta property="og:image:alt" content="Tornado Audio Professional Audio Mixing Services Logo" />
+    <meta property="og:image:alt" content="Tornado Audio" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Tornado Audio" />
     <meta property="og:locale" content="en_US" />
-    <meta property="business:contact_data:street_address" content="Remote Services Available Worldwide" />
-    <meta property="business:contact_data:locality" content="United States" />
-    <meta property="business:contact_data:region" content="US" />
+    <meta property="business:contact_data:locality" content="Bloomington-Normal" />
+    <meta property="business:contact_data:region" content="IL" />
     <meta property="business:contact_data:country_name" content="United States" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@tornadoaudio_mixing" />
-    <meta name="twitter:creator" content="@tornadoaudio_mixing" />
     <meta name="twitter:url" content="https://tornadoaudio.net/" />
-    <meta name="twitter:title" content="Tornado Audio - Professional Audio Mixing Services" />
-    <meta name="twitter:description" content="Expert audio mixing by Hunter Johanson. Transform recordings into radio-ready tracks. Rock, country & all genres. 3+ years experience." />
+    <meta name="twitter:title" content="Tornado Audio | Mixing &amp; Mastering by Hunter Johanson" />
+    <meta name="twitter:description" content="Mixing and mastering for independent artists and bands. Based in Bloomington-Normal, Illinois, working remotely with artists anywhere." />
     <meta name="twitter:image" content="https://tornadoaudio.net/logo512.png" />
-    <meta name="twitter:image:alt" content="Tornado Audio Professional Mixing Services" />
+    <meta name="twitter:image:alt" content="Tornado Audio" />
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-    <!-- Enhanced Structured Data for Professional Service -->
+    <!--
+      Structured data.
+
+      No aggregateRating here: review markup requires real, collected reviews.
+      When testimonials exist, add individual Review objects with real author
+      names and dates rather than a summary figure.
+    -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -75,140 +67,102 @@
       },
       "logo": "https://tornadoaudio.net/logo512.png",
       "url": "https://tornadoaudio.net",
-      "telephone": "Contact via website",
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "US",
-        "addressRegion": "United States"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
+        "addressLocality": "Bloomington-Normal",
+        "addressRegion": "IL",
         "addressCountry": "US"
       },
-      "description": "Professional audio mixing and mastering services specializing in rock music and all genres. Expert mixing engineer Hunter Johanson transforms recordings into radio-ready tracks with over 3 years of experience.",
-      "priceRange": "$40-$200",
+      "description": "Mixing and mastering for independent artists and bands, plus live sound engineering. Hunter Johanson works remotely with artists anywhere and on live events across Central Illinois and the Chicago area.",
+      "priceRange": "$75-$350",
       "currenciesAccepted": "USD",
-      "paymentAccepted": "PayPal, Venmo, Cash App",
+      "paymentAccepted": "Zelle, Venmo, Bank Transfer",
       "founder": {
         "@type": "Person",
         "name": "Hunter Johanson",
-        "jobTitle": "Professional Audio Mixing Engineer",
-        "description": "Professional audio mixing engineer with over 3 years of experience specializing in rock music production and all genres.",
+        "jobTitle": "Audio Engineer",
+        "description": "Mixing, mastering and live sound engineer with over 5 years of experience, specializing in rock and country.",
         "sameAs": [
           "https://instagram.com/tornadoaudio_mixing"
         ]
       },
       "serviceType": [
         "Audio Mixing",
-        "Music Production",
         "Audio Mastering",
         "Multi-Track Mixing",
-        "Audio Enhancement",
+        "Live Sound Engineering",
+        "Front of House Mixing",
         "Music Post-Production"
       ],
-      "areaServed": {
-        "@type": "Place",
-        "name": "Worldwide"
-      },
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Bloomington-Normal",
+          "containedInPlace": { "@type": "State", "name": "Illinois" }
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Central Illinois"
+        },
+        {
+          "@type": "City",
+          "name": "Chicago",
+          "containedInPlace": { "@type": "State", "name": "Illinois" }
+        }
+      ],
       "availableLanguage": "English",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Professional Audio Mixing Services",
+        "name": "Mixing and Mastering Services",
         "itemListElement": [
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Basic Mix Package",
-              "description": "Perfect for demos and independent artists - up to 24 tracks with professional processing, EQ, compression, and effects",
-              "category": "Audio Mixing"
-            },
-            "price": "40",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock",
-            "deliveryLeadTime": "P2D"
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Professional Mix Package",
-              "description": "Industry-standard mixing for serious projects - up to 48 tracks with advanced processing, automation, and professional polish",
-              "category": "Audio Mixing"
+              "name": "Master Only",
+              "description": "Mastering for a finished mix: tonal balance and loudness for streaming, sequencing for EPs and albums, WAV and MP3 delivery, 2 revision rounds",
+              "category": "Audio Mastering"
             },
             "price": "75",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "deliveryLeadTime": "P2D"
+            "deliveryLeadTime": "P3D"
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Premium Mix & Master Package",
-              "description": "Complete production package with unlimited tracks, professional mixing and mastering for radio-ready sound",
-              "category": "Audio Production"
+              "name": "Mix",
+              "description": "Full mix from raw tracks, up to 48 tracks, with EQ, dynamics, automation and effects, instrumental and vocal-up alternates, 2 revision rounds",
+              "category": "Audio Mixing"
             },
-            "price": "200",
+            "price": "125",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "deliveryLeadTime": "P3D"
+            "deliveryLeadTime": "P5D"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Mix + Master",
+              "description": "Mixing and mastering together with no track count limit, stems and multitracks included, distribution-ready master, 3 revision rounds",
+              "category": "Audio Production"
+            },
+            "price": "175",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "deliveryLeadTime": "P7D"
           }
         ]
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5.0",
-        "reviewCount": "15",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
-      "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 09:00-21:00",
+      "openingHours": "Mo,Tu,We,Th,Fr 09:00-18:00",
       "foundingDate": "2020",
       "slogan": "Transforming Sound, Elevating Artistry",
       "email": "contact@tornadoaudio.net",
       "sameAs": [
-        "https://www.facebook.com/tornadoaudio",
-        "https://twitter.com/tornadoaudio_mixing",
         "https://www.instagram.com/tornadoaudio_mixing/"
       ]
-    }
-    </script>
-
-    <!-- Additional Service Schema for Better SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "serviceType": "Professional Audio Mixing and Mastering",
-      "name": "Professional Audio Mixing Services",
-      "provider": {
-        "@type": "Person",
-        "name": "Hunter Johanson",
-        "jobTitle": "Professional Audio Mixing Engineer",
-        "url": "https://tornadoaudio.net",
-        "worksFor": {
-          "@type": "Organization",
-          "name": "Tornado Audio"
-        }
-      },
-      "description": "Professional audio mixing services transforming raw recordings into polished, radio-ready tracks. Specializing in rock music with expertise in all genres including country, pop, and electronic music.",
-      "category": "Music Production",
-      "audience": {
-        "@type": "Audience",
-        "audienceType": "Musicians, Bands, Independent Artists, Record Labels"
-      },
-      "offers": {
-        "@type": "AggregateOffer",
-        "priceRange": "$40-$200",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
-        "offerCount": "3"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Audio Production Services"
-      }
     }
     </script>
 
@@ -219,25 +173,26 @@
       "@type": "WebSite",
       "name": "Tornado Audio",
       "url": "https://tornadoaudio.net",
-      "description": "Professional audio mixing services by Hunter Johanson",
+      "description": "Mixing, mastering and live sound engineering by Hunter Johanson",
       "publisher": {
         "@type": "Organization",
         "name": "Tornado Audio"
       },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://tornadoaudio.net/?s={search_term_string}",
-        "query-input": "required name=search_term_string"
-      },
-      "mainEntity": {
-        "@type": "WebPage",
-        "@id": "https://tornadoaudio.net/#webpage"
-      },
       "hasPart": [
+        {
+          "@type": "SiteNavigationElement",
+          "name": "About",
+          "url": "https://tornadoaudio.net/#about"
+        },
         {
           "@type": "SiteNavigationElement",
           "name": "Services",
           "url": "https://tornadoaudio.net/#services"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Live Sound",
+          "url": "https://tornadoaudio.net/#live-sound"
         },
         {
           "@type": "SiteNavigationElement",
@@ -251,6 +206,11 @@
         },
         {
           "@type": "SiteNavigationElement",
+          "name": "Blog",
+          "url": "https://tornadoaudio.net/blog"
+        },
+        {
+          "@type": "SiteNavigationElement",
           "name": "Contact",
           "url": "https://tornadoaudio.net/#contact"
         }
@@ -258,7 +218,7 @@
     }
     </script>
 
-    <!-- FAQ Schema for Better Google Snippets -->
+    <!-- FAQ Schema -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -266,18 +226,10 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What audio mixing services does Tornado Audio offer?",
+          "name": "How much does mixing and mastering cost at Tornado Audio?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Tornado Audio offers professional audio mixing services including Basic Mix Package ($40), Professional Mix Package ($75), and Premium Mix & Master Package ($200). We specialize in rock, country, and all music genres with expert processing, EQ, compression, and effects."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much does professional audio mixing cost?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Our professional audio mixing services range from $40-$200 depending on the package. Basic Mix starts at $40 for up to 24 tracks, Professional Mix is $75 for up to 48 tracks, and Premium Mix & Master is $200 for unlimited tracks with mastering included."
+            "text": "Standard rates are $120 per song for mastering only, $250 per song for a mix, and $350 per song for mix and master together. Introductory rates of $75, $125 and $175 are currently available for a limited number of projects, in exchange for portfolio use and a testimonial. Albums and EPs of four or more songs receive 15% off."
           }
         },
         {
@@ -285,7 +237,31 @@
           "name": "How long does it take to mix a song?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Mixing turnaround time is typically 2-3 days depending on the package selected. Basic and Professional packages are completed within 2 days, while Premium Mix & Master packages take up to 3 days for the complete production process."
+            "text": "Mastering is returned within 3 business days, a mix within 5 business days, and mix and master together within 7 business days. Rush slots are available at 1.5x the standard rate when you need it sooner."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where is Tornado Audio based?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tornado Audio is based in Bloomington-Normal, Illinois. Mixing and mastering are handled remotely for artists anywhere. Live sound engineering is available throughout Central Illinois and the Chicago area."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How many revisions are included?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Master Only and Mix each include 2 revision rounds, and Mix + Master includes 3. Additional revisions beyond those rounds are billed hourly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I hear a mix of my own song before booking?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. A 60-second excerpt of your track will be mixed at no cost so you can judge the work on your own material. One free sample per customer, delivered at preview quality for evaluation."
           }
         },
         {
@@ -293,39 +269,30 @@
           "name": "What music genres does Hunter Johanson specialize in?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Hunter Johanson specializes in rock music mixing but has over 3 years of experience working with all genres including country, pop, electronic, indie, and more. Every genre receives the same professional treatment and attention to detail."
+            "text": "Rock is the primary specialization, with particular focus on heavy guitar tones, drum processing and dynamic mix arrangements. Country, pop, indie and acoustic projects are regularly taken on as well."
           }
         },
         {
           "@type": "Question",
-          "name": "What file formats do you accept for mixing?",
+          "name": "What file formats should I send?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We accept all standard audio file formats including WAV, AIFF, MP3, and various DAW project files. For best results, we recommend sending individual track stems in WAV format at the highest quality available from your recording session."
+            "text": "Individual track stems in WAV format at the highest sample rate and bit depth from your session give the best results. AIFF and MP3 are accepted, as are most DAW project files. Files can be sent via Dropbox, WeTransfer or Google Drive."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does payment work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A 50% deposit reserves your slot, with the balance due before final files are delivered. Payment is accepted via Zelle, Venmo or bank transfer."
           }
         }
       ]
     }
     </script>
 
-    <!-- Google tag (gtag.js) - one loader covers both the Analytics and Ads IDs -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0VXXHRNEQK"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-0VXXHRNEQK');
-      gtag('config', 'AW-719494667');
-
-      gtag('event', 'conversion', {
-        'send_to': 'AW-719494667/d9bwCKzws6gbEIu8itcC',
-        'value': 1.0,
-        'currency': 'USD'
-      });
-    </script>
-
-    <title>Professional Audio Mixing Services | Tornado Audio by Hunter Johanson | Rock, Country & All Genres</title>
+    <title>Mixing &amp; Mastering Engineer | Tornado Audio | Bloomington-Normal, IL</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

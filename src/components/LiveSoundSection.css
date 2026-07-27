@@ -184,3 +184,29 @@
     padding: var(--space-6);
   }
 }
+
+/* --------------------------------------------------------------------------
+   Named venues
+
+   Only rendered when siteConfig.liveSound.venues has real entries.
+   -------------------------------------------------------------------------- */
+
+.live-sound-venues {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3) var(--space-4);
+  max-width: var(--measure);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-rule);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.live-sound-venues-label {
+  color: var(--text-subtle);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

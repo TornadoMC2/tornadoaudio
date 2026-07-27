@@ -8,6 +8,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import matter from 'gray-matter';
 import './Blog.css';
 import Header from './Header';
+import NewsletterSignup from './NewsletterSignup';
 
 // Dynamically import all markdown files
 const importAll = (r) => {
@@ -297,11 +298,17 @@ function BlogPost() {
             </div>
 
             <div className="blog-cta">
-              <h3>Ready to transform your recordings?</h3>
-              <p>Get professional mixing services starting at just $40.</p>
-              <Link to="/#contact" className="cta-button">Get Started Today</Link>
+              <h3>Want this handled for you?</h3>
+              <p>
+                I mix and master rock and country records for independent artists,
+                remotely, at a flat per-song rate. Introductory pricing is running
+                on a limited number of projects.
+              </p>
+              <Link to="/#pricing" className="cta-button">See Pricing</Link>
             </div>
           </div>
+
+          <NewsletterSignup source="blog-post" />
 
           <Link to="/blog" className="back-to-blog">← Back to Blog</Link>
         </div>
@@ -324,9 +331,9 @@ function BlogPost() {
               </div>
             </div>
             <div className="footer-copyright">
-              <p>&copy; 2025 Tornado Audio - Professional Audio Mixing by Hunter Johanson. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} Tornado Audio — Mixing, mastering and live sound by Hunter Johanson. All rights reserved.</p>
               <p>
-                <small>Professional audio mixing services for musicians, bands, and independent artists worldwide.</small>
+                <small>Based in Bloomington-Normal, IL. Mixing and mastering handled remotely for artists anywhere.</small>
               </p>
               <div className="footer-links">
                 <Link to="/">Home</Link> |

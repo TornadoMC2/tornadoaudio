@@ -1,0 +1,149 @@
+/* ==========================================================================
+   About
+
+   Mobile-first: portrait stacks above the copy, side by side from 56em.
+   Flat surfaces, hairline rules, no shadows or entrance animation.
+   ========================================================================== */
+
+.about-section {
+  background: var(--bg);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (min-width: 56em) {
+  .about-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--space-7);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Portrait
+   -------------------------------------------------------------------------- */
+
+.about-portrait {
+  margin: 0;
+  min-width: 0;
+}
+
+/* 4:3 matches the source photo's native ratio, so nothing is cropped. A
+   portrait frame would centre-crop a landscape shot and cut out the subject —
+   if you swap in a portrait-orientation photo, change this to 4 / 5. */
+.about-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.about-portrait figcaption {
+  margin-top: var(--space-2);
+  color: var(--text-subtle);
+  font-size: var(--step--1);
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   Copy
+   -------------------------------------------------------------------------- */
+
+.about-body {
+  min-width: 0;
+}
+
+.about-body--full {
+  max-width: var(--measure);
+}
+
+.about-section h2 {
+  margin-bottom: var(--space-2);
+}
+
+.about-role {
+  margin-bottom: var(--space-4);
+  color: var(--text-subtle);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.about-body p {
+  margin-bottom: var(--space-4);
+  max-width: var(--measure);
+  color: var(--text-muted);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+
+.about-lede {
+  color: var(--text) !important;
+  font-size: var(--step-1) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Fact list
+   -------------------------------------------------------------------------- */
+
+.about-facts {
+  margin: var(--space-5) 0;
+  border-top: 1px solid var(--rule);
+}
+
+.about-fact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (min-width: 40em) {
+  .about-fact {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: baseline;
+  }
+}
+
+.about-fact dt {
+  color: var(--text-subtle);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.about-fact dd {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--step-0);
+}
+
+/* --------------------------------------------------------------------------
+   Actions
+   -------------------------------------------------------------------------- */
+
+.about-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 30em) {
+  .about-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

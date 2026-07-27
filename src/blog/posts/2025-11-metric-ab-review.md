@@ -82,7 +82,7 @@ Having the right tools is a huge part of the battle, but nothing beats a profess
 
 If you're tired of the guessing game and want your music to have that professional polish and competitive loudness, I'm here to help.
 
-**Our mixing services start at just $40**, giving you access to years of experience and high-end tools.
+**[See my current rates](/#pricing)** for mixing and mastering — flat per-song pricing, with a free 60-second sample of your own track before you commit.
 
 Ready to make your music sound its best?
 ➡️ [Contact me today](/#contact) to discuss your project and get a personalized quote!

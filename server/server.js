@@ -124,6 +124,33 @@ const sendConfirmationEmail = async (name, email) => {
   return info.messageId;
 };
 
+// There's no database here, so a signup is delivered as mail to Hunter and
+// added to the list by hand. Fine at this volume; revisit if it stops being.
+const sendSubscriptionEmail = async (email, source) => {
+  const info = await transporter.sendMail({
+    from: fromAddress(),
+    to: process.env.RECIPIENT_EMAIL,
+    replyTo: email,
+    subject: 'New mailing list signup',
+    text: `Email: ${email}\nSource: ${source}`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1c1917;">
+        <h2 style="border-bottom: 1px solid #d6d3d1; padding-bottom: 10px; font-weight: 600;">
+          New mailing list signup
+        </h2>
+        <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+        <p><strong>Source:</strong> ${escapeHtml(source)}</p>
+        <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+        <p style="color: #78716c; font-size: 12px;">
+          Submitted ${new Date().toLocaleString()} via tornadoaudio.net
+        </p>
+      </div>
+    `
+  });
+
+  return info.messageId;
+};
+
 // Small in-memory rate limit so the public contact endpoint can't be hammered.
 // Resets on restart, which is fine for a single-instance deploy.
 const submissions = new Map();
@@ -177,7 +204,7 @@ app.post('/api/contact', async (req, res) => {
         console.error('Notification email failed:', err.message);
         return res.status(500).json({
           success: false,
-          message: 'Could not send your message. Please email hunter@tornadoaudio.net directly.'
+          message: 'Could not send your message. Please email contact@tornadoaudio.net directly.'
         });
       }
 
@@ -195,6 +222,50 @@ app.post('/api/contact', async (req, res) => {
     });
   } catch (error) {
     console.error('Contact form error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error. Please try again later.'
+    });
+  }
+});
+
+app.post('/api/subscribe', async (req, res) => {
+  try {
+    const { email, source } = req.body;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address'
+      });
+    }
+
+    if (rateLimited(req.ip)) {
+      return res.status(429).json({
+        success: false,
+        message: 'Too many submissions. Please try again later.'
+      });
+    }
+
+    if (transporter) {
+      try {
+        await sendSubscriptionEmail(email, source || 'unknown');
+      } catch (err) {
+        console.error('Subscription email failed:', err.message);
+        return res.status(500).json({
+          success: false,
+          message: 'Could not sign you up. Please try again later.'
+        });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: "You're on the list. New posts only — no spam."
+    });
+  } catch (error) {
+    console.error('Subscribe error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error. Please try again later.'

@@ -159,3 +159,26 @@
     gap: var(--space-6);
   }
 }
+
+/* --------------------------------------------------------------------------
+   Release credit link
+
+   Only rendered when a sample has a releaseUrl. A credit someone can verify is
+   worth more than any adjective in the description above it.
+   -------------------------------------------------------------------------- */
+
+.portfolio-release {
+  margin: var(--space-3) 0 0;
+  font-size: var(--step--1);
+}
+
+.portfolio-release a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.portfolio-release a:hover {
+  color: var(--accent-hover);
+}

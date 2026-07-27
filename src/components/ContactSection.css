@@ -86,6 +86,24 @@
   line-height: 1.5;
 }
 
+.contact-item a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.contact-item a:hover {
+  color: var(--accent-hover);
+}
+
+.contact-note {
+  display: inline-block;
+  margin-top: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.4;
+}
+
 /* --------------------------------------------------------------------------
    Form
    -------------------------------------------------------------------------- */
@@ -239,4 +257,18 @@
   border-color: var(--danger);
   border-left: 3px solid var(--danger);
   font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Post-submit expectations
+
+   Sits under the button: the last thing read before deciding to send.
+   -------------------------------------------------------------------------- */
+
+.form-expectations {
+  margin: var(--space-3) 0 0;
+  max-width: var(--measure);
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.5;
 }

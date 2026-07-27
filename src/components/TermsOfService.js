@@ -68,7 +68,8 @@ function TermsOfService() {
             <h2>4. Payment Terms</h2>
             <p>Our service fees are as listed on our Site or as quoted to you directly. Payment terms include:</p>
             <ul>
-              <li>Full payment required upon completion of work before final file delivery</li>
+              <li>A 50% non-refundable deposit is required to reserve a project slot; work begins once it is received</li>
+              <li>The remaining balance is due on approval of the final mix, before final files are delivered</li>
               <li>All payments are processed through secure third-party payment processors</li>
               <li>Prices are subject to change, but not for already booked and confirmed projects</li>
             </ul>
@@ -90,18 +91,18 @@ function TermsOfService() {
 
           <section className="policy-section">
             <h2>6. Revision Policy</h2>
-            <p>Our mixing services include:</p>
+            <p>Our services include:</p>
             <ul>
-              <li>Two rounds of revisions included in the base price</li>
-              <li>Additional revisions available at additional cost</li>
+              <li>A fixed number of revision rounds per package, as set out in the <a href="/service-agreement">Service Agreement</a> and on the pricing page</li>
+              <li>Additional rounds beyond the package allowance are billed hourly</li>
               <li>Revision requests must be submitted within 14 days of receiving the mix</li>
-              <li>Clear and specific feedback required for all revisions</li>
+              <li>Clear, specific and consolidated feedback required for all revisions</li>
             </ul>
           </section>
 
           <section className="policy-section">
             <h2>7. Project Delivery and Timeline</h2>
-            <p>Standard delivery timelines are 7-14 business days from receiving all necessary project files, depending on project complexity and current workload. Rush services are available for an additional fee, subject to availability.</p>
+            <p>Standard delivery timelines are 3-7 business days from receipt of the deposit and all necessary project files, depending on the package and current workload. Multi-song and album projects run to extended timelines agreed in writing. Rush slots are available at 1.5x the standard rate, subject to availability.</p>
           </section>
 
           <section className="policy-section">
@@ -165,7 +166,7 @@ function TermsOfService() {
               </div>
             </div>
             <div className="footer-copyright">
-              <p>&copy; 2025 Tornado Audio - Professional Audio Mixing by Hunter Johanson. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} Tornado Audio — Mixing, mastering and live sound by Hunter Johanson. All rights reserved.</p>
               <p>
                 <small>Professional audio mixing services for musicians, bands, and independent artists worldwide.</small>
               </p>

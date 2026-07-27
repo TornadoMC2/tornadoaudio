@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 
+// `hash` items scroll within the home page; `path` items are real routes.
 const NAV_ITEMS = [
-  { hash: '#home', label: 'Home' },
+  { hash: '#about', label: 'About' },
   { hash: '#services', label: 'Services' },
   { hash: '#live-sound', label: 'Live Sound' },
   { hash: '#portfolio', label: 'Portfolio' },
   { hash: '#pricing', label: 'Pricing' },
+  { path: '/blog', label: 'Blog' },
   { hash: '#contact', label: 'Contact' }
 ];
 
@@ -84,7 +86,7 @@ const Header = () => {
             />
             <span className="logo-text">
               <span className="logo-name" itemProp="name">Tornado Audio</span>
-              <span className="logo-tagline" itemProp="description">Studio &amp; Live Sound by Hunter Johanson</span>
+              <span className="logo-tagline" itemProp="description">Mixing &amp; Mastering &middot; Bloomington-Normal, IL</span>
               <meta itemProp="url" content="https://tornadoaudio.net" />
               <meta itemProp="founder" content="Hunter Johanson" />
             </span>
@@ -98,8 +100,16 @@ const Header = () => {
             itemScope
             itemType="https://schema.org/SiteNavigationElement"
           >
-            {NAV_ITEMS.map(({ hash, label }) =>
-              isHomePage ? (
+            {NAV_ITEMS.map(({ hash, path, label }) => {
+              if (path) {
+                return (
+                  <Link key={path} to={path} onClick={handleNavClick} itemProp="url">
+                    <span itemProp="name">{label}</span>
+                  </Link>
+                );
+              }
+
+              return isHomePage ? (
                 <a key={hash} href={hash} onClick={handleNavClick} itemProp="url">
                   <span itemProp="name">{label}</span>
                 </a>
@@ -107,8 +117,8 @@ const Header = () => {
                 <Link key={hash} to={`/${hash}`} onClick={handleNavClick} itemProp="url">
                   <span itemProp="name">{label}</span>
                 </Link>
-              )
-            )}
+              );
+            })}
           </nav>
 
           <button

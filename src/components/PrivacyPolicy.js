@@ -97,8 +97,8 @@ function PrivacyPolicy() {
 
           <section className="policy-section">
             <h2>5. Cookies and Tracking Technologies</h2>
-            <p>We use cookies, pixels, and similar technologies to collect information about your browsing activities. These technologies help us analyze website traffic, customize content, and deliver targeted advertisements.</p>
-            <p>You can control cookies through your browser settings. However, disabling cookies may limit your ability to use certain features of our Site.</p>
+            <p>This Site does not use analytics cookies, advertising pixels, or third-party tracking technologies. We do not share your browsing activity with advertising networks, and we do not build a profile of you across other websites.</p>
+            <p>The Site uses your browser's session storage to remember which service you selected on the pricing page so the contact form can be pre-filled. That data stays in your browser, is never transmitted to us, and is cleared when you close the tab.</p>
           </section>
 
           <section className="policy-section">
@@ -168,7 +168,7 @@ function PrivacyPolicy() {
               </div>
             </div>
             <div className="footer-copyright">
-              <p>&copy; 2025 Tornado Audio - Professional Audio Mixing by Hunter Johanson. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} Tornado Audio — Mixing, mastering and live sound by Hunter Johanson. All rights reserved.</p>
               <p>
                 <small>Professional audio mixing services for musicians, bands, and independent artists worldwide.</small>
               </p>

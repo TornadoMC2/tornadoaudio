@@ -128,26 +128,38 @@
 }
 
 /* --------------------------------------------------------------------------
-   Sale banner
+   Introductory offer banner
+
+   Sits above the cards because it explains the numbers they're about to read.
    -------------------------------------------------------------------------- */
 
-.sale-banner {
+.intro-offer-banner {
   margin-block: var(--space-5);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-4);
   background: var(--accent-soft);
-  color: var(--text);
   border: 1px solid var(--accent-rule);
   border-radius: var(--radius);
+}
+
+.intro-offer-headline {
+  margin: 0 0 var(--space-2);
+  color: var(--text);
+  font-family: var(--font-display);
   font-size: var(--step-0);
   font-weight: 600;
 }
 
-.sale-end-date {
-  display: block;
-  margin-top: var(--space-1);
+.intro-offer-terms {
+  margin: 0;
+  max-width: var(--measure);
   color: var(--text-muted);
   font-size: var(--step--1);
-  font-weight: 400;
+  line-height: 1.5;
+}
+
+.intro-offer-terms strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
@@ -241,8 +253,8 @@
   border-color: var(--accent);
 }
 
-.pricing-card.on-sale,
-.pricing-card.popular.on-sale {
+.pricing-card.on-intro,
+.pricing-card.popular.on-intro {
   border-color: var(--accent-rule);
 }
 
@@ -252,8 +264,7 @@
 }
 
 /* Badges sit in the flow as small eyebrow labels, not floating pills. */
-.popular-badge,
-.sale-badge {
+.popular-badge {
   align-self: flex-start;
   margin-bottom: var(--space-3);
   padding: var(--space-1) var(--space-2);
@@ -273,12 +284,6 @@
   border: 1px solid var(--accent);
 }
 
-.sale-badge {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--accent-rule);
-}
-
 .pricing-card h3 {
   margin-bottom: var(--space-2);
   font-family: var(--font-display);
@@ -296,13 +301,26 @@
   color: var(--text);
 }
 
+/* The struck-through anchor. Only the figure is struck — the label stays
+   readable, so the card reads "standard rate $250" rather than as a mistake. */
 .pricing-card .original-price {
   display: block;
   color: var(--text-subtle);
   font-family: var(--font-body);
   font-size: var(--step--1);
   font-weight: 400;
-  text-decoration: line-through;
+}
+
+.pricing-card .original-price s {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.1em;
+}
+
+.pricing-card .price-unit {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 400;
+  color: var(--text-muted);
 }
 
 .pricing-card .savings {
@@ -374,65 +392,17 @@
 }
 
 /* --------------------------------------------------------------------------
-   Bulk pricing disclosure
+   Footer notes
    -------------------------------------------------------------------------- */
 
-.bulk-pricing {
-  margin-bottom: var(--space-5);
+/* Terms as a definition list: these are the answers to the questions a client
+   asks by email anyway, so they may as well be on the page. */
+.pricing-terms {
+  margin: 0 0 var(--space-5);
+  border-top: 1px solid var(--rule);
 }
 
-.bulk-pricing-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  width: 100%;
-  min-height: 44px;
-  padding: var(--space-2) var(--space-3);
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  font-family: var(--font-body);
-  font-size: var(--step--1);
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
-}
-
-.bulk-pricing-toggle:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.arrow {
-  flex: none;
-  color: var(--text-subtle);
-  font-size: var(--step--1);
-  line-height: 1;
-}
-
-.arrow.expanded {
-  transform: rotate(180deg);
-}
-
-.bulk-pricing-content {
-  margin-top: var(--space-3);
-  padding: var(--space-3);
-  background: var(--bg-sunken);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  overflow-x: auto;
-}
-
-.bulk-pricing-content ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.bulk-option {
+.pricing-term {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-1);
@@ -440,80 +410,27 @@
   border-bottom: 1px solid var(--rule);
 }
 
-.bulk-option:last-child {
-  border-bottom: none;
-}
-
-.bulk-pricing-content li:last-child .bulk-option {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.bulk-pricing-content li:first-child .bulk-option {
-  padding-top: 0;
-}
-
-.quantity {
+.pricing-term dt {
   color: var(--text);
   font-size: var(--step--1);
   font-weight: 600;
 }
 
-.bulk-price-container {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.bulk-price {
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: var(--step-0);
-  font-weight: 600;
-}
-
-.bulk-original-price {
-  color: var(--text-subtle);
+.pricing-term dd {
+  margin: 0;
+  max-width: var(--measure);
+  color: var(--text-muted);
   font-size: var(--step--1);
-  text-decoration: line-through;
-}
-
-.savings {
-  color: var(--accent);
-  font-size: var(--step--1);
-  font-weight: 600;
-}
-
-.turnaround {
-  color: var(--text-subtle);
-  font-size: var(--step--1);
-}
-
-.bulk-disclaimer {
-  margin: var(--space-3) 0 0;
-  color: var(--text-subtle);
-  font-size: var(--step--1);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 @media (min-width: 48em) {
-  .bulk-option {
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: var(--space-3);
+  .pricing-term {
+    grid-template-columns: 12rem minmax(0, 1fr);
+    column-gap: var(--space-4);
     align-items: baseline;
   }
-
-  .bulk-price-container,
-  .turnaround {
-    justify-self: end;
-    text-align: right;
-  }
 }
-
-/* --------------------------------------------------------------------------
-   Footer notes
-   -------------------------------------------------------------------------- */
 
 .pricing-footer {
   margin-top: var(--space-7);

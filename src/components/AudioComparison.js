@@ -475,9 +475,9 @@ const AudioComparison = ({ beforeAudio, afterAudio, title, description, isPlaceh
             </button>
 
             <div className="placeholder-features">
-              <div className="feature-item">Professional Quality</div>
-              <div className="feature-item">Fast Turnaround</div>
-              <div className="feature-item">Unlimited Revisions*</div>
+              <div className="feature-item">Flat per-song pricing</div>
+              <div className="feature-item">Free 60-second sample</div>
+              <div className="feature-item">Revision rounds included</div>
             </div>
           </div>
         </div>

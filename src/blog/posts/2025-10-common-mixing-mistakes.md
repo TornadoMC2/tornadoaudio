@@ -210,7 +210,7 @@ Avoiding these common mixing mistakes will significantly improve your home studi
 
 At Tornado Audio, I've developed refined techniques and a critical ear through hundreds of mixing projects. I can help you avoid these pitfalls and achieve truly radio-ready results that stand out.
 
-**Our services start at just $40** for basic mixing, making it an affordable way to take your music to the next level.
+If you'd rather hand it off, **[see my current rates](/#pricing)** — flat per-song pricing, with a free 60-second sample of your own track before you commit.
 
 Ready to transform your sound?
 ➡️ [Contact me today](/#contact) to discuss your project and get a personalized quote!
