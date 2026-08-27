@@ -76,10 +76,17 @@ const LiveSoundSection = () => {
         </header>
 
         {venues.length > 0 && (
-          <p className="live-sound-venues">
-            <span className="live-sound-venues-label">Venues worked:</span>{' '}
-            {venues.join(' · ')}
-          </p>
+          <div className="live-sound-venues">
+            <h3 className="live-sound-venues-label">Venues worked</h3>
+            <ul className="live-sound-venue-list">
+              {venues.map((venue) => (
+                <li key={venue.name} className="live-sound-venue">
+                  <span className="venue-name">{venue.name}</span>
+                  <span className="venue-location">{venue.location}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         <div className="live-sound-stats">

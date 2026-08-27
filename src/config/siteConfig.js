@@ -59,11 +59,20 @@ const siteConfig = {
 
   // Live Sound
   //
-  // TODO (Hunter): add real venue and event names you can use publicly. Three
-  // named venues carry more weight than the six generic category bullets in
-  // LiveSoundSection — the categories are unfalsifiable, the names aren't.
+  // Named rooms carry more weight than the six generic category bullets in
+  // LiveSoundSection — the categories are unfalsifiable, the names aren't. Only
+  // add a venue Hunter has actually worked and can say so publicly.
   liveSound: {
-    venues: ["Thelma Gaylord Performing Arts Theatre, OKC", "Salem Civic Center, VA", "Braden Auditorium, IL"],
+    venues: [
+      { name: 'Thelma Gaylord Performing Arts Theatre', location: 'Oklahoma City, OK' },
+      { name: 'The Arcada Theatre', location: 'St. Charles, IL' },
+      { name: 'The Clyde Theatre', location: 'Fort Wayne, IN' },
+      { name: 'Ludlow Garage', location: 'Cincinnati, OH' },
+      { name: 'Des Plaines Theatre', location: 'Des Plaines, IL' },
+      { name: 'Devon Lakeshore Amphitheater', location: 'Decatur, IL' },
+      { name: 'Salem Civic Center', location: 'Salem, VA' },
+      { name: 'Braden Auditorium', location: 'Normal, IL' },
+    ],
   },
 
   // About

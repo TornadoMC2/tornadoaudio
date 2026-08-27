@@ -396,10 +396,11 @@
    -------------------------------------------------------------------------- */
 
 /* Terms as a definition list: these are the answers to the questions a client
-   asks by email anyway, so they may as well be on the page. */
+   asks by email anyway, so they may as well be on the page. No border-top —
+   .pricing-footer already draws the separating rule directly above, and two
+   hairlines a gap apart read as a mistake. */
 .pricing-terms {
   margin: 0 0 var(--space-5);
-  border-top: 1px solid var(--rule);
 }
 
 .pricing-term {
@@ -445,10 +446,12 @@
   font-size: var(--step--1);
 }
 
+/* Spans the content column like .intro-offer-banner. `none` is needed to beat
+   the global `p { max-width: var(--measure) }` rule in App.css. */
 .service-agreement-note {
   margin-bottom: var(--space-4);
   padding: var(--space-3) var(--space-4);
-  max-width: var(--measure);
+  max-width: none;
   background: var(--bg-raised);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
